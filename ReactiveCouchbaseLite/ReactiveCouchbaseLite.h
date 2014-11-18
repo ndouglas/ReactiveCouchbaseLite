@@ -6,3 +6,5 @@
 //  Released into the public domain.
 //  See LICENSE for details.
 //
+
+#import "CBLDatabase+ReactiveCouchbaseLite.h"

@@ -78,12 +78,14 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         };
     };
     XCTAssertTrue([self expect:generator(@0) fromSignal:signal timeout:5.0 description:@"last sequence number matches"]);
+    
     CBLDocument *document = [_database createDocument];
     XCTAssertTrue([document update:^BOOL(CBLUnsavedRevision *newRevision) {
         newRevision[@"name"] = [[NSUUID UUID] UUIDString];
         return YES;
     } error:&error], @"%@", error);
     XCTAssertTrue([self expect:generator(@1) fromSignal:signal timeout:5.0 description:@"last sequence number matches"]);
+    
     XCTAssertTrue([document update:^BOOL(CBLUnsavedRevision *newRevision) {
         newRevision[@"name"] = [[NSUUID UUID] UUIDString];
         return YES;
