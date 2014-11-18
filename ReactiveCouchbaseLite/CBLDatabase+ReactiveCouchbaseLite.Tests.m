@@ -10,6 +10,9 @@
 #import <XCTest/XCTest.h>
 #import "CBLDatabase+ReactiveCouchbaseLite.h"
 
+typedef BOOL (^RCLObjectTesterBlock)(id);
+typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
+
 @interface CBLDatabase_ReactiveCouchbaseLiteTests : XCTestCase {
     CBLManager *_manager;
     CBLDatabase *_database;
@@ -65,9 +68,6 @@
     }];
     return result;
 }
-
-typedef BOOL (^RCLObjectTesterBlock)(id);
-typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 
 - (void)testLastSequenceNumber {
     NSError *error = nil;
