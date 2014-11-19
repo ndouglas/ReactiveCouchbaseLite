@@ -20,4 +20,13 @@
 
 + (RACSignal *)rcl_sharedInstance;
 
+/**
+ A copy of the specified database.
+ 
+ @return A signal containing a copy of the specified database, or an error.
+ @discussion The database will be created if it doesn't already exist.
+ */
+
++ (RACSignal *)rcl_databaseNamed:(NSString *)_name;
+
 @end

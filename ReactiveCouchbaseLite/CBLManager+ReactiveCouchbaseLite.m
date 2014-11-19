@@ -26,4 +26,24 @@
     return [RACSignal return:rcl_copy];
 }
 
++ (RACSignal *)rcl_databaseNamed:(NSString *)_name {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        RACDisposable *disposable = [[self rcl_sharedInstance]
+        subscribeNext:^(CBLManager *manager) {
+            NSError *error = nil;
+            CBLDatabase *database = [manager databaseNamed:_name error:&error];
+            if (database) {
+                [subscriber sendNext:database];
+            } else {
+                [subscriber sendError:error];
+            }
+        } error:^(NSError *error) {
+            [subscriber sendError:error];
+        } completed:^{
+            [subscriber sendCompleted];
+        }];
+        return disposable;
+    }];
+}
+
 @end
