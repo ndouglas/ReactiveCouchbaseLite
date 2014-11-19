@@ -23,11 +23,12 @@
             });
         }
     });
-    return [RACSignal return:rcl_copy];
+    return [[RACSignal return:rcl_copy]
+    setNameWithFormat:@"%@ +rcl_sharedInstance", self];
 }
 
 + (RACSignal *)rcl_databaseNamed:(NSString *)_name {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    return [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         RACDisposable *disposable = [[self rcl_sharedInstance]
         subscribeNext:^(CBLManager *manager) {
             NSError *error = nil;
@@ -43,11 +44,12 @@
             [subscriber sendCompleted];
         }];
         return disposable;
-    }];
+    }]
+    setNameWithFormat:@"%@ +rcl_databaseNamed: %@", self, _name];
 }
 
 + (RACSignal *)rcl_existingDatabaseNamed:(NSString *)_name {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    return [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         RACDisposable *disposable = [[self rcl_sharedInstance]
         subscribeNext:^(CBLManager *manager) {
             NSError *error = nil;
@@ -63,7 +65,8 @@
             [subscriber sendCompleted];
         }];
         return disposable;
-    }];
+    }]
+    setNameWithFormat:@"%@ +rcl_existingDatabaseNamed: %@", self, _name];
 }
 
 @end
