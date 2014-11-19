@@ -29,4 +29,13 @@
 
 + (RACSignal *)rcl_databaseNamed:(NSString *)_name;
 
+/**
+ A copy of the specified database.
+ 
+ @return A signal containing a copy of the specified database, or an error.
+ @discussion The database will not be created if it doesn't already exist.
+ */
+
++ (RACSignal *)rcl_existingDatabaseNamed:(NSString *)_name;
+
 @end
