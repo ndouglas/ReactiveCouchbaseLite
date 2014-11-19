@@ -26,6 +26,9 @@ extern NSError *RCLErrorWithCode(RCLErrorCodeType code) {
         case RCLErrorCode_DocumentCouldNotBeCreated:
             description = NSLocalizedString(@"Couchbase-Lite could not create the requested document.", #code);
             break;
+        case RCLErrorCode_LocalDocumentCouldNotBeFound:
+            description = NSLocalizedString(@"Couchbase-Lite could not find the requested local document.", #code);
+            break;
     }
     return [NSError errorWithDomain:RCLErrorDomain code:code userInfo:@{
         NSLocalizedDescriptionKey : description,

@@ -16,6 +16,7 @@ typedef enum {
     RCLErrorCode_DocumentCouldNotBeFoundOrCreated,          // Couchbase-Lite couldn't find or create the document.
     RCLErrorCode_DocumentCouldNotBeFound,                   // Couchbase-Lite couldn't find the document.
     RCLErrorCode_DocumentCouldNotBeCreated,                 // Couchbase-Lite couldn't create the document.
+    RCLErrorCode_LocalDocumentCouldNotBeFound,              // Couchbase-Lite couldn't find the local document.
 } RCLErrorCodeType;
 
 extern NSError *RCLErrorWithCode(RCLErrorCodeType code);

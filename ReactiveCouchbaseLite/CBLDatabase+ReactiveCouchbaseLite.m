@@ -88,4 +88,18 @@
     }];
 }
 
+- (RACSignal *)rcl_existingLocalDocumentWithID:(NSString *)documentID {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSDictionary *dictionary = [self existingLocalDocumentWithID:documentID];
+        if (dictionary) {
+            [subscriber sendNext:dictionary];
+        } else {
+            [subscriber sendError:RCLErrorWithCode(RCLErrorCode_LocalDocumentCouldNotBeFound)];
+        }
+        [subscriber sendCompleted];
+        return nil;
+    }];
+}
+
+
 @end

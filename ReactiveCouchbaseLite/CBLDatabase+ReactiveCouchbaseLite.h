@@ -78,4 +78,13 @@
 
 - (RACSignal *)rcl_createDocument;
 
+/**
+ Opens the local document with the specified ID.
+ 
+ @param documentID The unique identifier of the document.
+ @return A dictionary, or an error if it could not be found.
+ */
+
+- (RACSignal *)rcl_existingLocalDocumentWithID:(NSString *)documentID;
+
 @end
