@@ -17,4 +17,15 @@
 
 @interface RACSignal (ReactiveCouchbaseLite)
 
+/**
+ For a signal returning CBLQuery objects, return a copy of the query with the changed 
+ index update mode.
+ 
+ @param mode The index update mode to use.
+ @return A signal passing an updated query object.
+ @discussion If the index update mode isn't different, the original object is returned.
+ */
+
+- (RACSignal *)rcl_updateQueryIndexUpdateMode:(CBLIndexUpdateMode)mode;
+
 @end
