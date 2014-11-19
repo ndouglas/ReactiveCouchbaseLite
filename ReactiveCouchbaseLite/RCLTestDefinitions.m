@@ -13,21 +13,41 @@
 @implementation XCTestCase (ReactiveCouchbaseLite)
 
 - (void)expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal subscribeNext:(void (^)(id next))nextHandler error:(void (^)(NSError *error))errorHandler completion:(void (^)(void))completionHandler timeout:(NSTimeInterval)timeout {
+    __block BOOL nextEncountered = NO;
     nextHandler = nextHandler ?: ^(id next) {
-        XCTFail(@"Expectation '%@' received unexpected next: %@", expectation.description, next);
+        XCTFail(@"Expectation '%@' for signal '%@' received unexpected next: %@", expectation.description, signal, next);
     };
     errorHandler = errorHandler ?: ^(NSError *error) {
-        XCTFail(@"Expectation '%@' received unexpected error: %@", expectation.description, error);
+        XCTFail(@"Expectation '%@' for signal '%@' received unexpected error: %@", expectation.description, signal, error);
     };
     completionHandler = completionHandler ?: ^{
-        XCTFail(@"Expectation '%@' received unexpected completion.", expectation.description);
+        XCTFail(@"Expectation '%@' for signal '%@' received unexpected completion.", expectation.description, signal);
     };
     RACDisposable *disposable = [[signal
     take:1]
-    subscribeNext:nextHandler error:errorHandler completed:completionHandler];
+    subscribeNext:^(id next) {
+        if (!nextEncountered) {
+            nextEncountered = YES;
+            nextHandler(next);
+        } else {
+            NSLog(@"Ignoring post-test next '%@' for expectation '%@' for signal '%@'.", next, expectation.description, signal);
+        }
+    } error:^(NSError *error) {
+        if (!nextEncountered) {
+            errorHandler(error);
+        } else {
+            NSLog(@"Ignoring post-test error '%@' for expectation '%@' for signal '%@'.", error.localizedDescription, expectation.description, signal);
+        }
+    } completed:^{
+        if (!nextEncountered) {
+            completionHandler();
+        } else {
+            NSLog(@"Ignoring post-test completion for expectation '%@' for signal '%@'.", expectation.description, signal);
+        }
+    }];
     [self waitForExpectationsWithTimeout:timeout handler:^(NSError *error) {
         if (error) {
-            XCTFail(@"Expectation '%@' failed with error: %@", expectation.description, error);
+            XCTFail(@"Expectation '%@' for signal '%@' failed with error: %@", expectation.description, signal, error);
         }
         [disposable dispose];
     }];

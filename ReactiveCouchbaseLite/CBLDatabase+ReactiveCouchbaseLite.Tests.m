@@ -11,7 +11,7 @@
 #import "RCLTestDefinitions.h"
 #import "ReactiveCouchbaseLite.h"
 
-typedef BOOL (^RCLObjectTesterBlock)(id);
+typedef void (^RCLObjectTesterBlock)(id);
 typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 
 @interface CBLDatabase_ReactiveCouchbaseLiteTests : XCTestCase {
@@ -52,73 +52,65 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     }
 }
 
-- (BOOL)expect:(RCLObjectTesterBlock)block fromSignal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
-    __block BOOL result = NO;
+/**
+- (void)expectCompletionFromSignal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
     XCTestExpectation *expectation = [self expectationWithDescription:description];
-    RACDisposable *disposable = [[signal
-    take:1]
-    subscribeNext:^(id inValue) {
-        result = block(inValue);
+    [self expectation:expectation signal:signal subscribeCompletion:^{
         [expectation fulfill];
-    }];
-    [self waitForExpectationsWithTimeout:timeout handler:^(NSError *error) {
-        if (error) {
-            XCTFail(@"Expectation '%@' failed with error: %@", description, error);
-        }
-        [disposable dispose];
-    }];
-    return result;
+    } timeout:timeout];
 }
 
-- (BOOL)expectCompletionFromSignal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
-    __block BOOL result = NO;
+- (void)expectNext:(void (^)(id next))nextHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
     XCTestExpectation *expectation = [self expectationWithDescription:description];
-    RACDisposable *disposable = [[signal
-    take:1]
-    subscribeCompleted:^{
-        result = YES;
+    [self expectation:expectation signal:signal subscribeNext:^(id next) {
+        nextHandler(next);
         [expectation fulfill];
-    }];
-    [self waitForExpectationsWithTimeout:timeout handler:^(NSError *error) {
-        if (error) {
-            XCTFail(@"Expectation '%@' failed with error: %@", description, error);
-        }
-        [disposable dispose];
-    }];
-    return result;
-    
+    } timeout:timeout];
 }
+
+- (void)expectError:(void (^)(NSError *error))errorHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
+    XCTestExpectation *expectation = [self expectationWithDescription:description];
+    [self expectation:expectation signal:signal subscribeError:^(NSError *error) {
+        errorHandler(error);
+        [expectation fulfill];
+    } timeout:timeout];
+}
+*/
 
 - (void)testLastSequenceNumber {
+
     NSError *error = nil;
     RACSignal *signal = [_database rcl_lastSequenceNumber];
     RCLObjectTesterGeneratorBlock generator = ^(id testValue) {
-        return ^BOOL(id inValue) {
-            return (!inValue && !testValue) || [inValue isEqual:testValue];
+        return ^(id inValue) {
+            XCTAssertTrue((!inValue && !testValue) || [inValue isEqual:testValue], @"inValue %@ is not equal to testValue %@", inValue, testValue);
         };
     };
-    XCTAssertTrue([self expect:generator(@0) fromSignal:signal timeout:5.0 description:@"last sequence number matches"]);
+    [self expectNext:generator(@0) signal:signal timeout:5.0 description:@"last sequence number matches"];
     
     CBLDocument *document = [_database createDocument];
     XCTAssertTrue([document update:^BOOL(CBLUnsavedRevision *newRevision) {
         newRevision[@"name"] = [[NSUUID UUID] UUIDString];
         return YES;
     } error:&error], @"%@", error);
-    XCTAssertTrue([self expect:generator(@1) fromSignal:signal timeout:5.0 description:@"last sequence number matches"]);
+    [self expectNext:generator(@1) signal:signal timeout:5.0 description:@"last sequence number matches"];
     
     XCTAssertTrue([document update:^BOOL(CBLUnsavedRevision *newRevision) {
         newRevision[@"name"] = [[NSUUID UUID] UUIDString];
         return YES;
     } error:&error], @"%@", error);
-    XCTAssertTrue([self expect:generator(@2) fromSignal:signal timeout:5.0 description:@"last sequence number matches"]);
+    [self expectNext:generator(@2) signal:signal timeout:5.0 description:@"last sequence number matches"];
+    
+    NSLog(@"%@", _database);
 }
 
 - (void)testClose {
-    XCTAssertTrue([self expect:]
+    [self expectCompletionFromSignal:[_database rcl_close] timeout:5.0 description:@"database closed successfully"];
 }
 
 @end
 
+/**
 - (RACSignal *)rcl_close;
 - (RACSignal *)rcl_compact;
 - (RACSignal *)rcl_delete;
@@ -131,5 +123,5 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 - (RACSignal *)rcl_allDocumentsQuery;
 - (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode;
 - (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode updateMode:(CBLIndexUpdateMode)updateMode;
-
+*/
 
