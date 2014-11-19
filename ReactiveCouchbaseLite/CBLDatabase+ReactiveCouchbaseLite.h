@@ -26,4 +26,12 @@
 
 - (RACSignal *)rcl_lastSequenceNumber;
 
+/**
+  Closes this database.
+  
+  @return A signal indicating whether the database closed with an error or not.
+ */
+
+- (RACSignal *)rcl_close;
+
 @end

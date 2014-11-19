@@ -16,4 +16,15 @@
     takeUntil:self.rac_willDeallocSignal];
 }
 
+- (RACSignal *)rcl_close {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSError *error = nil;
+        if (![self close:&error]) {
+            [subscriber sendError:error];
+        }
+        [subscriber sendCompleted];
+        return nil;
+    }];
+}
+
 @end
