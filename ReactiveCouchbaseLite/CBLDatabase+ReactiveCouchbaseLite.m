@@ -152,6 +152,14 @@
     return [result setNameWithFormat:@"[%@] -rcl_allDocumentsQueryWithMode: %@", result.name, @(mode)];
 }
 
+- (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode updateMode:(CBLIndexUpdateMode)updateMode {
+    RACSignal *result = [[[self rcl_allDocumentsQuery]
+    map:^CBLQuery *(CBLQuery *query) {
+        query.allDocsMode = mode;
+        return query;
+    }]
+    rcl_updateQueryIndexMode:updateMode];
+    return [result setNameWithFormat:@"[%@] -rcl_allDocumentsQueryWithMode: %@ updateMode: %@", result.name, @(mode), @(updateMode)];
 }
 
 @end
