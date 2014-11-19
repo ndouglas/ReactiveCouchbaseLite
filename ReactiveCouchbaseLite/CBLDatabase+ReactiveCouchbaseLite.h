@@ -114,4 +114,13 @@
 
 - (RACSignal *)rcl_allDocumentsQuery;
 
+/**
+ Creates an all documents query with a specified mode.
+ 
+ @param mode The mode of the query.
+ @return A signal containing an all documents query with the specified mode.
+ */
+
+- (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode;
+
 @end

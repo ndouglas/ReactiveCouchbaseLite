@@ -8,6 +8,7 @@
 //
 
 #import "CBLDatabase+ReactiveCouchbaseLite.h"
+#import "RACSignal+ReactiveCouchbaseLite.h"
 
 @implementation CBLDatabase (ReactiveCouchbaseLite)
 
@@ -140,6 +141,15 @@
         return nil;
     }];
     return [result setNameWithFormat:@"[%@] -rcl_allDocumentsQuery", result.name];
+}
+
+- (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode {
+    RACSignal *result = [[self rcl_allDocumentsQuery]
+    map:^CBLQuery *(CBLQuery *query) {
+        query.allDocsMode = mode;
+        return query;
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_allDocumentsQueryWithMode: %@", result.name, @(mode)];
 }
 
 }
