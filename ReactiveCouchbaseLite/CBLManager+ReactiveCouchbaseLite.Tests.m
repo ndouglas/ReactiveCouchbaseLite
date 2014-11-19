@@ -71,7 +71,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 - (void)testSharedInstance {
     RACSignal *signal = [CBLManager rcl_sharedInstance];
     RCLObjectTesterBlock tester = ^BOOL (id inValue) {
-        return [inValue isEqual:_manager];
+        return inValue != nil;
     };
     XCTAssertTrue([self expect:tester fromSignal:signal timeout:5.0 description:@"sharedInstance is equal to sharedInstance"]);
     
