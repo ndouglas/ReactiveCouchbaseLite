@@ -1,6 +1,6 @@
 //
 //  RACSignal+ReactiveCouchbaseLite.m
-//  Sync
+//  ReactiveCouchbaseLite
 //
 //  Created by Nathan Douglas on 11/19/14.
 //  Released into the public domain.

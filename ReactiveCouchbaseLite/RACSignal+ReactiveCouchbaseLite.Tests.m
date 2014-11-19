@@ -1,9 +1,10 @@
 //
 //  RACSignal+ReactiveCouchbaseLite.Tests.m
-//  Sync
+//  ReactiveCouchbaseLite
 //
 //  Created by Nathan Douglas on 11/19/14.
-//  Copyright (c) 2013 DEVONtechnologies. All rights reserved.
+//  Released into the public domain.
+//  See LICENSE for details.
 //
 
 #import <XCTest/XCTest.h>
