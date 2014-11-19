@@ -55,7 +55,7 @@
  Creates or opens the document with the specified ID.
  
  @param documentID The unique identifier of the document.
- @return A document, or an error if it could not be created or found.
+ @return A signal with the document or an error if the document could not be created or found.
  @discussion The document will be created if it can't be found.
  */
 
@@ -65,7 +65,7 @@
  Opens the document with the specified ID.
  
  @param documentID The unique identifier of the document.
- @return A document, or an error if it could not be found.
+ @return A signal with the document or an error if the document could not be found.
  */
 
 - (RACSignal *)rcl_existingDocumentWithID:(NSString *)documentID;
@@ -73,7 +73,7 @@
 /**
  Creates a new document with a random UUID.
  
- @return A document, or an error if it could not be created.
+ @return A signal with the document or an error if the document could not be created.
  */
 
 - (RACSignal *)rcl_createDocument;
@@ -82,7 +82,7 @@
  Opens the local document with the specified ID.
  
  @param documentID The unique identifier of the document.
- @return A dictionary, or an error if it could not be found.
+ @return A signal with the dictionary representing the document or an error if the document could not be found.
  */
 
 - (RACSignal *)rcl_existingLocalDocumentWithID:(NSString *)documentID;
