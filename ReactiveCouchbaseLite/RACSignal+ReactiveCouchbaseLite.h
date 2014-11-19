@@ -48,4 +48,14 @@
 
 - (RACSignal *)rcl_updateQueryIndexAfterQuerying;
 
+/**
+ For a signal returning CBLQuery objects, return a copy of the query that never updates 
+ the query index.
+ 
+ @return A signal passing an updated query object.
+ @discussion If the index update mode isn't different, the original object is returned.
+ */
+
+- (RACSignal *)rcl_neverUpdateQueryIndex;
+
 @end
