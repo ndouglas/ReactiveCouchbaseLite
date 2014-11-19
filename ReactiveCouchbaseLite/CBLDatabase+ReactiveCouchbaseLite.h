@@ -97,4 +97,13 @@
 
 - (RACSignal *)rcl_putLocalDocumentWithProperties:(NSDictionary *)properties ID:(NSString *)documentID;
 
+/**
+ Deletes the local document with the specified ID.
+ 
+ @param documentID The unique identifier of the document.
+ @return A signal containing either a completion or an error, if one occurred.
+ */
+
+- (RACSignal *)rcl_deleteLocalDocumentWithID:(NSString *)documentID;
+
 @end

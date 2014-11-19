@@ -112,5 +112,15 @@
     }];
 }
 
+- (RACSignal *)rcl_deleteLocalDocumentWithID:(NSString *)documentID {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSError *error = nil;
+        if (![self deleteLocalDocumentWithID:documentID error:&error]) {
+            [subscriber sendError:error];
+        }
+        [subscriber sendCompleted];
+        return nil;
+    }];
+}
 
 @end
