@@ -62,4 +62,17 @@
     }];
 }
 
+- (RACSignal *)rcl_existingDocumentWithID:(NSString *)documentID {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        CBLDocument *document = [self existingDocumentWithID:documentID];
+        if (document) {
+            [subscriber sendNext:document];
+        } else {
+            [subscriber sendError:RCLErrorWithCode(RCLErrorCode_DocumentCouldNotBeFound)];
+        }
+        [subscriber sendCompleted];
+        return nil;
+    }];
+}
+
 @end

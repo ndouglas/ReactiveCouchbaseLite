@@ -61,4 +61,13 @@
 
 - (RACSignal *)rcl_documentWithID:(NSString *)documentID;
 
+/**
+ Opens the document with the specified ID.
+ 
+ @param documentID The unique identifier of the document.
+ @return A document, or an error if it could not be found.
+ */
+
+- (RACSignal *)rcl_existingDocumentWithID:(NSString *)documentID;
+
 @end
