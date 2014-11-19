@@ -12,12 +12,13 @@
 @implementation CBLDatabase (ReactiveCouchbaseLite)
 
 - (RACSignal *)rcl_lastSequenceNumber {
-    return [RACObserve(self, lastSequenceNumber)
+    RACSignal *result = [RACObserve(self, lastSequenceNumber)
     takeUntil:self.rac_willDeallocSignal];
+    return [result setNameWithFormat:@"[%@] -rcl_lastSequenceNumber", result.name];
 }
 
 - (RACSignal *)rcl_close {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSError *error = nil;
         if (![self close:&error]) {
             [subscriber sendError:error];
@@ -25,10 +26,11 @@
         [subscriber sendCompleted];
         return nil;
     }];
+    return [result setNameWithFormat:@"[%@] -rcl_close", result.name];
 }
 
 - (RACSignal *)rcl_compact {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSError *error = nil;
         if (![self compact:&error]) {
             [subscriber sendError:error];
@@ -36,10 +38,11 @@
         [subscriber sendCompleted];
         return nil;
     }];
+    return [result setNameWithFormat:@"[%@] -rcl_compact", result.name];
 }
 
 - (RACSignal *)rcl_delete {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSError *error = nil;
         if (![self deleteDatabase:&error]) {
             [subscriber sendError:error];
@@ -47,10 +50,11 @@
         [subscriber sendCompleted];
         return nil;
     }];
+    return [result setNameWithFormat:@"[%@] -rcl_delete", result.name];
 }
 
 - (RACSignal *)rcl_documentWithID:(NSString *)documentID {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         CBLDocument *document = [self documentWithID:documentID];
         if (document) {
             [subscriber sendNext:document];
@@ -60,10 +64,11 @@
         [subscriber sendCompleted];
         return nil;
     }];
+    return [result setNameWithFormat:@"[%@] -rcl_documentWithID: %@", result.name, documentID];
 }
 
 - (RACSignal *)rcl_existingDocumentWithID:(NSString *)documentID {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         CBLDocument *document = [self existingDocumentWithID:documentID];
         if (document) {
             [subscriber sendNext:document];
@@ -73,10 +78,11 @@
         [subscriber sendCompleted];
         return nil;
     }];
+    return [result setNameWithFormat:@"[%@] -rcl_existingDocumentWithID: %@", result.name, documentID];
 }
 
 - (RACSignal *)rcl_createDocument {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         CBLDocument *document = [self createDocument];
         if (document) {
             [subscriber sendNext:document];
@@ -86,10 +92,11 @@
         [subscriber sendCompleted];
         return nil;
     }];
+    return [result setNameWithFormat:@"[%@] -rcl_createDocument", result.name];
 }
 
 - (RACSignal *)rcl_existingLocalDocumentWithID:(NSString *)documentID {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSDictionary *dictionary = [self existingLocalDocumentWithID:documentID];
         if (dictionary) {
             [subscriber sendNext:dictionary];
@@ -99,10 +106,11 @@
         [subscriber sendCompleted];
         return nil;
     }];
+    return [result setNameWithFormat:@"[%@] -rcl_existingLocalDocumentWithID: %@", result.name, documentID];
 }
 
 - (RACSignal *)rcl_putLocalDocumentWithProperties:(NSDictionary *)properties ID:(NSString *)documentID {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSError *error = nil;
         if (![self putLocalDocument:properties withID:documentID error:&error]) {
             [subscriber sendError:error];
@@ -110,10 +118,11 @@
         [subscriber sendCompleted];
         return nil;
     }];
+    return [result setNameWithFormat:@"[%@] -rcl_putLocalDocumentWithProperties:%@ ID: %@", result.name, properties, documentID];
 }
 
 - (RACSignal *)rcl_deleteLocalDocumentWithID:(NSString *)documentID {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSError *error = nil;
         if (![self deleteLocalDocumentWithID:documentID error:&error]) {
             [subscriber sendError:error];
@@ -121,6 +130,9 @@
         [subscriber sendCompleted];
         return nil;
     }];
+    return [result setNameWithFormat:@"[%@] -rcl_deleteLocalDocumentWithID: %@", result.name, documentID];
+}
+
 }
 
 @end
