@@ -7,7 +7,6 @@
 //  See LICENSE for details.
 //
 
-#import "RCLDefinitions.h"
 #import "CBLDatabase+ReactiveCouchbaseLite.h"
 #import "CBLManager+ReactiveCouchbaseLite.h"
 #import "RACSignal+ReactiveCouchbaseLite.h"
