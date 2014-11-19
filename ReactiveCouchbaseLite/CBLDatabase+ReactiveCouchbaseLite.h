@@ -87,4 +87,14 @@
 
 - (RACSignal *)rcl_existingLocalDocumentWithID:(NSString *)documentID;
 
+/**
+ Updates the local document with the specified ID.
+ 
+ @param properties The properties to apply to the document.
+ @param documentID The unique identifier of the document.
+ @return A signal containing either a completion or an error, if one occurred.
+ */
+
+- (RACSignal *)rcl_putLocalDocumentWithProperties:(NSDictionary *)properties ID:(NSString *)documentID;
+
 @end
