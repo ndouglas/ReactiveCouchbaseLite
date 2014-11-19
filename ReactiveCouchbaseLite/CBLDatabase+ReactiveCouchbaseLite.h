@@ -70,4 +70,12 @@
 
 - (RACSignal *)rcl_existingDocumentWithID:(NSString *)documentID;
 
+/**
+ Creates a new document with a random UUID.
+ 
+ @return A document, or an error if it could not be created.
+ */
+
+- (RACSignal *)rcl_createDocument;
+
 @end

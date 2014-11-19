@@ -75,4 +75,17 @@
     }];
 }
 
+- (RACSignal *)rcl_createDocument {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        CBLDocument *document = [self createDocument];
+        if (document) {
+            [subscriber sendNext:document];
+        } else {
+            [subscriber sendError:RCLErrorWithCode(RCLErrorCode_DocumentCouldNotBeCreated)];
+        }
+        [subscriber sendCompleted];
+        return nil;
+    }];
+}
+
 @end
