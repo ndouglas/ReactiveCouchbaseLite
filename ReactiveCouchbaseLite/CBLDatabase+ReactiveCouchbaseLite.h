@@ -34,4 +34,12 @@
 
 - (RACSignal *)rcl_close;
 
+/**
+  Compacts this database.
+  
+  @return A signal indicating whether the database compacted with an error or not.
+ */
+
+- (RACSignal *)rcl_compact;
+
 @end
