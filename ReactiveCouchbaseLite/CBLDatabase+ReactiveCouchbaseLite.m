@@ -133,6 +133,15 @@
     return [result setNameWithFormat:@"[%@] -rcl_deleteLocalDocumentWithID: %@", result.name, documentID];
 }
 
+- (RACSignal *)rcl_allDocumentsQuery {
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [subscriber sendNext:[self createAllDocumentsQuery]];
+        [subscriber sendCompleted];
+        return nil;
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_allDocumentsQuery", result.name];
+}
+
 }
 
 @end

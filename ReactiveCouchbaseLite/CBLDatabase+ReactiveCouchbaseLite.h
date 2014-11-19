@@ -106,4 +106,12 @@
 
 - (RACSignal *)rcl_deleteLocalDocumentWithID:(NSString *)documentID;
 
+/**
+ Creates an all documents query.
+ 
+ @return A signal containing an all documents query.
+ */
+
+- (RACSignal *)rcl_allDocumentsQuery;
+
 @end
