@@ -13,7 +13,7 @@
 @interface CBLManager (ReactiveCouchbaseLite)
 
 /**
- Returns a copy of the shared instance of CBLManager, suitable for using off the normal thread.
+ A copy of the shared instance of CBLManager, suitable for using off the normal thread.
  
  @return A signal containing a copy of the shared instance of CBLManager.
  */
