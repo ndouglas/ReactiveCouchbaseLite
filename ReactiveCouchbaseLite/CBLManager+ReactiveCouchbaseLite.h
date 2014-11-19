@@ -9,6 +9,7 @@
 
 #import <CouchbaseLite/CouchbaseLite.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
+#import "RCLDefinitions.h"
 
 @interface CBLManager (ReactiveCouchbaseLite)
 
