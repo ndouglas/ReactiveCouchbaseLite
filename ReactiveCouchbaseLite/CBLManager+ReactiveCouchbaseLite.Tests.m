@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "RCLTestDefinitions.h"
 #import "ReactiveCouchbaseLite.h"
 
 typedef BOOL (^RCLObjectTesterBlock)(id);

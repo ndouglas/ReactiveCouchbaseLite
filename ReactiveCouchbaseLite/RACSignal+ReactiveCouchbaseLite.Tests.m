@@ -8,6 +8,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "RCLTestDefinitions.h"
 #import "ReactiveCouchbaseLite.h"
 
 @interface RACSignal_ReactiveCouchbaseLiteTests : XCTestCase

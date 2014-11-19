@@ -8,6 +8,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "RCLTestDefinitions.h"
 #import "ReactiveCouchbaseLite.h"
 
 typedef BOOL (^RCLObjectTesterBlock)(id);
@@ -69,6 +70,25 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     return result;
 }
 
+- (BOOL)expectCompletionFromSignal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
+    __block BOOL result = NO;
+    XCTestExpectation *expectation = [self expectationWithDescription:description];
+    RACDisposable *disposable = [[signal
+    take:1]
+    subscribeCompleted:^{
+        result = YES;
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:timeout handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Expectation '%@' failed with error: %@", description, error);
+        }
+        [disposable dispose];
+    }];
+    return result;
+    
+}
+
 - (void)testLastSequenceNumber {
     NSError *error = nil;
     RACSignal *signal = [_database rcl_lastSequenceNumber];
@@ -93,5 +113,23 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     XCTAssertTrue([self expect:generator(@2) fromSignal:signal timeout:5.0 description:@"last sequence number matches"]);
 }
 
+- (void)testClose {
+    XCTAssertTrue([self expect:]
+}
+
 @end
+
+- (RACSignal *)rcl_close;
+- (RACSignal *)rcl_compact;
+- (RACSignal *)rcl_delete;
+- (RACSignal *)rcl_documentWithID:(NSString *)documentID;
+- (RACSignal *)rcl_existingDocumentWithID:(NSString *)documentID;
+- (RACSignal *)rcl_createDocument;
+- (RACSignal *)rcl_existingLocalDocumentWithID:(NSString *)documentID;
+- (RACSignal *)rcl_putLocalDocumentWithProperties:(NSDictionary *)properties ID:(NSString *)documentID;
+- (RACSignal *)rcl_deleteLocalDocumentWithID:(NSString *)documentID;
+- (RACSignal *)rcl_allDocumentsQuery;
+- (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode;
+- (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode updateMode:(CBLIndexUpdateMode)updateMode;
+
 
