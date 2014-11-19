@@ -42,4 +42,12 @@
 
 - (RACSignal *)rcl_compact;
 
+/**
+  Deletes this database.
+  
+  @return A signal indicating whether the database deleted with an error or not.
+ */
+
+- (RACSignal *)rcl_delete;
+
 @end

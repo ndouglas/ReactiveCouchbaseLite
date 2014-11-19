@@ -27,7 +27,6 @@
     }];
 }
 
-
 - (RACSignal *)rcl_compact {
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSError *error = nil;
@@ -38,4 +37,16 @@
         return nil;
     }];
 }
+
+- (RACSignal *)rcl_delete {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSError *error = nil;
+        if (![self deleteDatabase:&error]) {
+            [subscriber sendError:error];
+        }
+        [subscriber sendCompleted];
+        return nil;
+    }];
+}
+
 @end
