@@ -8,3 +8,4 @@
 //
 
 #import "CBLDatabase+ReactiveCouchbaseLite.h"
+#import "CBLManager+ReactiveCouchbaseLite.h"

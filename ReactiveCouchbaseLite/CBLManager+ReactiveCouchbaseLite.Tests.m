@@ -1,10 +1,9 @@
 //
-//  CBLDatabase+ReactiveCouchbaseLite.Tests.m
-//  ReactiveCouchbaseLite
+//  CBLManager+ReactiveCouchbaseLite.Tests.m
+//  Sync
 //
-//  Created by Nathan Douglas on 11/18/14.
-//  Released into the public domain.
-//  See LICENSE for details.
+//  Created by Nathan Douglas on 11/19/14.
+//  Copyright (c) 2013 DEVONtechnologies. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
@@ -13,14 +12,14 @@
 typedef BOOL (^RCLObjectTesterBlock)(id);
 typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 
-@interface CBLDatabase_ReactiveCouchbaseLiteTests : XCTestCase {
+@interface CBLManager_ReactiveCouchbaseLiteTests : XCTestCase {
     CBLManager *_manager;
     CBLDatabase *_database;
 }
 
 @end
 
-@implementation CBLDatabase_ReactiveCouchbaseLiteTests
+@implementation CBLManager_ReactiveCouchbaseLiteTests
 
 - (void)setUp {
 	[super setUp];
@@ -69,28 +68,13 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     return result;
 }
 
-- (void)testLastSequenceNumber {
-    NSError *error = nil;
-    RACSignal *signal = [_database rcl_lastSequenceNumber];
-    RCLObjectTesterGeneratorBlock generator = ^(id testValue) {
-        return ^BOOL(id inValue) {
-            return (!inValue && !testValue) || [inValue isEqual:testValue];
-        };
+- (void)testSharedInstance {
+    RACSignal *signal = [CBLManager rcl_sharedInstance];
+    RCLObjectTesterBlock tester = ^BOOL (id inValue) {
+        return [inValue isEqual:_manager];
     };
-    XCTAssertTrue([self expect:generator(@0) fromSignal:signal timeout:5.0 description:@"last sequence number matches"]);
+    XCTAssertTrue([self expect:tester fromSignal:signal timeout:5.0 description:@"sharedInstance is equal to sharedInstance"]);
     
-    CBLDocument *document = [_database createDocument];
-    XCTAssertTrue([document update:^BOOL(CBLUnsavedRevision *newRevision) {
-        newRevision[@"name"] = [[NSUUID UUID] UUIDString];
-        return YES;
-    } error:&error], @"%@", error);
-    XCTAssertTrue([self expect:generator(@1) fromSignal:signal timeout:5.0 description:@"last sequence number matches"]);
-    
-    XCTAssertTrue([document update:^BOOL(CBLUnsavedRevision *newRevision) {
-        newRevision[@"name"] = [[NSUUID UUID] UUIDString];
-        return YES;
-    } error:&error], @"%@", error);
-    XCTAssertTrue([self expect:generator(@2) fromSignal:signal timeout:5.0 description:@"last sequence number matches"]);
 }
 
 @end
