@@ -24,4 +24,9 @@
     setNameWithFormat:@"%@ -rcl_updateQueryIndexMode: %@", self.name, @(mode)];
 }
 
+- (RACSignal *)rcl_updateQueryIndexBeforeQuerying {
+    return [[self rcl_updateQueryIndexUpdateMode:kCBLUpdateIndexBefore]
+    setNameWithFormat:@"%@ -rcl_updateQueryIndexBeforeQuerying", self.name];
+}
+
 @end
