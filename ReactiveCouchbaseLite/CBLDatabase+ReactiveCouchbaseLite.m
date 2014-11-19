@@ -158,7 +158,7 @@
         query.allDocsMode = mode;
         return query;
     }]
-    rcl_updateQueryIndexMode:updateMode];
+    rcl_updateQueryIndexUpdateMode:updateMode];
     return [result setNameWithFormat:@"[%@] -rcl_allDocumentsQueryWithMode: %@ updateMode: %@", result.name, @(mode), @(updateMode)];
 }
 
