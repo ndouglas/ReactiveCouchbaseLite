@@ -13,7 +13,7 @@
 
 + (RACSignal *)rcl_sharedInstance {
     static CBLManager *rcl_copy = nil;
-    dispatch_once_t predicate = 0;
+    static dispatch_once_t predicate = 0;
     dispatch_once(&predicate, ^{
         if ([NSThread isMainThread]) {
             rcl_copy = [[CBLManager sharedInstance] copy];
