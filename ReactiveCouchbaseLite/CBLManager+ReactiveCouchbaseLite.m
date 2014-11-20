@@ -38,6 +38,7 @@
             } else {
                 [subscriber sendError:error];
             }
+            [subscriber sendCompleted];
         } error:^(NSError *error) {
             [subscriber sendError:error];
         } completed:^{
