@@ -10,6 +10,7 @@
 #import "CBLDatabase+ReactiveCouchbaseLite.h"
 #import "CBLDocument+ReactiveCouchbaseLite.h"
 #import "CBLManager+ReactiveCouchbaseLite.h"
+#import "CBLQuery+ReactiveCouchbaseLite.h"
 #import "CBLReplication+ReactiveCouchbaseLite.h"
 #import "CBLRevision+ReactiveCouchbaseLite.h"
 #import "CBLSavedRevision+ReactiveCouchbaseLite.h"
