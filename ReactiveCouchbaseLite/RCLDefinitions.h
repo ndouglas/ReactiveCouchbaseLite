@@ -13,10 +13,14 @@
 extern NSString * const RCLErrorDomain;
 
 typedef enum {
-    RCLErrorCode_DocumentCouldNotBeFoundOrCreated,          // Couchbase-Lite couldn't find or create the document.
-    RCLErrorCode_DocumentCouldNotBeFound,                   // Couchbase-Lite couldn't find the document.
-    RCLErrorCode_DocumentCouldNotBeCreated,                 // Couchbase-Lite couldn't create the document.
-    RCLErrorCode_LocalDocumentCouldNotBeFound,              // Couchbase-Lite couldn't find the local document.
+    RCLErrorCode_DocumentCouldNotBeFoundOrCreated,          // Couldn't find or create the document.
+    RCLErrorCode_DocumentCouldNotBeFound,                   // Couldn't find the document.
+    RCLErrorCode_DocumentCouldNotBeCreated,                 // Couldn't create the document.
+    RCLErrorCode_LocalDocumentCouldNotBeFound,              // Couldn't find the local document.
+    RCLErrorCode_ViewCouldNotBeFound,                       // Couldn't find the view.
+    RCLErrorCode_ValidationCouldNotBeFound,                 // Couldn't find the validation.
+    RCLErrorCode_FilterCouldNotBeFound,                     // Couldn't find the filter.
+    RCLErrorCode_TransactionWasNotCommitted,                // Unable to commit the transaction.
 } RCLErrorCodeType;
 
 extern NSError *RCLErrorWithCode(RCLErrorCodeType code);
