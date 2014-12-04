@@ -9,4 +9,5 @@
 
 #import "CBLDatabase+ReactiveCouchbaseLite.h"
 #import "CBLManager+ReactiveCouchbaseLite.h"
+#import "CBLRevision+ReactiveCouchbaseLite.h"
 #import "RACSignal+ReactiveCouchbaseLite.h"
