@@ -19,7 +19,7 @@
             result = query.copy;
             result.indexUpdateMode = mode;
         }
-        return query;
+        return result;
     }]
     setNameWithFormat:@"%@ -rcl_updateQueryIndexMode: %@", self.name, @(mode)];
 }
