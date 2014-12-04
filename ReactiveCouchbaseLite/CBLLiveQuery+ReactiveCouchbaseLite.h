@@ -19,4 +19,12 @@
 
 - (RACSignal *)rcl_rows;
 
+/**
+ The query results.
+ 
+ @return A signal containing the rows of the database matching the query as the contents of the database change.
+ */
+
+- (RACSignal *)rcl_changes;
+
 @end
