@@ -16,6 +16,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 
 @interface CBLDatabase_ReactiveCouchbaseLiteTests : XCTestCase {
     CBLManager *_manager;
+    NSString *_databaseName;
     CBLDatabase *_database;
 }
 
@@ -28,9 +29,10 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     _manager = [CBLManager sharedInstance];
     NSError *error = nil;
     [self cleanupPreviousDatabaseInManager:_manager];
-    _database = [_manager databaseNamed:@"rcl_test" error:&error];
+    _databaseName = [NSString stringWithFormat:@"test_%@", @([[[NSUUID UUID] UUIDString] hash])];
+    _database = [_manager databaseNamed:_databaseName error:&error];
     if (!_database) {
-        XCTFail(@"Error creating database 'rcl_test': %@", error);
+        XCTFail(@"Error creating database '%@': %@", _databaseName, error);
     }
 }
 
@@ -51,31 +53,6 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         }
     }
 }
-
-/**
-- (void)expectCompletionFromSignal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
-    XCTestExpectation *expectation = [self expectationWithDescription:description];
-    [self expectation:expectation signal:signal subscribeCompletion:^{
-        [expectation fulfill];
-    } timeout:timeout];
-}
-
-- (void)expectNext:(void (^)(id next))nextHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
-    XCTestExpectation *expectation = [self expectationWithDescription:description];
-    [self expectation:expectation signal:signal subscribeNext:^(id next) {
-        nextHandler(next);
-        [expectation fulfill];
-    } timeout:timeout];
-}
-
-- (void)expectError:(void (^)(NSError *error))errorHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
-    XCTestExpectation *expectation = [self expectationWithDescription:description];
-    [self expectation:expectation signal:signal subscribeError:^(NSError *error) {
-        errorHandler(error);
-        [expectation fulfill];
-    } timeout:timeout];
-}
-*/
 
 - (void)testLastSequenceNumber {
 
@@ -108,18 +85,72 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     [self expectCompletionFromSignal:[_database rcl_close] timeout:5.0 description:@"database closed successfully"];
 }
 
+- (void)testCompact {
+    [self expectCompletionFromSignal:[_database rcl_compact] timeout:5.0 description:@"database compacted successfully"];
+}
+
+- (void)testDelete {
+    [self expectCompletionFromSignal:[[_database rcl_delete]
+    then:^RACSignal *{
+        return [[[[CBLManager rcl_existingDatabaseNamed:_databaseName]
+        doNext:^(CBLDatabase *database) {
+            XCTFail(@"database '%@' was apparently not deleted", _databaseName);
+        }]
+        doCompleted:^{
+            XCTFail(@"database '%@' was apparently not deleted", _databaseName);
+        }]
+        catchTo:[RACSignal empty]];
+    }] timeout:5.0 description:@"database deleted successfully"];
+}
+
+- (void)testDocumentWithID {
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self expectNext:^(CBLDocument *document) {
+        NSLog(@"Opened document %@", document);
+    } signal:[_database rcl_documentWithID:ID] timeout:5.0 description:@"document created/opened successfully"];
+}
+
+- (void)testCreateDocument {
+    [self expectNext:^(CBLDocument *document) {
+        NSLog(@"Created document %@", document);
+    } signal:[_database rcl_createDocument] timeout:5.0 description:@"document created/opened successfully"];
+}
+
+- (void)testExistingDocumentWithID {
+    /**
+     Postponed while I add document manipulation methods.
+     */
+}
+
+- (void)testExistingLocalDocumentWithID {
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self expectError:^(NSError *error) {
+        NSLog(@"Received error: %@", error);
+    } signal:[_database rcl_existingLocalDocumentWithID:ID] timeout:5.0 description:@"local document not found"];
+    [self expectCompletionFromSignal:[_database rcl_putLocalDocumentWithProperties:@{} ID:ID] timeout:5.0 description:@"local document created"];
+}
+
+- (void)testDeleteLocalDocumentWithID {
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self expectError:^(NSError *error) {
+        NSLog(@"Received error: %@", error);
+    } signal:[_database rcl_existingLocalDocumentWithID:ID] timeout:5.0 description:@"local document not found"];
+    [self expectCompletionFromSignal:[[_database rcl_putLocalDocumentWithProperties:@{} ID:ID]
+    then:^RACSignal *{
+        return [[_database rcl_deleteLocalDocumentWithID:ID]
+        then:^RACSignal *{
+            return [[[_database rcl_existingLocalDocumentWithID:ID]
+            doCompleted:^{
+                XCTFail(@"Local document '%@' was apparently not deleted", ID);
+            }]
+            catchTo:[RACSignal empty]];
+        }];
+    }] timeout:5.0 description:@"local document created"];
+}
+
 @end
 
 /**
-- (RACSignal *)rcl_close;
-- (RACSignal *)rcl_compact;
-- (RACSignal *)rcl_delete;
-- (RACSignal *)rcl_documentWithID:(NSString *)documentID;
-- (RACSignal *)rcl_existingDocumentWithID:(NSString *)documentID;
-- (RACSignal *)rcl_createDocument;
-- (RACSignal *)rcl_existingLocalDocumentWithID:(NSString *)documentID;
-- (RACSignal *)rcl_putLocalDocumentWithProperties:(NSDictionary *)properties ID:(NSString *)documentID;
-- (RACSignal *)rcl_deleteLocalDocumentWithID:(NSString *)documentID;
 - (RACSignal *)rcl_allDocumentsQuery;
 - (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode;
 - (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode updateMode:(CBLIndexUpdateMode)updateMode;
