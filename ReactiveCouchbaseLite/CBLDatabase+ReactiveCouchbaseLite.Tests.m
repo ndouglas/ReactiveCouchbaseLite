@@ -154,5 +154,19 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 - (RACSignal *)rcl_allDocumentsQuery;
 - (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode;
 - (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode updateMode:(CBLIndexUpdateMode)updateMode;
+- (RACSignal *)rcl_slowQueryWithMap:(CBLMapBlock)block;
+- (RACSignal *)rcl_viewNamed:(NSString *)name;
+- (RACSignal *)rcl_existingViewNamed:(NSString *)name;
+- (RACSignal *)rcl_setValidationNamed:(NSString *)name asBlock:(CBLValidationBlock)block;
+- (RACSignal *)rcl_validationNamed:(NSString *)name;
+- (RACSignal *)rcl_setFilterNamed:(NSString *)name asBlock:(CBLFilterBlock)block;
+- (RACSignal *)rcl_filterNamed:(NSString *)name;
+- (RACSignal *)rcl_inTransaction:(BOOL (^)(void))block;
+- (RACSignal *)rcl_doAsync:(void (^)(void))block;
+- (RACSignal *)rcl_doSync:(void (^)(void))block;
+- (RACSignal *)rcl_allReplications;
+- (RACSignal *)rcl_createPushReplication:(NSURL *)URL;
+- (RACSignal *)rcl_createPullReplication:(NSURL *)URL;
+- (RACSignal *)rcl_databaseChangeNotifications;
 */
 
