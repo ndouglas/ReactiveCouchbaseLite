@@ -20,7 +20,9 @@ typedef enum {
     RCLErrorCode_ViewCouldNotBeFound,                       // Couldn't find the view.
     RCLErrorCode_ValidationCouldNotBeFound,                 // Couldn't find the validation.
     RCLErrorCode_FilterCouldNotBeFound,                     // Couldn't find the filter.
-    RCLErrorCode_TransactionWasNotCommitted,                // Unable to commit the transaction.
+    RCLErrorCode_TransactionWasNotCommitted,                // Couldn't commit the transaction.
+    RCLErrorCode_RevisionCouldNotBeFound,                   // Couldn't find the revision.
+    RCLErrorCode_AttachmentCouldNotBeFound,                 // Couldn't find the attachment.
 } RCLErrorCodeType;
 
 extern NSError *RCLErrorWithCode(RCLErrorCodeType code);
