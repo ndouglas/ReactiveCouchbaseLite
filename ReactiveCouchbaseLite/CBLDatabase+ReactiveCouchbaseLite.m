@@ -267,9 +267,14 @@
 }
 
 - (RACSignal *)rcl_databaseChangeNotifications {
-	RACSignal *result = [[[NSNotificationCenter defaultCenter]
+	RACSignal *result = [[[[[NSNotificationCenter defaultCenter]
     rac_addObserverForName:kCBLDatabaseChangeNotification object:self]
-    takeUntil:self.rac_willDeallocSignal];
+    takeUntil:self.rac_willDeallocSignal]
+	map:^RACSignal *(NSNotification *notification) {
+		RACSignal *result = ((NSArray *)notification.userInfo[@"changes"]).rac_sequence.signal;
+		return result;
+	}]
+	flatten];
     return [result setNameWithFormat:@"[%@] -rcl_databaseChangeNotifications", result.name];
 }
 

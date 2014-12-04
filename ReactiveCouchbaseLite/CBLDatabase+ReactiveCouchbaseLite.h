@@ -257,7 +257,7 @@
 /**
  Observes changes in the database.
  
- @return A signal containing NSNotification objects describing database changes.
+ @return A signal containing CBLDatabaseChange objects.
  */
 
 - (RACSignal *)rcl_databaseChangeNotifications;
