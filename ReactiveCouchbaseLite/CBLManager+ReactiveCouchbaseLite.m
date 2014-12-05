@@ -26,49 +26,52 @@
     setNameWithFormat:@"%@ +rcl_sharedInstance", self];
 }
 
-+ (RACSignal *)rcl_databaseNamed:(NSString *)_name {
-    return [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        RACDisposable *disposable = [[self rcl_sharedInstance]
-        subscribeNext:^(CBLManager *manager) {
-            NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
-            NSError *error = nil;
-            CBLDatabase *database = [manager databaseNamed:_name error:&error];
-            if (database) {
-                [subscriber sendNext:database];
-            } else {
-                [subscriber sendError:error];
-            }
-            [subscriber sendCompleted];
-        } error:^(NSError *error) {
-            [subscriber sendError:error];
-        } completed:^{
-            [subscriber sendCompleted];
-        }];
-        return disposable;
-    }]
-    setNameWithFormat:@"%@ +rcl_databaseNamed: %@", self, _name];
++ (RACSignal *)rcl_databaseNamed:(NSString *)name {
+    return [[self rcl_sharedInstance]
+    flattenMap:^RACSignal *(CBLManager *manager) {
+        NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
+        return [manager rcl_databaseNamed:name];
+    }];
 }
 
-+ (RACSignal *)rcl_existingDatabaseNamed:(NSString *)_name {
-    return [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        RACDisposable *disposable = [[self rcl_sharedInstance]
-        subscribeNext:^(CBLManager *manager) {
-            NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
-            NSError *error = nil;
-            CBLDatabase *database = [manager existingDatabaseNamed:_name error:&error];
-            if (database) {
-                [subscriber sendNext:database];
-            } else {
-                [subscriber sendError:error];
-            }
-        } error:^(NSError *error) {
++ (RACSignal *)rcl_existingDatabaseNamed:(NSString *)name {
+    return [[self rcl_sharedInstance]
+    flattenMap:^RACSignal *(CBLManager *manager) {
+        NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
+        return [manager rcl_existingDatabaseNamed:name];
+    }];
+}
+
+- (RACSignal *)rcl_databaseNamed:(NSString *)name {
+    NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSError *error = nil;
+        CBLDatabase *database = [self databaseNamed:name error:&error];
+        if (database) {
+            [subscriber sendNext:database];
+        } else {
             [subscriber sendError:error];
-        } completed:^{
-            [subscriber sendCompleted];
-        }];
-        return disposable;
-    }]
-    setNameWithFormat:@"%@ +rcl_existingDatabaseNamed: %@", self, _name];
+        }
+        [subscriber sendCompleted];
+        return nil;
+    }];
+    return [result setNameWithFormat:@"%@ -rcl_databaseNamed: %@", result.name, name];
+}
+
+- (RACSignal *)rcl_existingDatabaseNamed:(NSString *)name {
+    NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSError *error = nil;
+        CBLDatabase *database = [self existingDatabaseNamed:name error:&error];
+        if (database) {
+            [subscriber sendNext:database];
+        } else {
+            [subscriber sendError:error];
+        }
+        [subscriber sendCompleted];
+        return nil;
+    }];
+    return [result setNameWithFormat:@"%@ -rcl_existingDatabaseNamed: %@", result.name, name];
 }
 
 - (RACScheduler *)rcl_scheduler {

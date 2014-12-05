@@ -24,11 +24,32 @@
 /**
  A copy of the specified database.
  
+ @param name The name of the database.
  @return A signal containing a copy of the specified database, or an error.
  @discussion The database will be created if it doesn't already exist.
  */
 
-+ (RACSignal *)rcl_databaseNamed:(NSString *)_name;
++ (RACSignal *)rcl_databaseNamed:(NSString *)name;
+
+/**
+ A copy of the specified database.
+ 
+ @param name The name of the database.
+ @return A signal containing a copy of the specified database, or an error.
+ @discussion The database will not be created if it doesn't already exist.
+ */
+
++ (RACSignal *)rcl_existingDatabaseNamed:(NSString *)name;
+
+/**
+ A copy of the specified database.
+ 
+ @param name The name of the database.
+ @return A signal containing a copy of the specified database, or an error.
+ @discussion The database will be created if it doesn't already exist.
+ */
+
+- (RACSignal *)rcl_databaseNamed:(NSString *)name;
 
 /**
  A copy of the specified database.
@@ -37,7 +58,7 @@
  @discussion The database will not be created if it doesn't already exist.
  */
 
-+ (RACSignal *)rcl_existingDatabaseNamed:(NSString *)_name;
+- (RACSignal *)rcl_existingDatabaseNamed:(NSString *)name;
 
 /**
  A scheduler for this manager and descendant objects.
