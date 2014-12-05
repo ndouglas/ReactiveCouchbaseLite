@@ -8,7 +8,6 @@
 //
 
 #import "CBLDatabase+ReactiveCouchbaseLite.h"
-#import "RACSignal+ReactiveCouchbaseLite.h"
 
 @implementation CBLDatabase (ReactiveCouchbaseLite)
 
@@ -150,13 +149,13 @@
 }
 
 - (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode updateMode:(CBLIndexUpdateMode)updateMode {
-    RACSignal *result = [[[self rcl_allDocumentsQuery]
+    RACSignal *result = [[self rcl_allDocumentsQuery]
     map:^CBLQuery *(CBLQuery *query) {
         CBLQuery *result = query.copy;
         result.allDocsMode = mode;
+        result.indexUpdateMode = updateMode;
         return result;
-    }]
-    rcl_updateQueryIndexUpdateMode:updateMode];
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_allDocumentsQueryWithMode: %@ updateMode: %@", result.name, @(mode), @(updateMode)];
 }
 

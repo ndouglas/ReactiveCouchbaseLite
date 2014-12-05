@@ -168,6 +168,9 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     }] timeout:5.0 description:@"local document created"];
 }
 
+- (void)testSlowQueryWithMap {
+}
+
 @end
 
 /**
