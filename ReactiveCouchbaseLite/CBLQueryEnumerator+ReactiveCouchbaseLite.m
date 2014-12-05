@@ -12,16 +12,29 @@
 
 @implementation CBLQueryEnumerator (ReactiveCouchbaseLite)
 
-- (RACSignal *)rcl_flattenedRows {
+- (RACSignal *)rcl_nextRow {
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        CBLQueryRow *row = nil;
-        while ((row = self.nextRow)) {
+        CBLQueryRow *row = self.nextRow;
+        if (row) {
             [subscriber sendNext:row];
+        } else {
+            [subscriber sendError:RCLErrorWithCode(RCLErrorCode_QueryRowCouldNotBeFound)];
         }
         [subscriber sendCompleted];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@ -rcl_flattenedRows]", self.description];
+    return [result setNameWithFormat:@"[%@ -rcl_nextRow]", self.description];
+}
+
+- (RACSequence *)rcl_sequence {
+    CBLQueryEnumerator *enumerator = [self copy];
+    [enumerator reset];
+    CBLQueryRow *row = [enumerator nextRow];
+    return [RACSequence sequenceWithHeadBlock:^CBLQueryRow *{
+        return row;
+    } tailBlock:^RACSequence *{
+        return [enumerator rcl_sequence];
+    }];
 }
 
 @end

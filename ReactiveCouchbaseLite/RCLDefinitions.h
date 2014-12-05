@@ -23,6 +23,7 @@ typedef enum {
     RCLErrorCode_TransactionWasNotCommitted,                // Couldn't commit the transaction.
     RCLErrorCode_RevisionCouldNotBeFound,                   // Couldn't find the revision.
     RCLErrorCode_AttachmentCouldNotBeFound,                 // Couldn't find the attachment.
+    RCLErrorCode_QueryRowCouldNotBeFound,                   // Couldn't find the query row.
 } RCLErrorCodeType;
 
 extern NSError *RCLErrorWithCode(RCLErrorCodeType code);

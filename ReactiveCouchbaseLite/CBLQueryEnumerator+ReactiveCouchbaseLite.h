@@ -10,11 +10,19 @@
 @interface CBLQueryEnumerator (ReactiveCouchbaseLite)
 
 /**
- All of the rows, sent sequentially.
+ A signal for the next row.
  
- @return A signal of every result row.
+ @return A signal of the next row.
  */
 
-- (RACSignal *)rcl_flattenedRows;
+- (RACSignal *)rcl_nextRow;
+
+/**
+ All of the rows as a sequence.
+ 
+ @return A signal of the rows.
+ */
+
+- (RACSequence *)rcl_sequence;
 
 @end
