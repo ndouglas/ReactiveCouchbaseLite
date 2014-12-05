@@ -17,7 +17,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 @interface CBLDatabase_ReactiveCouchbaseLiteTests : XCTestCase {
     CBLManager *_manager;
     NSString *_databaseName;
-    CBLDatabase *_database;
+    RACScheduler *_failScheduler;
 }
 
 @end
@@ -28,36 +28,21 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 	[super setUp];
     _manager = [CBLManager sharedInstance];
     NSError *error = nil;
-    [self cleanupPreviousDatabaseInManager:_manager];
     _databaseName = [NSString stringWithFormat:@"test_%@", @([[[NSUUID UUID] UUIDString] hash])];
-    _database = [_manager databaseNamed:_databaseName error:&error];
-    if (!_database) {
-        XCTFail(@"Error creating database '%@': %@", _databaseName, error);
-    }
+    _failScheduler = [[RACQueueScheduler alloc] initWithName:@"FailQueue" queue:dispatch_queue_create("FailQueue", DISPATCH_QUEUE_SERIAL)];
 }
 
 - (void)tearDown {
     NSError *error = nil;
-    if (![_database deleteDatabase:&error]) {
-        XCTFail(@"Error deleting database: %@", _database.name);
-    }
 	[super tearDown];
 }
 
-- (void)cleanupPreviousDatabaseInManager:(CBLManager *)aManager {
-    NSError *error = nil;
-    CBLDatabase *previousDatabase = [aManager existingDatabaseNamed:@"rcl_test" error:&error];
-    if (previousDatabase) {
-        if (![previousDatabase deleteDatabase:&error]) {
-            XCTFail(@"Error deleting previous database: %@", _database.name);
-        }
-    }
-}
-
 - (void)testLastSequenceNumber {
-
     NSError *error = nil;
-    RACSignal *signal = [_database rcl_lastSequenceNumber];
+    RACSignal *signal = [[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_lastSequenceNumber];
+    }];
     RCLObjectTesterGeneratorBlock generator = ^(id testValue) {
         return ^(id inValue) {
             XCTAssertTrue((!inValue && !testValue) || [inValue isEqual:testValue], @"inValue %@ is not equal to testValue %@", inValue, testValue);
@@ -65,7 +50,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     };
     [self expectNext:generator(@0) signal:signal timeout:5.0 description:@"last sequence number matches"];
     
-    CBLDocument *document = [_database createDocument];
+    CBLDocument *document = [[_manager databaseNamed:_databaseName error:&error] createDocument];
     XCTAssertTrue([document update:^BOOL(CBLUnsavedRevision *newRevision) {
         newRevision[@"name"] = [[NSUUID UUID] UUIDString];
         return YES;
@@ -77,20 +62,29 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         return YES;
     } error:&error], @"%@", error);
     [self expectNext:generator(@2) signal:signal timeout:5.0 description:@"last sequence number matches"];
-    
-    NSLog(@"%@", _database);
 }
 
 - (void)testClose {
-    [self expectCompletionFromSignal:[_database rcl_close] timeout:5.0 description:@"database closed successfully"];
+    [self expectCompletionFromSignal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_close];
+    }]
+    timeout:5.0 description:@"database closed successfully"];
 }
 
 - (void)testCompact {
-    [self expectCompletionFromSignal:[_database rcl_compact] timeout:5.0 description:@"database compacted successfully"];
+    [self expectCompletionFromSignal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_compact];
+    }]
+    timeout:5.0 description:@"database compacted successfully"];
 }
 
 - (void)testDelete {
-    [self expectCompletionFromSignal:[[_database rcl_delete]
+    [self expectCompletionFromSignal:[[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_delete];
+    }]
     then:^RACSignal *{
         return [[[[CBLManager rcl_existingDatabaseNamed:_databaseName]
         doNext:^(CBLDatabase *database) {
@@ -107,18 +101,29 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self expectNext:^(CBLDocument *document) {
         NSLog(@"Opened document %@", document);
-    } signal:[_database rcl_documentWithID:ID] timeout:5.0 description:@"document created/opened successfully"];
+    } signal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_documentWithID:ID];
+    }]
+    timeout:5.0 description:@"document created/opened successfully"];
 }
 
 - (void)testCreateDocument {
     [self expectNext:^(CBLDocument *document) {
         NSLog(@"Created document %@", document);
-    } signal:[_database rcl_createDocument] timeout:5.0 description:@"document created/opened successfully"];
+    } signal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_createDocument];
+    }]
+    timeout:5.0 description:@"document created/opened successfully"];
 }
 
 - (void)testExistingDocumentWithID {
     NSString *ID = [[NSUUID UUID] UUIDString];
-    [self expectCompletionFromSignal:[[[[[[[_database rcl_documentWithID:ID]
+    [self expectCompletionFromSignal:[[[[[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_documentWithID:ID];
+    }]
     flattenMap:^RACSignal *(CBLDocument *document) {
         return [document rcl_newRevision];
     }]
@@ -127,21 +132,25 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     }]
     ignoreValues]
     then:^RACSignal *{
-        return [_database rcl_existingDocumentWithID:ID];
+        return [[CBLManager rcl_databaseNamed:_databaseName]
+        flattenMap:^RACSignal *(CBLDatabase *database) {
+            return [database rcl_existingDocumentWithID:ID];
+        }];
     }]
     flattenMap:^RACSignal *(CBLDocument *document) {
         return [document rcl_delete];
     }]
     then:^RACSignal *{
-        return [[[_database rcl_existingDocumentWithID:ID]
-        doNext:^(CBLDocument *document) {
-            XCTFail(@"document '%@' apparently not deleted.", ID);
-        }]
-        catchTo:[RACSignal empty]];
+        return [[CBLManager rcl_databaseNamed:_databaseName]
+        flattenMap:^RACSignal *(CBLDatabase *database) {
+            return [database rcl_existingDocumentWithID:ID];
+        }];
     }]
-    timeout:5.0 description:@"document created/opened successfully"];
+    catchTo:[RACSignal empty]]
+    timeout:5.0 description:@"document created/opened/deleted successfully"];
 }
 
+/**
 - (void)testExistingLocalDocumentWithID {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self expectError:^(NSError *error) {
@@ -317,7 +326,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         return [RACSignal empty];
     }] timeout:5.0 description:@"correctly asynchronously invokes block."];
 }
-
+*/
 @end
 
 /**
