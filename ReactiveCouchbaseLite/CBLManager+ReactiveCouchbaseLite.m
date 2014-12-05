@@ -76,7 +76,14 @@
 }
 
 - (BOOL)rcl_isOnScheduler {
-    return [@(dispatch_queue_get_label((dispatch_queue_t)[(RACQueueScheduler *)[self rcl_scheduler] queue])) isEqual:self.description];
+    BOOL result = YES;
+    result = result && [self rcl_scheduler];
+    result = result && [[self rcl_scheduler] isKindOfClass:[RACQueueScheduler class]];
+    RACQueueScheduler *queueScheduler = (RACQueueScheduler *)[self rcl_scheduler];
+    dispatch_queue_t schedulerQueue = [queueScheduler queue];
+    NSString *schedulerQueueLabel = @(dispatch_queue_get_label(schedulerQueue));
+    result = result && [schedulerQueueLabel isEqualToString:self.description];
+    return result;
 }
 
 @end
