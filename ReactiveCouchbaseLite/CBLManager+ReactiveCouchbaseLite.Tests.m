@@ -10,9 +10,6 @@
 #import "RCLTestDefinitions.h"
 #import "ReactiveCouchbaseLite.h"
 
-typedef BOOL (^RCLObjectTesterBlock)(id);
-typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
-
 @interface CBLManager_ReactiveCouchbaseLiteTests : XCTestCase {
     CBLManager *_manager;
     CBLDatabase *_database;
@@ -51,31 +48,20 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     }
 }
 
-- (BOOL)expect:(RCLObjectTesterBlock)block fromSignal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
-    __block BOOL result = NO;
-    XCTestExpectation *expectation = [self expectationWithDescription:description];
-    RACDisposable *disposable = [[signal
-    take:1]
-    subscribeNext:^(id inValue) {
-        result = block(inValue);
-        [expectation fulfill];
-    }];
-    [self waitForExpectationsWithTimeout:timeout handler:^(NSError *error) {
-        if (error) {
-            XCTFail(@"Expectation '%@' failed with error: %@", description, error);
-        }
-        [disposable dispose];
-    }];
-    return result;
+- (void)testSharedInstance {
+    [self expectNext:^(CBLManager *manager) {
+        XCTAssertNotNil(manager);
+    } signal:[CBLManager rcl_sharedInstance] timeout:5.0 description:@"sharedInstance is equal to sharedInstance"];
 }
 
-- (void)testSharedInstance {
-    RACSignal *signal = [CBLManager rcl_sharedInstance];
-    RCLObjectTesterBlock tester = ^BOOL (id inValue) {
-        return inValue != nil;
-    };
-    XCTAssertTrue([self expect:tester fromSignal:signal timeout:5.0 description:@"sharedInstance is equal to sharedInstance"]);
-    
+- (void)testIsOnScheduler {
+    [self expectNext:^(CBLManager *manager) {
+       XCTAssertTrue(manager.rcl_isOnScheduler);
+    } signal:[CBLManager rcl_sharedInstance] timeout:5.0 description:@"sharedInstance was delivered on a correct thread"];
+    [self expectNext:^(CBLManager *manager) {
+       XCTAssertTrue(!manager.rcl_isOnScheduler);
+    } signal:[[CBLManager rcl_sharedInstance]
+    deliverOn:[[RACQueueScheduler alloc] initWithName:@"FailQueue" queue:dispatch_queue_create("FailQueue", DISPATCH_QUEUE_SERIAL)]] timeout:5.0 description:@"sharedInstance was delivered on an incorrect thread"];
 }
 
 @end

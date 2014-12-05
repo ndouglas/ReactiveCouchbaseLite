@@ -20,7 +20,7 @@
             manager = [[CBLManager sharedInstance] copy];
         });
     }
-    manager.dispatchQueue = dispatch_queue_create(self.description.UTF8String, DISPATCH_QUEUE_SERIAL);
+    manager.dispatchQueue = dispatch_queue_create(manager.description.UTF8String, DISPATCH_QUEUE_SERIAL);
     return [[[RACSignal return:manager]
     deliverOn:[manager rcl_scheduler]]
     setNameWithFormat:@"+[%@ rcl_sharedInstance]", self];
@@ -78,8 +78,8 @@
 - (BOOL)rcl_isOnScheduler {
     BOOL result = YES;
     result = result && [self rcl_scheduler];
-    result = result && [[self rcl_scheduler] isKindOfClass:[RACQueueScheduler class]];
-    RACQueueScheduler *queueScheduler = (RACQueueScheduler *)[self rcl_scheduler];
+    result = result && [[RACQueueScheduler currentScheduler] isKindOfClass:[RACQueueScheduler class]];
+    RACQueueScheduler *queueScheduler = (RACQueueScheduler *)[RACQueueScheduler currentScheduler];
     dispatch_queue_t schedulerQueue = [queueScheduler queue];
     NSString *schedulerQueueLabel = @(dispatch_queue_get_label(schedulerQueue));
     result = result && [schedulerQueueLabel isEqualToString:self.description];
