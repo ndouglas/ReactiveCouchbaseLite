@@ -219,15 +219,6 @@
 - (RACSignal *)rcl_doAsync:(void (^)(void))block;
 
 /**
- Runs the specified block synchronously on the database's dispatch queue or thread.
- 
- @param block The block to execute.
- @return A signal that completes when the block has been executed.
- */
-
-- (RACSignal *)rcl_doSync:(void (^)(void))block;
-
-/**
  All current, running CBLReplications involving this database.
  
  @return A signal of NSArray objects containing the replications involving this database.

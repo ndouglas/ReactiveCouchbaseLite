@@ -240,15 +240,6 @@
     return [result setNameWithFormat:@"[%@] -rcl_doAsync: %@ ", result.name, block];
 }
 
-- (RACSignal *)rcl_doSync:(void (^)(void))block {
-    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [self doSync:block];
-        [subscriber sendCompleted];
-        return nil;
-    }];
-    return [result setNameWithFormat:@"[%@] -rcl_doAsync: %@ ", result.name, block];
-}
-
 - (RACSignal *)rcl_allReplications {
     RACSignal *result = [RACObserve(self, allReplications)
     takeUntil:self.rac_willDeallocSignal];
