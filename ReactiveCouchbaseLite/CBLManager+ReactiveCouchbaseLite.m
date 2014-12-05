@@ -43,32 +43,40 @@
 }
 
 - (RACSignal *)rcl_databaseNamed:(NSString *)name {
-    NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+    @weakify(self)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        NSError *error = nil;
-        CBLDatabase *database = [self databaseNamed:name error:&error];
-        if (database) {
-            [subscriber sendNext:database];
-        } else {
-            [subscriber sendError:error];
-        }
-        [subscriber sendCompleted];
+        @strongify(self)
+        [self.rcl_scheduler schedule:^{
+            @strongify(self)
+            NSError *error = nil;
+            CBLDatabase *database = [self databaseNamed:name error:&error];
+            if (database) {
+                [subscriber sendNext:database];
+            } else {
+                [subscriber sendError:error];
+            }
+            [subscriber sendCompleted];
+        }];
         return nil;
     }];
     return [result setNameWithFormat:@"%@ -rcl_databaseNamed: %@", result.name, name];
 }
 
 - (RACSignal *)rcl_existingDatabaseNamed:(NSString *)name {
-    NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+    @weakify(self)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        NSError *error = nil;
-        CBLDatabase *database = [self existingDatabaseNamed:name error:&error];
-        if (database) {
-            [subscriber sendNext:database];
-        } else {
-            [subscriber sendError:error];
-        }
-        [subscriber sendCompleted];
+        @strongify(self)
+        [self.rcl_scheduler schedule:^{
+            @strongify(self)
+            NSError *error = nil;
+            CBLDatabase *database = [self existingDatabaseNamed:name error:&error];
+            if (database) {
+                [subscriber sendNext:database];
+            } else {
+                [subscriber sendError:error];
+            }
+            [subscriber sendCompleted];
+        }];
         return nil;
     }];
     return [result setNameWithFormat:@"%@ -rcl_existingDatabaseNamed: %@", result.name, name];
