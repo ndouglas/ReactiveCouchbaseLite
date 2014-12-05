@@ -12,19 +12,18 @@
 @implementation CBLManager (ReactiveCouchbaseLite)
 
 + (RACSignal *)rcl_sharedInstance {
-    static CBLManager *rcl_copy = nil;
-    static dispatch_once_t predicate = 0;
-    dispatch_once(&predicate, ^{
-        if ([NSThread isMainThread]) {
-            rcl_copy = [[CBLManager sharedInstance] copy];
-        } else {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                rcl_copy = [[CBLManager sharedInstance] copy];
-            });
-        }
-    });
-    return [[RACSignal return:rcl_copy]
-    setNameWithFormat:@"%@ +rcl_sharedInstance", self];
+    static CBLManager *manager = nil;
+    if ([NSThread isMainThread]) {
+        manager = [[CBLManager sharedInstance] copy];
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            manager = [[CBLManager sharedInstance] copy];
+        });
+    }
+    manager.dispatchQueue = dispatch_queue_create(self.description.UTF8String, DISPATCH_QUEUE_SERIAL);
+    return [[[RACSignal return:manager]
+    deliverOn:[manager rcl_scheduler]]
+    setNameWithFormat:@"+[%@ rcl_sharedInstance]", self];
 }
 
 + (RACSignal *)rcl_databaseNamed:(NSString *)_name {
