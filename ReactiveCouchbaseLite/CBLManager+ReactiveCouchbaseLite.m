@@ -89,7 +89,9 @@ static char CBLManagerAssociatedSchedulerKey;
 }
 
 - (RACScheduler *)rcl_scheduler {
-    return (RACScheduler *)objc_getAssociatedObject(self, &CBLManagerAssociatedSchedulerKey);
+    RACScheduler *result = (RACScheduler *)objc_getAssociatedObject(self, &CBLManagerAssociatedSchedulerKey);
+    NSCAssert(result != nil, @"manager does not have scheduler property set");
+    return result;
 }
 
 - (BOOL)rcl_isOnScheduler {
