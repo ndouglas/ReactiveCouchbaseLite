@@ -141,22 +141,22 @@
 - (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode {
     RACSignal *result = [[self rcl_allDocumentsQuery]
     map:^CBLQuery *(CBLQuery *query) {
-        CBLQuery *result = query.copy;
+        CBLQuery *result = query;
         result.allDocsMode = mode;
         return result;
     }];
     return [result setNameWithFormat:@"[%@] -rcl_allDocumentsQueryWithMode: %@", result.name, @(mode)];
 }
 
-- (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode updateMode:(CBLIndexUpdateMode)updateMode {
+- (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode indexUpdateMode:(CBLIndexUpdateMode)indexUpdateMode {
     RACSignal *result = [[self rcl_allDocumentsQuery]
     map:^CBLQuery *(CBLQuery *query) {
-        CBLQuery *result = query.copy;
+        CBLQuery *result = query;
         result.allDocsMode = mode;
-        result.indexUpdateMode = updateMode;
+        result.indexUpdateMode = indexUpdateMode;
         return result;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_allDocumentsQueryWithMode: %@ updateMode: %@", result.name, @(mode), @(updateMode)];
+    return [result setNameWithFormat:@"[%@] -rcl_allDocumentsQueryWithMode: %@ indexUpdateMode: %@", result.name, @(mode), @(indexUpdateMode)];
 }
 
 - (RACSignal *)rcl_slowQueryWithMap:(CBLMapBlock)block {

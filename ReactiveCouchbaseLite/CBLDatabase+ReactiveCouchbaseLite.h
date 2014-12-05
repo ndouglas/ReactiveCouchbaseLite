@@ -127,19 +127,18 @@
  Creates an all documents query with a specified mode.
  
  @param mode The mode of the query.
- @param updateMode The updateMode of the query.
+ @param indexUpdateMode The indexUpdateMode of the query.
  @return A signal containing an all documents query with the specified mode.
  */
 
-- (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode updateMode:(CBLIndexUpdateMode)updateMode;
+- (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode indexUpdateMode:(CBLIndexUpdateMode)indexUpdateMode;
 
 /** 
  Creates a one-shot query with the given map block.
  
  @param block The map block that will be used to query the database.
  @return A signal containing the slow query.
- @discussion This is inefficient but useful for development.  
- @discussion See -[CBLDatabase slowQueryWithMap:] for more information.
+ @discussion This is inefficient but useful for development. See -[CBLDatabase slowQueryWithMap:] for more information.
  */
 
 - (RACSignal *)rcl_slowQueryWithMap:(CBLMapBlock)block;

@@ -168,16 +168,57 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     }] timeout:5.0 description:@"local document created"];
 }
 
+- (void)testAllDocumentsQuery {
+    [self expectNext:^(CBLQuery *query) {
+        XCTAssertTrue([query isKindOfClass:[CBLQuery class]]);
+    } signal:[_database rcl_allDocumentsQuery] timeout:5.0 description:@"all documents query created"];
+}
+
+- (void)testAllDocumentsQueryWithMode {
+    [self expectNext:^(CBLQuery *query) {
+        XCTAssertTrue([query isKindOfClass:[CBLQuery class]]);
+        XCTAssertEqual(kCBLOnlyConflicts, query.allDocsMode);
+    } signal:[_database rcl_allDocumentsQueryWithMode:kCBLOnlyConflicts] timeout:5.0 description:@"all documents query created"];
+}
+
+- (void)testAllDocumentsQueryWithModeIndexUpdateMode {
+    [self expectNext:^(CBLQuery *query) {
+        XCTAssertTrue([query isKindOfClass:[CBLQuery class]]);
+        XCTAssertEqual(kCBLOnlyConflicts, query.allDocsMode);
+        XCTAssertEqual(kCBLUpdateIndexAfter, query.indexUpdateMode);
+    } signal:[_database rcl_allDocumentsQueryWithMode:kCBLOnlyConflicts indexUpdateMode:kCBLUpdateIndexAfter] timeout:5.0 description:@"all documents query created"];
+}
+
 - (void)testSlowQueryWithMap {
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self expectCompletionFromSignal:[[[[_database rcl_documentWithID:ID]
+    flattenMap:^RACSignal *(CBLDocument *document) {
+        return [document rcl_newRevision];
+    }]
+    flattenMap:^RACSignal *(CBLUnsavedRevision *unsavedRevision) {
+        return [unsavedRevision rcl_save];
+    }]
+    then:^RACSignal *{
+        return [[[[_database rcl_slowQueryWithMap:^(NSDictionary *document, CBLMapEmitBlock emit) {
+            emit(document[@"_id"], document);
+        }]
+        flattenMap:^RACSignal *(CBLQuery *query) {
+            return [query rcl_run];
+        }]
+        flattenMap:^RACSignal *(CBLQueryEnumerator *enumerator) {
+            return [enumerator rcl_nextRow];
+        }]
+        flattenMap:^RACStream *(CBLQueryRow *row) {
+            XCTAssertEqualObjects(row.documentID, ID);
+            return [RACSignal empty];
+        }];
+    }]
+    timeout:5.0 description:@"slow query created"];
 }
 
 @end
 
 /**
-- (RACSignal *)rcl_allDocumentsQuery;
-- (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode;
-- (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode updateMode:(CBLIndexUpdateMode)updateMode;
-- (RACSignal *)rcl_slowQueryWithMap:(CBLMapBlock)block;
 - (RACSignal *)rcl_viewNamed:(NSString *)name;
 - (RACSignal *)rcl_existingViewNamed:(NSString *)name;
 - (RACSignal *)rcl_setValidationNamed:(NSString *)name asBlock:(CBLValidationBlock)block;
