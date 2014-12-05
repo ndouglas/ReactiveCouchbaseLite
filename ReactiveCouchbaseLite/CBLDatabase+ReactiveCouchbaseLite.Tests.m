@@ -117,9 +117,29 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 }
 
 - (void)testExistingDocumentWithID {
-    /**
-     Postponed while I add document manipulation methods.
-     */
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self expectCompletionFromSignal:[[[[[[[_database rcl_documentWithID:ID]
+    flattenMap:^RACSignal *(CBLDocument *document) {
+        return [document rcl_newRevision];
+    }]
+    flattenMap:^RACSignal *(CBLUnsavedRevision *unsavedRevision) {
+        return [unsavedRevision rcl_save];
+    }]
+    ignoreValues]
+    then:^RACSignal *{
+        return [_database rcl_existingDocumentWithID:ID];
+    }]
+    flattenMap:^RACSignal *(CBLDocument *document) {
+        return [document rcl_delete];
+    }]
+    then:^RACSignal *{
+        return [[[_database rcl_existingDocumentWithID:ID]
+        doNext:^(CBLDocument *document) {
+            XCTFail(@"document '%@' apparently not deleted.", ID);
+        }]
+        catchTo:[RACSignal empty]];
+    }]
+    timeout:5.0 description:@"document created/opened successfully"];
 }
 
 - (void)testExistingLocalDocumentWithID {
