@@ -216,18 +216,111 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     timeout:5.0 description:@"slow query created"];
 }
 
+- (void)testViewNamed {
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self expectNext:^(CBLView *view) {
+        XCTAssertTrue([view isKindOfClass:[CBLView class]]);
+    } signal:[_database rcl_viewNamed:ID] timeout:5.0 description:@"view opened"];
+}
+
+- (void)testExistingViewNamed {
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self expectCompletionFromSignal:[[[[[[_database rcl_existingViewNamed:ID]
+    catch:^RACSignal *(NSError *error) {
+        return [_database rcl_viewNamed:ID];
+    }]
+    flattenMap:^RACSignal *(CBLView *view) {
+        [view setMapBlock:^(NSDictionary *document, CBLMapEmitBlock emit) {
+            emit(document[@"_id"], document);
+        } version:ID];
+        return [RACSignal return:view];
+    }]
+    flattenMap:^RACSignal *(CBLView *view) {
+        return [RACSignal empty];
+    }]
+    then:^RACSignal * {
+        return [_database rcl_existingViewNamed:ID];
+    }]
+    flattenMap:^RACSignal *(CBLView *view) {
+        return [RACSignal empty];
+    }]
+    timeout:5.0 description:@"returns only existing views"];
+}
+
+- (void)testSetValidationNamedAsBlock {
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self expectCompletionFromSignal:[_database rcl_setValidationNamed:ID asBlock:^(CBLRevision *newRevision, id<CBLValidationContext> context) {
+    }] timeout:5.0 description:@"correctly sets validation block"];
+}
+
+- (void)testValidationNamed {
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self expectNext:^(id block) {
+        XCTAssertTrue([block isKindOfClass:[NSObject class]]);
+    } signal:[[[_database rcl_validationNamed:ID]
+    catch:^RACSignal *(NSError *error) {
+        return [_database rcl_setValidationNamed:ID asBlock:^(CBLRevision *newRevision, id<CBLValidationContext> context) {
+        }];
+    }]
+    then:^RACSignal *{
+        return [_database rcl_validationNamed:ID];
+    }] timeout:5.0 description:@"correctly sets validation block"];
+}
+
+- (void)testSetFilterNamedAsBlock {
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self expectCompletionFromSignal:[_database rcl_setFilterNamed:ID asBlock:^BOOL(CBLSavedRevision *revision, NSDictionary *params) {
+        return YES;
+    }] timeout:5.0 description:@"correctly sets filter block"];
+}
+
+- (void)testFilterNamed {
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self expectNext:^(id block) {
+        XCTAssertTrue([block isKindOfClass:[NSObject class]]);
+    } signal:[[[_database rcl_filterNamed:ID]
+    catch:^RACSignal *(NSError *error) {
+        return [_database rcl_setFilterNamed:ID asBlock:^BOOL(CBLSavedRevision *revision, NSDictionary *params) {
+            return YES;
+        }];
+    }]
+    then:^RACSignal *{
+        return [_database rcl_filterNamed:ID];
+    }] timeout:5.0 description:@"correctly sets filter block"];
+}
+
+- (void)testInTransaction {
+    __block BOOL completed = NO;
+    [self expectCompletionFromSignal:[_database rcl_inTransaction:^BOOL{
+        completed = YES;
+        return YES;
+    }] timeout:5.0 description:@"correctly commits transaction."];
+    XCTAssertTrue(completed);
+}
+
+- (void)testDoAsync {
+    __block BOOL completed = NO;
+    [self expectCompletionFromSignal:[[[[_database rcl_doAsync:^{
+        sleep(1);
+        completed = YES;
+    }]
+    then:^RACSignal *{
+        return [RACSignal error:[NSError errorWithDomain:NSStringFromClass([self class]) code:(0+completed) userInfo:@{}]];
+    }]
+    catch:^RACSignal *(NSError *error) {
+        XCTAssertNotNil(error);
+        XCTAssertTrue(error.code == 0);
+        return [[RACSignal empty] delay:1.1];
+    }]
+    then:^RACSignal *{
+        XCTAssertTrue(completed);
+        return [RACSignal empty];
+    }] timeout:5.0 description:@"correctly asynchronously invokes block."];
+}
+
 @end
 
 /**
-- (RACSignal *)rcl_viewNamed:(NSString *)name;
-- (RACSignal *)rcl_existingViewNamed:(NSString *)name;
-- (RACSignal *)rcl_setValidationNamed:(NSString *)name asBlock:(CBLValidationBlock)block;
-- (RACSignal *)rcl_validationNamed:(NSString *)name;
-- (RACSignal *)rcl_setFilterNamed:(NSString *)name asBlock:(CBLFilterBlock)block;
-- (RACSignal *)rcl_filterNamed:(NSString *)name;
-- (RACSignal *)rcl_inTransaction:(BOOL (^)(void))block;
-- (RACSignal *)rcl_doAsync:(void (^)(void))block;
-- (RACSignal *)rcl_doSync:(void (^)(void))block;
 - (RACSignal *)rcl_allReplications;
 - (RACSignal *)rcl_createPushReplication:(NSURL *)URL;
 - (RACSignal *)rcl_createPullReplication:(NSURL *)URL;
