@@ -30,6 +30,7 @@
     return [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         RACDisposable *disposable = [[self rcl_sharedInstance]
         subscribeNext:^(CBLManager *manager) {
+            NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
             CBLDatabase *database = [manager databaseNamed:_name error:&error];
             if (database) {
@@ -52,6 +53,7 @@
     return [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         RACDisposable *disposable = [[self rcl_sharedInstance]
         subscribeNext:^(CBLManager *manager) {
+            NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
             CBLDatabase *database = [manager existingDatabaseNamed:_name error:&error];
             if (database) {
@@ -71,6 +73,10 @@
 
 - (RACScheduler *)rcl_scheduler {
     return [[RACQueueScheduler alloc] initWithName:self.description queue:self.dispatchQueue];
+}
+
+- (BOOL)rcl_isOnScheduler {
+    return [@(dispatch_queue_get_label((dispatch_queue_t)[(RACQueueScheduler *)[self rcl_scheduler] queue])) isEqual:self.description];
 }
 
 @end
