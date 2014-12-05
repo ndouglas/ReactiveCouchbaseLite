@@ -68,12 +68,4 @@
 
 - (RACScheduler *)rcl_scheduler;
 
-/**
- Returns whether we are operating on the scheduler devoted to this instance of the manager.
- 
- @return YES if the queues have the same label, otherwise NO.
- */
-
-- (BOOL)rcl_isOnScheduler;
-
 @end

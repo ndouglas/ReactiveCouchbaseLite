@@ -12,6 +12,7 @@
 
 @interface CBLManager_ReactiveCouchbaseLiteTests : XCTestCase {
     CBLManager *_manager;
+    NSString *_databaseName;
     CBLDatabase *_database;
     RACScheduler *_failScheduler;
 }
@@ -25,9 +26,10 @@
     _manager = [CBLManager sharedInstance];
     NSError *error = nil;
     [self cleanupPreviousDatabaseInManager:_manager];
-    _database = [_manager databaseNamed:@"rcl_test" error:&error];
+    _databaseName = [NSString stringWithFormat:@"test_%@", @([[[NSUUID UUID] UUIDString] hash])];
+    _database = [_manager databaseNamed:_databaseName error:&error];
     if (!_database) {
-        XCTFail(@"Error creating database 'rcl_test': %@", error);
+        XCTFail(@"Error creating database '%@': %@", _databaseName, error);
     }
     _failScheduler = [[RACQueueScheduler alloc] initWithName:@"FailQueue" queue:dispatch_queue_create("FailQueue", DISPATCH_QUEUE_SERIAL)];
 }
@@ -54,6 +56,18 @@
     [self expectNext:^(CBLManager *manager) {
         XCTAssertNotNil(manager);
     } signal:[CBLManager rcl_sharedInstance] timeout:5.0 description:@"sharedInstance is equal to sharedInstance"];
+}
+
+- (void)testDatabaseNamed {
+    [self expectNext:^(CBLDatabase *database) {
+        XCTAssertNotNil(database);
+    } signal:[CBLManager rcl_databaseNamed:_databaseName] timeout:5.0 description:@"database is not nil"];
+}
+
+- (void)testExistingDatabaseNamed {
+    [self expectNext:^(CBLDatabase *database) {
+        XCTAssertNotNil(database);
+    } signal:[CBLManager rcl_existingDatabaseNamed:_databaseName] timeout:5.0 description:@"existing database is not nil"];
 }
 
 - (void)testIsOnScheduler {
