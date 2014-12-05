@@ -70,4 +70,8 @@
     setNameWithFormat:@"%@ +rcl_existingDatabaseNamed: %@", self, _name];
 }
 
+- (RACScheduler *)rcl_scheduler {
+    return [[RACQueueScheduler alloc] initWithName:self.description queue:self.dispatchQueue];
+}
+
 @end

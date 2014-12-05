@@ -39,4 +39,12 @@
 
 + (RACSignal *)rcl_existingDatabaseNamed:(NSString *)_name;
 
+/**
+ A copy of the shared instance of CBLManager, suitable for using off the normal thread.
+ 
+ @return A scheduler that will work for this manager and its descendant objects.
+ */
+
+- (RACScheduler *)rcl_scheduler;
+
 @end
