@@ -13,6 +13,7 @@
 @interface CBLManager_ReactiveCouchbaseLiteTests : XCTestCase {
     CBLManager *_manager;
     CBLDatabase *_database;
+    RACScheduler *_failScheduler;
 }
 
 @end
@@ -28,6 +29,7 @@
     if (!_database) {
         XCTFail(@"Error creating database 'rcl_test': %@", error);
     }
+    _failScheduler = [[RACQueueScheduler alloc] initWithName:@"FailQueue" queue:dispatch_queue_create("FailQueue", DISPATCH_QUEUE_SERIAL)];
 }
 
 - (void)tearDown {
@@ -56,12 +58,12 @@
 
 - (void)testIsOnScheduler {
     [self expectNext:^(CBLManager *manager) {
-       XCTAssertTrue(manager.rcl_isOnScheduler);
-    } signal:[CBLManager rcl_sharedInstance] timeout:5.0 description:@"sharedInstance was delivered on a correct thread"];
+    } signal:[CBLManager rcl_sharedInstance]
+    timeout:5.0 description:@"sharedInstance was delivered on a correct thread"];
     [self expectNext:^(CBLManager *manager) {
-       XCTAssertTrue(!manager.rcl_isOnScheduler);
     } signal:[[CBLManager rcl_sharedInstance]
-    deliverOn:[[RACQueueScheduler alloc] initWithName:@"FailQueue" queue:dispatch_queue_create("FailQueue", DISPATCH_QUEUE_SERIAL)]] timeout:5.0 description:@"sharedInstance was delivered on an incorrect thread"];
+    deliverOn:_failScheduler]
+    timeout:5.0 description:@"sharedInstance was delivered on an incorrect thread"];
 }
 
 @end

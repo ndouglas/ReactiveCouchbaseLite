@@ -8,6 +8,9 @@
 //
 
 #import "CBLManager+ReactiveCouchbaseLite.h"
+#import <objc/runtime.h>
+
+static char CBLManagerAssociatedSchedulerKey;
 
 @implementation CBLManager (ReactiveCouchbaseLite)
 
@@ -20,9 +23,12 @@
             manager = [[CBLManager sharedInstance] copy];
         });
     }
-    manager.dispatchQueue = dispatch_queue_create(manager.description.UTF8String, DISPATCH_QUEUE_SERIAL);
+    NSString *description = manager.description;
+    manager.dispatchQueue = dispatch_queue_create(description.UTF8String, DISPATCH_QUEUE_SERIAL);
+    RACScheduler *scheduler = [[RACQueueScheduler alloc] initWithName:description queue:manager.dispatchQueue];
+    objc_setAssociatedObject(manager, &CBLManagerAssociatedSchedulerKey, scheduler, OBJC_ASSOCIATION_RETAIN);
     return [[[RACSignal return:manager]
-    deliverOn:[manager rcl_scheduler]]
+    deliverOn:scheduler]
     setNameWithFormat:@"%@ +rcl_sharedInstance", self];
 }
 
@@ -83,18 +89,11 @@
 }
 
 - (RACScheduler *)rcl_scheduler {
-    return [[RACQueueScheduler alloc] initWithName:self.description queue:self.dispatchQueue];
+    return (RACScheduler *)objc_getAssociatedObject(self, &CBLManagerAssociatedSchedulerKey);
 }
 
 - (BOOL)rcl_isOnScheduler {
-    BOOL result = YES;
-    result = result && [self rcl_scheduler];
-    result = result && [[RACQueueScheduler currentScheduler] isKindOfClass:[RACQueueScheduler class]];
-    RACQueueScheduler *queueScheduler = (RACQueueScheduler *)[RACQueueScheduler currentScheduler];
-    dispatch_queue_t schedulerQueue = [queueScheduler queue];
-    NSString *schedulerQueueLabel = @(dispatch_queue_get_label(schedulerQueue));
-    result = result && [schedulerQueueLabel isEqualToString:self.description];
-    return result;
+    return [self.rcl_scheduler isEqual:[RACScheduler currentScheduler]];
 }
 
 @end
