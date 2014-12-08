@@ -11,6 +11,8 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import "RCLDefinitions.h"
 
+extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
+
 /**
  Adds useful methods to CBLDatabase.
  */

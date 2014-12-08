@@ -10,8 +10,6 @@
 #import "CBLDatabase+ReactiveCouchbaseLite.h"
 #import "ReactiveCouchbaseLite.h"
 
-@implementation CBLDatabase (ReactiveCouchbaseLite)
-
 CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     __block CBLDatabase *result = nil;
     if (!current.rcl_isOnScheduler) {
@@ -21,6 +19,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     }
     return result;
 }
+
+@implementation CBLDatabase (ReactiveCouchbaseLite)
 
 - (RACSignal *)rcl_lastSequenceNumber {
     RACSignal *result = RACObserve(self, lastSequenceNumber);
