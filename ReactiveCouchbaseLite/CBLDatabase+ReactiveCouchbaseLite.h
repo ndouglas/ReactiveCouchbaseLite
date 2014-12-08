@@ -207,7 +207,7 @@
  @return A signal that completes if the transaction was completed successfully, otherwise returns an error.
  */
 
-- (RACSignal *)rcl_inTransaction:(BOOL (^)(void))block;
+- (RACSignal *)rcl_inTransaction:(BOOL (^)(CBLDatabase *database))block;
 
 /**
  Runs the specified block asynchronously on the database's dispatch queue or thread.

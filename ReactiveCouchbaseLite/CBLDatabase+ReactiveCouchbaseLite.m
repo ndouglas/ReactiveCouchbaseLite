@@ -354,7 +354,7 @@
     return [result setNameWithFormat:@"[%@] -rcl_filterNamed: %@", result.name, name];
 }
 
-- (RACSignal *)rcl_inTransaction:(BOOL (^)(void))block {
+- (RACSignal *)rcl_inTransaction:(BOOL (^)(CBLDatabase *database))block {
     @weakify(self)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
@@ -362,7 +362,9 @@
         [self.rcl_scheduler schedule:^{
             @strongify(self)
             NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-            if (![self inTransaction:block]) {
+            if (![self inTransaction:^BOOL {
+                return block(self);
+            }]) {
                 [subscriber sendError:RCLErrorWithCode(RCLErrorCode_TransactionWasNotCommitted)];
             }
             [subscriber sendCompleted];

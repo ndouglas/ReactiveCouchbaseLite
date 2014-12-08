@@ -367,10 +367,19 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 
 - (void)testInTransaction {
     __block BOOL completed = NO;
+    [[[[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL]
+    rcl_inTransaction:^BOOL(CBLDatabase *database) {
+        XCTAssertTrue(database.rcl_isOnScheduler);
+        return YES;
+    }]
+    subscribeCompleted:^{
+        NSLog(@"Wheeee!");
+    }];
     [self expectCompletionFromSignal:[[CBLManager rcl_databaseNamed:_databaseName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
-        return [database rcl_inTransaction:^BOOL{
-            completed = YES;
+        return [database rcl_inTransaction:^BOOL (CBLDatabase *database) {
+            XCTAssertTrue(database.rcl_isOnScheduler);
+            completed = !completed;
             return YES;
         }];
     }] timeout:5.0 description:@"correctly commits transaction."];
