@@ -9,6 +9,8 @@
 
 #import "RCLDefinitions.h"
 
+extern CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current);
+
 /**
  Adds useful methods to CBLDocument.
  */

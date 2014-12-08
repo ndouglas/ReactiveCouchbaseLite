@@ -10,18 +10,29 @@
 #import "CBLDocument+ReactiveCouchbaseLite.h"
 #import "ReactiveCouchbaseLite.h"
 
+CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
+    __block CBLDocument *result = nil;
+    if (!current.rcl_isOnScheduler) {
+        result = [RCLCurrentOrNewDatabase(current.database) existingDocumentWithID:current.documentID];
+    } else {
+        result = current;
+    }
+    return result;
+}
+
 @implementation CBLDocument (ReactiveCouchbaseLite)
 
 - (RACSignal *)rcl_delete {
-    @weakify(self)
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    @weakify(document)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+        @strongify(document)
+        @weakify(document)
+        [document.rcl_scheduler schedule:^{
+            @strongify(document)
+            NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
-            if (![self deleteDocument:&error]) {
+            if (![document deleteDocument:&error]) {
                 [subscriber sendError:error];
             }
             [subscriber sendCompleted];
@@ -32,15 +43,16 @@
 }
 
 - (RACSignal *)rcl_purge {
-    @weakify(self)
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    @weakify(document)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+        @strongify(document)
+        @weakify(document)
+        [document.rcl_scheduler schedule:^{
+            @strongify(document)
+            NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
-            if (![self purgeDocument:&error]) {
+            if (![document purgeDocument:&error]) {
                 [subscriber sendError:error];
             }
             [subscriber sendCompleted];
@@ -51,46 +63,54 @@
 }
 
 - (RACSignal *)rcl_documentChangeNotifications {
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
 	RACSignal *result = [[[[[NSNotificationCenter defaultCenter]
-    rac_addObserverForName:kCBLDocumentChangeNotification object:self]
-    takeUntil:self.rac_willDeallocSignal]
-    deliverOn:self.rcl_scheduler]
+    rac_addObserverForName:kCBLDocumentChangeNotification object:document]
+    takeUntil:document.rac_willDeallocSignal]
+    deliverOn:document.rcl_scheduler]
 	map:^CBLDatabaseChange *(NSNotification *notification) {
-        NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+        NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
 		return (CBLDatabaseChange *)notification.userInfo[@"change"];
 	}];
     return [result setNameWithFormat:@"[%@] -rcl_documentChangeNotifications", result.name];
 }
 
 - (RACSignal *)rcl_currentRevisionID {
-    RACSignal *result = [[[self rcl_documentChangeNotifications]
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    @weakify(document)
+    RACSignal *result = [[[document rcl_documentChangeNotifications]
 	map:^NSString *(CBLDatabaseChange *change) {
-        NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+        @strongify(document)
+        NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
 		return change.revisionID;
 	}]
-    startWith:[self currentRevisionID]];
+    startWith:[document currentRevisionID]];
     return [result setNameWithFormat:@"[%@] -rcl_currentRevisionID", result.name];
 }
 
 - (RACSignal *)rcl_currentRevision {
-    RACSignal *result = [[[self rcl_currentRevisionID]
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    @weakify(document)
+    RACSignal *result = [[[document rcl_currentRevisionID]
     ignore:nil]
 	flattenMap:^RACSignal *(NSString *revisionID) {
-        NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-        return [self rcl_revisionWithID:revisionID];
+        @strongify(document)
+        NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
+        return [document rcl_revisionWithID:revisionID];
     }];
     return [result setNameWithFormat:@"[%@] -rcl_currentRevision", result.name];
 }
 
 - (RACSignal *)rcl_revisionWithID:(NSString *)revisionID {
-    @weakify(self)
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    @weakify(document)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-            CBLRevision *revision = [self revisionWithID:revisionID];
+        @strongify(document)
+        @weakify(document)
+        [document.rcl_scheduler schedule:^{
+            @strongify(document)
+            NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
+            CBLRevision *revision = [document revisionWithID:revisionID];
             if (revision) {
                 [subscriber sendNext:revision];
             } else {
@@ -104,21 +124,27 @@
 }
 
 - (RACSignal *)rcl_getRevisionHistory {
-    RACSignal *result = [[[[[self rcl_currentRevision]
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    @weakify(document)
+    RACSignal *result = [[[[[document rcl_currentRevision]
     ignore:nil]
     map:^RACSignal *(CBLRevision *revision) {
-        NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+        @strongify(document)
+        NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
         return [revision rcl_getRevisionHistory];
     }]
     switchToLatest]
-    startWith:[self getRevisionHistory:NULL]];
+    startWith:[document getRevisionHistory:NULL]];
     return [result setNameWithFormat:@"[%@] -rcl_getRevisionHistory", result.name];
 }
 
 - (RACSignal *)rcl_getRevisionHistoryFilteredWithBlock:(BOOL (^)(CBLSavedRevision *revision))block {
-    RACSignal *result = [[[self rcl_getRevisionHistory]
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    @weakify(document)
+    RACSignal *result = [[[document rcl_getRevisionHistory]
     map:^NSArray *(NSArray *revisionList) {
-        NSCAssert(self.database.manager.rcl_isOnScheduler, @"not on correct scheduler");
+        @strongify(document)
+        NSCAssert(document.database.manager.rcl_isOnScheduler, @"not on correct scheduler");
         return [[revisionList.rac_sequence filter:block] array];
     }]
     distinctUntilChanged];
@@ -126,15 +152,16 @@
 }
 
 - (RACSignal *)rcl_getConflictingRevisions {
-    @weakify(self)
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    @weakify(document)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+        @strongify(document)
+        @weakify(document)
+        [document.rcl_scheduler schedule:^{
+            @strongify(document)
+            NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
-            NSArray *revisions = [self getConflictingRevisions:&error];
+            NSArray *revisions = [document getConflictingRevisions:&error];
             if (revisions) {
                 [subscriber sendNext:revisions];
             } else {
@@ -148,13 +175,14 @@
 }
 
 - (RACSignal *)rcl_getLeafRevisions {
-    @weakify(self)
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    @weakify(document)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+        @strongify(document)
+        @weakify(document)
+        [document.rcl_scheduler schedule:^{
+            @strongify(document)
+            NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
             NSArray *revisions = [self getLeafRevisions:&error];
             if (revisions) {
@@ -170,14 +198,15 @@
 }
 
 - (RACSignal *)rcl_newRevision {
-    @weakify(self)
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    @weakify(document)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-            [subscriber sendNext:[self newRevision]];
+        @strongify(document)
+        @weakify(document)
+        [document.rcl_scheduler schedule:^{
+            @strongify(document)
+            NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
+            [subscriber sendNext:[document newRevision]];
             [subscriber sendCompleted];
         }];
         return nil;
@@ -186,29 +215,32 @@
 }
 
 - (RACSignal *)rcl_properties {
-    RACSignal *result = [[RACObserve(self, properties)
-    takeUntil:self.rac_willDeallocSignal]
-    sample:[self rcl_documentChangeNotifications]];
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    RACSignal *result = [[RACObserve(document, properties)
+    takeUntil:document.rac_willDeallocSignal]
+    sample:[document rcl_documentChangeNotifications]];
     return [result setNameWithFormat:@"[%@] -rcl_properties", result.name];
 }
 
 - (RACSignal *)rcl_userProperties {
-    RACSignal *result = [[RACObserve(self, userProperties)
-    takeUntil:self.rac_willDeallocSignal]
-    sample:[self rcl_documentChangeNotifications]];
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    RACSignal *result = [[RACObserve(document, userProperties)
+    takeUntil:document.rac_willDeallocSignal]
+    sample:[document rcl_documentChangeNotifications]];
     return [result setNameWithFormat:@"[%@] -rcl_userProperties", result.name];
 }
 
 - (RACSignal *)rcl_putProperties:(NSDictionary *)properties {
-    @weakify(self)
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    @weakify(document)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+        @strongify(document)
+        @weakify(document)
+        [document.rcl_scheduler schedule:^{
+            @strongify(document)
+            NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
-            CBLSavedRevision *revision = [self putProperties:properties error:&error];
+            CBLSavedRevision *revision = [document putProperties:properties error:&error];
             if (revision) {
                 [subscriber sendNext:revision];
             } else {
@@ -222,15 +254,16 @@
 }
 
 - (RACSignal *)rcl_update:(BOOL(^)(CBLUnsavedRevision *))block {
-    @weakify(self)
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    @weakify(document)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+        @strongify(document)
+        @weakify(document)
+        [document.rcl_scheduler schedule:^{
+            @strongify(document)
+            NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
-            CBLSavedRevision *revision = [self update:block error:&error];
+            CBLSavedRevision *revision = [document update:block error:&error];
             if (revision) {
                 [subscriber sendNext:revision];
             } else {
