@@ -22,7 +22,7 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
             NSError *error = nil;
             if (![self close:&error]) {
@@ -58,7 +58,7 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
             NSError *error = nil;
             if (![self deleteDatabase:&error]) {
@@ -76,7 +76,7 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
             CBLDocument *document = [self documentWithID:documentID];
             if (document) {
@@ -96,7 +96,7 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
             CBLDocument *document = [self existingDocumentWithID:documentID];
             if (document) {
@@ -116,7 +116,7 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
             CBLDocument *document = [self createDocument];
             if (document) {
@@ -136,7 +136,7 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
             NSDictionary *dictionary = [self existingLocalDocumentWithID:documentID];
             if (dictionary) {
@@ -155,7 +155,7 @@
     @weakify(self)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             NSError *error = nil;
             if (![self putLocalDocument:properties withID:documentID error:&error]) {
                 [subscriber sendError:error];
@@ -172,8 +172,9 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
+            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
             if (![self deleteLocalDocumentWithID:documentID error:&error]) {
                 [subscriber sendError:error];
@@ -190,9 +191,9 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
-            //NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             [subscriber sendNext:[self createAllDocumentsQuery]];
             [subscriber sendCompleted];
         }];
@@ -206,7 +207,7 @@
     RACSignal *result = [[self rcl_allDocumentsQuery]
     map:^CBLQuery *(CBLQuery *query) {
         @strongify(self)
-        NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+        NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
         CBLQuery *result = query;
         result.allDocsMode = mode;
         return result;
@@ -219,7 +220,7 @@
     RACSignal *result = [[self rcl_allDocumentsQuery]
     map:^CBLQuery *(CBLQuery *query) {
         @strongify(self)
-        NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+        NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
         CBLQuery *result = query;
         result.allDocsMode = mode;
         result.indexUpdateMode = indexUpdateMode;
@@ -233,7 +234,7 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
             [subscriber sendNext:[self slowQueryWithMap:block]];
             [subscriber sendCompleted];
@@ -248,7 +249,7 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
             [subscriber sendNext:[self viewNamed:name]];
             [subscriber sendCompleted];
@@ -263,9 +264,9 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
-            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             CBLView *view = [self existingViewNamed:name];
             if (view) {
                 [subscriber sendNext:view];
@@ -284,9 +285,9 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
-            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             [self setValidationNamed:name asBlock:block];
             [subscriber sendCompleted];
         }];
@@ -300,9 +301,9 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
-            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             CBLValidationBlock block = [self validationNamed:name];
             if (block) {
                 [subscriber sendNext:block];
@@ -321,9 +322,9 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
-            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             [self setFilterNamed:name asBlock:block];
             [subscriber sendCompleted];
         }];
@@ -337,9 +338,9 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
-            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             CBLFilterBlock block = [self filterNamed:name];
             if (block) {
                 [subscriber sendNext:block];
@@ -358,9 +359,9 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
-            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             if (![self inTransaction:block]) {
                 [subscriber sendError:RCLErrorWithCode(RCLErrorCode_TransactionWasNotCommitted)];
             }
@@ -376,9 +377,9 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
-            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             [self doAsync:block];
             [subscriber sendCompleted];
         }];
@@ -398,9 +399,9 @@
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
+        [self.rcl_scheduler schedule:^{
             @strongify(self)
-            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             [subscriber sendNext:[self createPushReplication:URL]];
             [subscriber sendCompleted];
         }];
@@ -416,7 +417,7 @@
         @weakify(self)
         [self.manager.rcl_scheduler schedule:^{
             @strongify(self)
-            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             [subscriber sendNext:[self createPullReplication:URL]];
             [subscriber sendCompleted];
         }];
@@ -435,6 +436,14 @@
 	}]
 	flatten];
     return [result setNameWithFormat:@"[%@] -rcl_databaseChangeNotifications", result.name];
+}
+
+- (RACScheduler *)rcl_scheduler {
+    return self.manager.rcl_scheduler;
+}
+
+- (BOOL)rcl_isOnScheduler {
+    return self.manager.rcl_isOnScheduler;
 }
 
 @end

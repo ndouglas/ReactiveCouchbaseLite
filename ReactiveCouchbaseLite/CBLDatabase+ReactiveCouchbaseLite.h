@@ -252,4 +252,20 @@
 
 - (RACSignal *)rcl_databaseChangeNotifications;
 
+/**
+ A scheduler for this database and descendant objects.
+ 
+ @return A scheduler that will work for this database and its descendant objects.
+ */
+
+- (RACScheduler *)rcl_scheduler;
+
+/**
+ Returns whether we are operating on the scheduler devoted to this database's instance of the manager.
+ 
+ @return YES if the queues have the same label, otherwise NO.
+ */
+
+- (BOOL)rcl_isOnScheduler;
+
 @end
