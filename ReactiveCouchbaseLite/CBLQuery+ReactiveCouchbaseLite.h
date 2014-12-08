@@ -20,6 +20,15 @@
 - (RACSignal *)rcl_run;
 
 /**
+ All of the rows as a signal.
+ 
+ @return A signal of the rows.
+ @discussion Will run the query.
+ */
+
+- (RACSignal *)rcl_signal;
+
+/**
  A scheduler for this database and descendant objects.
  
  @return A scheduler that will work for this database and its descendant objects.

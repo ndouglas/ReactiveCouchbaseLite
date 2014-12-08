@@ -28,6 +28,15 @@
     return [result setNameWithFormat:@"[%@] -rcl_run", result.name];
 }
 
+- (RACSignal *)rcl_signal {
+    NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+    RACSignal *result = [[self rcl_run]
+    flattenMap:^RACSignal *(CBLQueryEnumerator *queryEnumerator) {
+        return queryEnumerator.rac_sequence.signal;
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_sequence", result.name];
+}
+
 - (RACScheduler *)rcl_scheduler {
     return self.database.rcl_scheduler;
 }
