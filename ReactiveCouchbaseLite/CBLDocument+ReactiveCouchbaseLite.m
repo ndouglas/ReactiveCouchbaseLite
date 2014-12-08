@@ -178,6 +178,7 @@
             @strongify(self)
             NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             [subscriber sendNext:[self newRevision]];
+            [subscriber sendCompleted];
         }];
         return nil;
     }];

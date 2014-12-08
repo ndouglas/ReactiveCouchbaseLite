@@ -63,6 +63,17 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 }
 
 - (void)testClose {
+    CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
+    dispatch_async(((RACQueueScheduler *)_failScheduler).queue, ^{
+        [[database rcl_close]
+        subscribeError:^(NSError *error) {
+            XCTFail(@"Operation failed with error: %@", error);
+        }
+        completed:^{
+            NSLog(@"Operation completed.");
+        }];
+    });
+    sleep(1);
     [self expectCompletionFromSignal:[[[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL] rcl_close]
     timeout:5.0 description:@"database closed successfully"];
     [self expectCompletionFromSignal:[[CBLManager rcl_databaseNamed:_databaseName]
@@ -73,6 +84,17 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 }
 
 - (void)testCompact {
+    CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
+    dispatch_async(((RACQueueScheduler *)_failScheduler).queue, ^{
+        [[database rcl_compact]
+        subscribeError:^(NSError *error) {
+            XCTFail(@"Operation failed with error: %@", error);
+        }
+        completed:^{
+            NSLog(@"Operation completed.");
+        }];
+    });
+    sleep(1);
     [self expectCompletionFromSignal:[[[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL] rcl_compact]
     timeout:5.0 description:@"database compacted successfully"];
     [self expectCompletionFromSignal:[[CBLManager rcl_databaseNamed:_databaseName]
@@ -83,6 +105,17 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 }
 
 - (void)testDelete {
+    CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
+    dispatch_async(((RACQueueScheduler *)_failScheduler).queue, ^{
+        [[database rcl_delete]
+        subscribeError:^(NSError *error) {
+            XCTFail(@"Operation failed with error: %@", error);
+        }
+        completed:^{
+            NSLog(@"Operation completed.");
+        }];
+    });
+    sleep(1);
     [self expectCompletionFromSignal:[[[[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL] rcl_delete]
     then:^RACSignal *{
         return [[[[CBLManager rcl_existingDatabaseNamed:_databaseName]
@@ -152,7 +185,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     }]
     timeout:5.0 description:@"document created/opened/deleted successfully"];
     ID = [[NSUUID UUID] UUIDString];
-    [self expectCompletionFromSignal:[[[[[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self expectCompletionFromSignal:[[[[[[[[[[[CBLManager rcl_databaseNamed:_databaseName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -162,7 +195,15 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     flattenMap:^RACSignal *(CBLUnsavedRevision *unsavedRevision) {
         return [unsavedRevision rcl_save];
     }]
-    ignoreValues]
+    doNext:^(id _next_) {
+        NSLog(@"Next");
+    }]
+    doError:^(NSError *error) {
+        NSLog(@"Error");
+    }]
+    doCompleted:^{
+        NSLog(@"Completed");
+    }]
     then:^RACSignal *{
         return [[CBLManager rcl_databaseNamed:_databaseName]
         flattenMap:^RACSignal *(CBLDatabase *database) {

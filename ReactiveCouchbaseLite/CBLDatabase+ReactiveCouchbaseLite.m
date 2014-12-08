@@ -12,20 +12,32 @@
 
 @implementation CBLDatabase (ReactiveCouchbaseLite)
 
+CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
+    __block CBLDatabase *result = nil;
+    if (!current.rcl_isOnScheduler) {
+        result = [RCLSharedInstanceCurrentOrNewManager(current.manager) existingDatabaseNamed:current.name error:NULL];
+    } else {
+        result = current;
+    }
+    return result;
+}
+
 - (RACSignal *)rcl_lastSequenceNumber {
     RACSignal *result = RACObserve(self, lastSequenceNumber);
     return [result setNameWithFormat:@"[%@] -rcl_lastSequenceNumber", result.name];
 }
 
 - (RACSignal *)rcl_close {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
-            if (![self close:&error]) {
+            if (![database close:&error]) {
                 [subscriber sendError:error];
             }
             [subscriber sendCompleted];
@@ -36,14 +48,16 @@
 }
 
 - (RACSignal *)rcl_compact {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
-            @strongify(self)
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
-            if (![self compact:&error]) {
+            if (![database compact:&error]) {
                 [subscriber sendError:error];
             }
             [subscriber sendCompleted];
@@ -54,14 +68,16 @@
 }
 
 - (RACSignal *)rcl_delete {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
-            if (![self deleteDatabase:&error]) {
+            if (![database deleteDatabase:&error]) {
                 [subscriber sendError:error];
             }
             [subscriber sendCompleted];
@@ -72,13 +88,15 @@
 }
 
 - (RACSignal *)rcl_documentWithID:(NSString *)documentID {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            CBLDocument *document = [self documentWithID:documentID];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            CBLDocument *document = [database documentWithID:documentID];
             if (document) {
                 [subscriber sendNext:document];
             } else {
@@ -92,13 +110,15 @@
 }
 
 - (RACSignal *)rcl_existingDocumentWithID:(NSString *)documentID {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            CBLDocument *document = [self existingDocumentWithID:documentID];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            CBLDocument *document = [database existingDocumentWithID:documentID];
             if (document) {
                 [subscriber sendNext:document];
             } else {
@@ -112,13 +132,15 @@
 }
 
 - (RACSignal *)rcl_createDocument {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            CBLDocument *document = [self createDocument];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            CBLDocument *document = [database createDocument];
             if (document) {
                 [subscriber sendNext:document];
             } else {
@@ -132,13 +154,15 @@
 }
 
 - (RACSignal *)rcl_existingLocalDocumentWithID:(NSString *)documentID {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSDictionary *dictionary = [self existingLocalDocumentWithID:documentID];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            NSDictionary *dictionary = [database existingLocalDocumentWithID:documentID];
             if (dictionary) {
                 [subscriber sendNext:dictionary];
             } else {
@@ -152,12 +176,16 @@
 }
 
 - (RACSignal *)rcl_putLocalDocumentWithProperties:(NSDictionary *)properties ID:(NSString *)documentID {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        [self.rcl_scheduler schedule:^{
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
-            if (![self putLocalDocument:properties withID:documentID error:&error]) {
+            if (![database putLocalDocument:properties withID:documentID error:&error]) {
                 [subscriber sendError:error];
             }
             [subscriber sendCompleted];
@@ -168,15 +196,16 @@
 }
 
 - (RACSignal *)rcl_deleteLocalDocumentWithID:(NSString *)documentID {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
-            if (![self deleteLocalDocumentWithID:documentID error:&error]) {
+            if (![database deleteLocalDocumentWithID:documentID error:&error]) {
                 [subscriber sendError:error];
             }
             [subscriber sendCompleted];
@@ -187,14 +216,15 @@
 }
 
 - (RACSignal *)rcl_allDocumentsQuery {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-            [subscriber sendNext:[self createAllDocumentsQuery]];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            [subscriber sendNext:[database createAllDocumentsQuery]];
             [subscriber sendCompleted];
         }];
         return nil;
@@ -203,11 +233,12 @@
 }
 
 - (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode {
-    @weakify(self)
-    RACSignal *result = [[self rcl_allDocumentsQuery]
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
+    RACSignal *result = [[database rcl_allDocumentsQuery]
     map:^CBLQuery *(CBLQuery *query) {
-        @strongify(self)
-        NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+        @strongify(database)
+        NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
         CBLQuery *result = query;
         result.allDocsMode = mode;
         return result;
@@ -216,11 +247,12 @@
 }
 
 - (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode indexUpdateMode:(CBLIndexUpdateMode)indexUpdateMode {
-    @weakify(self)
-    RACSignal *result = [[self rcl_allDocumentsQuery]
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
+    RACSignal *result = [[database rcl_allDocumentsQuery]
     map:^CBLQuery *(CBLQuery *query) {
-        @strongify(self)
-        NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+        @strongify(database)
+        NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
         CBLQuery *result = query;
         result.allDocsMode = mode;
         result.indexUpdateMode = indexUpdateMode;
@@ -230,13 +262,15 @@
 }
 
 - (RACSignal *)rcl_slowQueryWithMap:(CBLMapBlock)block {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            [subscriber sendNext:[self slowQueryWithMap:block]];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            [subscriber sendNext:[database slowQueryWithMap:block]];
             [subscriber sendCompleted];
         }];
         return nil;
@@ -245,13 +279,15 @@
 }
 
 - (RACSignal *)rcl_viewNamed:(NSString *)name {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            [subscriber sendNext:[self viewNamed:name]];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            [subscriber sendNext:[database viewNamed:name]];
             [subscriber sendCompleted];
         }];
         return nil;
@@ -260,14 +296,15 @@
 }
 
 - (RACSignal *)rcl_existingViewNamed:(NSString *)name {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-            CBLView *view = [self existingViewNamed:name];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            CBLView *view = [database existingViewNamed:name];
             if (view) {
                 [subscriber sendNext:view];
             } else {
@@ -281,14 +318,15 @@
 }
 
 - (RACSignal *)rcl_setValidationNamed:(NSString *)name asBlock:(CBLValidationBlock)block {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-            [self setValidationNamed:name asBlock:block];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            [database setValidationNamed:name asBlock:block];
             [subscriber sendCompleted];
         }];
         return nil;
@@ -297,14 +335,15 @@
 }
 
 - (RACSignal *)rcl_validationNamed:(NSString *)name {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-            CBLValidationBlock block = [self validationNamed:name];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            CBLValidationBlock block = [database validationNamed:name];
             if (block) {
                 [subscriber sendNext:block];
             } else {
@@ -318,14 +357,15 @@
 }
 
 - (RACSignal *)rcl_setFilterNamed:(NSString *)name asBlock:(CBLFilterBlock)block {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-            [self setFilterNamed:name asBlock:block];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            [database setFilterNamed:name asBlock:block];
             [subscriber sendCompleted];
         }];
         return nil;
@@ -334,14 +374,15 @@
 }
 
 - (RACSignal *)rcl_filterNamed:(NSString *)name {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-            CBLFilterBlock block = [self filterNamed:name];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            CBLFilterBlock block = [database filterNamed:name];
             if (block) {
                 [subscriber sendNext:block];
             } else {
@@ -355,15 +396,16 @@
 }
 
 - (RACSignal *)rcl_inTransaction:(BOOL (^)(CBLDatabase *database))block {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-            if (![self inTransaction:^BOOL {
-                return block(self);
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            if (![database inTransaction:^BOOL {
+                return block(database);
             }]) {
                 [subscriber sendError:RCLErrorWithCode(RCLErrorCode_TransactionWasNotCommitted)];
             }
@@ -375,14 +417,15 @@
 }
 
 - (RACSignal *)rcl_doAsync:(void (^)(void))block {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-            [self doAsync:block];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            [database doAsync:block];
             [subscriber sendCompleted];
         }];
         return nil;
@@ -397,14 +440,15 @@
 }
 
 - (RACSignal *)rcl_createPushReplication:(NSURL *)URL {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-            [subscriber sendNext:[self createPushReplication:URL]];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            [subscriber sendNext:[database createPushReplication:URL]];
             [subscriber sendCompleted];
         }];
         return nil;
@@ -413,14 +457,15 @@
 }
 
 - (RACSignal *)rcl_createPullReplication:(NSURL *)URL {
-    @weakify(self)
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    @weakify(database)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self)
-        @weakify(self)
-        [self.manager.rcl_scheduler schedule:^{
-            @strongify(self)
-            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-            [subscriber sendNext:[self createPullReplication:URL]];
+        @strongify(database)
+        @weakify(database)
+        [database.rcl_scheduler schedule:^{
+            @strongify(database)
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            [subscriber sendNext:[database createPullReplication:URL]];
             [subscriber sendCompleted];
         }];
         return nil;
@@ -429,9 +474,10 @@
 }
 
 - (RACSignal *)rcl_databaseChangeNotifications {
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
 	RACSignal *result = [[[[[NSNotificationCenter defaultCenter]
-    rac_addObserverForName:kCBLDatabaseChangeNotification object:self]
-    takeUntil:self.rac_willDeallocSignal]
+    rac_addObserverForName:kCBLDatabaseChangeNotification object:database]
+    takeUntil:database.rac_willDeallocSignal]
 	map:^RACSignal *(NSNotification *notification) {
 		RACSignal *result = ((NSArray *)notification.userInfo[@"changes"]).rac_sequence.signal;
 		return result;
