@@ -12,7 +12,9 @@
 
 static char CBLManagerAssociatedSchedulerKey;
 
-@implementation CBLManager (ReactiveCouchbaseLite)
+@interface CBLManager ()
+- (void)rcl_setScheduler:(RACScheduler *)scheduler;
+@end
 
 CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
     __block CBLManager *result = nil;
@@ -37,6 +39,8 @@ CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
     }
     return result;
 }
+
+@implementation CBLManager (ReactiveCouchbaseLite)
 
 + (RACSignal *)rcl_manager {
     __block CBLManager *manager = RCLSharedInstanceCurrentOrNewManager(nil);

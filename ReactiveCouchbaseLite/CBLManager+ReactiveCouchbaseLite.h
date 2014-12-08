@@ -11,6 +11,8 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import "RCLDefinitions.h"
 
+extern CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current);
+
 @interface CBLManager (ReactiveCouchbaseLite)
 
 /**
