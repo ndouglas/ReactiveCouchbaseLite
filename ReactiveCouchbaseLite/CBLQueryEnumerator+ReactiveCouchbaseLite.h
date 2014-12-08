@@ -20,7 +20,7 @@
 /**
  All of the rows as a sequence.
  
- @return A signal of the rows.
+ @return A sequence of the rows.
  */
 
 - (RACSequence *)rcl_sequence;
