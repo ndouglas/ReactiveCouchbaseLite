@@ -116,7 +116,7 @@
         XCTAssertNotNil(currentRevisionID);
         return [RACSignal empty];
     }]
-    timeout:5.0 description:@"revision id observed successfully."];
+    timeout:5.0 description:@"revision id observed successfully"];
 }
 
 - (void)testCurrentRevision {
@@ -135,7 +135,7 @@
         XCTAssertNotNil(currentRevision);
         return [RACSignal empty];
     }]
-    timeout:5.0 description:@"revision observed successfully."];
+    timeout:5.0 description:@"revision observed successfully"];
 }
 
 - (void)testRevisionWithID {
@@ -164,14 +164,54 @@
         XCTAssertNotNil(revision);
         return [RACSignal empty];
     }]
-    timeout:5.0 description:@"revision fetched successfully."];
+    timeout:5.0 description:@"revision fetched successfully"];
+}
+
+- (void)testGetRevisionHistory {
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
+    [self expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_documentWithID:ID];
+    }]
+    flattenMap:^RACSignal *(CBLDocument *document) {
+        RACSignal *result = [document rcl_getRevisionHistory];
+        return result;
+    }]
+    ignore:nil]
+    take:1]
+    flattenMap:^RACSignal *(NSArray *revisionHistory) {
+        XCTAssertNotNil(revisionHistory);
+        return [RACSignal empty];
+    }]
+    timeout:5.0 description:@"revision history fetched successfully"];
+}
+
+- (void)testGetRevisionHistoryFilteredWithBlock {
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
+    [self expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_documentWithID:ID];
+    }]
+    flattenMap:^RACSignal *(CBLDocument *document) {
+        RACSignal *result = [document rcl_getRevisionHistoryFilteredWithBlock:^BOOL(CBLSavedRevision *revision) {
+            return revision != nil;
+        }];
+        return result;
+    }]
+    ignore:nil]
+    take:1]
+    flattenMap:^RACSignal *(NSArray *revisionHistory) {
+        XCTAssertNotNil(revisionHistory);
+        return [RACSignal empty];
+    }]
+    timeout:5.0 description:@"revision history fetched successfully"];
 }
 
 @end
 
 /**
-- (RACSignal *)rcl_getRevisionHistory;
-- (RACSignal *)rcl_getRevisionHistoryFilteredWithBlock:(BOOL (^)(CBLSavedRevision *revision))block;
 - (RACSignal *)rcl_getConflictingRevisions;
 - (RACSignal *)rcl_getLeafRevisions;
 - (RACSignal *)rcl_newRevision;

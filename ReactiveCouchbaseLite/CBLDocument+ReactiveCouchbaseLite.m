@@ -104,11 +104,14 @@
 }
 
 - (RACSignal *)rcl_getRevisionHistory {
-    RACSignal *result = [[self rcl_currentRevision]
+    RACSignal *result = [[[[[self rcl_currentRevision]
+    ignore:nil]
     map:^RACSignal *(CBLRevision *revision) {
-        NSCAssert(self.database.manager.rcl_isOnScheduler, @"not on correct scheduler");
+        NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
         return [revision rcl_getRevisionHistory];
-    }];
+    }]
+    switchToLatest]
+    startWith:[self getRevisionHistory:NULL]];
     return [result setNameWithFormat:@"[%@] -rcl_getRevisionHistory", result.name];
 }
 
