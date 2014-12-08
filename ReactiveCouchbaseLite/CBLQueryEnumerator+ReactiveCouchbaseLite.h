@@ -7,6 +7,9 @@
 //  See LICENSE for details.
 //
 
+#import "RCLDefinitions.h"
+#import "CBLQuery+ReactiveCouchbaseLite.h"
+
 @interface CBLQueryEnumerator (ReactiveCouchbaseLite)
 
 /**

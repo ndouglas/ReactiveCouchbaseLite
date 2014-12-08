@@ -8,6 +8,7 @@
 //
 
 #import "RCLDefinitions.h"
+#import "CBLRevision+ReactiveCouchbaseLite.h"
 
 @interface CBLSavedRevision (ReactiveCouchbaseLite)
 

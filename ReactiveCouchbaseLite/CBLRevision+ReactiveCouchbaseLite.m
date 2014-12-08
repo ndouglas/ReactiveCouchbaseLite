@@ -10,58 +10,36 @@
 #import "CBLRevision+ReactiveCouchbaseLite.h"
 #import "ReactiveCouchbaseLite.h"
 
-static inline CBLRevision *RCLCurrentOrNewRevision(CBLRevision *current) {
-    __block CBLRevision *result = nil;
-    if (!current.rcl_isOnScheduler) {
-        result = [RCLCurrentOrNewDocument(current.document) revisionWithID:current.revisionID];
-    } else {
-        result = current;
-    }
-    return result;
-}
-
 @implementation CBLRevision (ReactiveCouchbaseLite)
 
 - (RACSignal *)rcl_getRevisionHistory {
-    CBLRevision *revision = RCLCurrentOrNewRevision(self);
-    @weakify(revision)
+    @weakify(self)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(revision)
-        @weakify(revision)
-        [revision.rcl_scheduler schedule:^{
-            @strongify(revision)
-            NSCAssert(revision.rcl_isOnScheduler, @"not on correct scheduler");
-            NSError *error = nil;
-            NSArray *history = [revision getRevisionHistory:&error];
-            if (history) {
-                [subscriber sendNext:history];
-            } else {
-                [subscriber sendError:error];
-            }
-            [subscriber sendCompleted];
-        }];
+        @strongify(self)
+        NSError *error = nil;
+        NSArray *history = [self getRevisionHistory:&error];
+        if (history) {
+            [subscriber sendNext:history];
+        } else {
+            [subscriber sendError:error];
+        }
+        [subscriber sendCompleted];
         return nil;
     }];
     return [result setNameWithFormat:@"[%@] -rcl_getRevisionHistory", result.name];
 }
 
 - (RACSignal *)rcl_attachmentNamed:(NSString *)name {
-    CBLRevision *revision = RCLCurrentOrNewRevision(self);
-    @weakify(revision)
+    @weakify(self)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(revision)
-        @weakify(revision)
-        [revision.rcl_scheduler schedule:^{
-            @strongify(revision)
-            NSCAssert(revision.rcl_isOnScheduler, @"not on correct scheduler");
-            CBLAttachment *attachment = [revision attachmentNamed:name];
-            if (attachment) {
-                [subscriber sendNext:attachment];
-            } else {
-                [subscriber sendError:RCLErrorWithCode(RCLErrorCode_AttachmentCouldNotBeFound)];
-            }
-            [subscriber sendCompleted];
-        }];
+        @strongify(self)
+        CBLAttachment *attachment = [self attachmentNamed:name];
+        if (attachment) {
+            [subscriber sendNext:attachment];
+        } else {
+            [subscriber sendError:RCLErrorWithCode(RCLErrorCode_AttachmentCouldNotBeFound)];
+        }
+        [subscriber sendCompleted];
         return nil;
     }];
     return [result setNameWithFormat:@"[%@] -rcl_attachmentNamed: %@", result.name, name];
