@@ -53,11 +53,13 @@ static char CBLManagerAssociatedSchedulerKey;
 }
 
 - (RACSignal *)rcl_databaseNamed:(NSString *)name {
+    NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
     @weakify(self)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         [self.rcl_scheduler schedule:^{
             @strongify(self)
+            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
             CBLDatabase *database = [self databaseNamed:name error:&error];
             if (database) {
@@ -73,11 +75,13 @@ static char CBLManagerAssociatedSchedulerKey;
 }
 
 - (RACSignal *)rcl_existingDatabaseNamed:(NSString *)name {
+    NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
     @weakify(self)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self)
         [self.rcl_scheduler schedule:^{
             @strongify(self)
+            NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
             CBLDatabase *database = [self existingDatabaseNamed:name error:&error];
             if (database) {
@@ -94,7 +98,10 @@ static char CBLManagerAssociatedSchedulerKey;
 
 - (RACScheduler *)rcl_scheduler {
     RACScheduler *result = (RACScheduler *)objc_getAssociatedObject(self, &CBLManagerAssociatedSchedulerKey);
-    NSCAssert(result != nil || [NSThread isMainThread], @"manager does not have scheduler property set");
+    if (!result && [NSThread isMainThread]) {
+        result = [RACScheduler mainThreadScheduler];
+    }
+    NSCAssert(result != nil, @"manager does not have scheduler property set");
     return result;
 }
 
