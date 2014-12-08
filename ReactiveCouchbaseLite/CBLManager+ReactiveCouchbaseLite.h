@@ -14,12 +14,12 @@
 @interface CBLManager (ReactiveCouchbaseLite)
 
 /**
- A copy of the shared instance of CBLManager, suitable for using off the normal thread.
+ A copy of the shared instance of CBLManager.
  
  @return A signal containing a copy of the shared instance of CBLManager.
  */
 
-+ (RACSignal *)rcl_sharedInstance;
++ (RACSignal *)rcl_manager;
 
 /**
  A copy of the specified database.
