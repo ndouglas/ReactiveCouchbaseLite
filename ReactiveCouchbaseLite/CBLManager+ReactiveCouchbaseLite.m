@@ -16,12 +16,16 @@ static char CBLManagerAssociatedSchedulerKey;
 
 + (RACSignal *)rcl_sharedInstance {
     __block CBLManager *manager = nil;
-    if ([NSThread isMainThread]) {
+    void (^block)(void) = ^{
+        if (![[CBLManager sharedInstance] rcl_scheduler]) {
+            objc_setAssociatedObject([CBLManager sharedInstance], &CBLManagerAssociatedSchedulerKey, [RACScheduler mainThreadScheduler], OBJC_ASSOCIATION_RETAIN);
+        }
         manager = [[CBLManager sharedInstance] copy];
+    };
+    if ([NSThread isMainThread]) {
+        block();
     } else {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            manager = [[CBLManager sharedInstance] copy];
-        });
+        dispatch_sync(dispatch_get_main_queue(), block);
     }
     NSString *description = manager.description;
     manager.dispatchQueue = dispatch_queue_create(description.UTF8String, DISPATCH_QUEUE_SERIAL);
@@ -89,8 +93,8 @@ static char CBLManagerAssociatedSchedulerKey;
 }
 
 - (RACScheduler *)rcl_scheduler {
-    RACScheduler *result = (RACScheduler *)objc_getAssociatedObject(self, &CBLManagerAssociatedSchedulerKey) ?: [RACScheduler currentScheduler];
-    NSCAssert(result != nil, @"manager does not have scheduler property set");
+    RACScheduler *result = (RACScheduler *)objc_getAssociatedObject(self, &CBLManagerAssociatedSchedulerKey);
+    NSCAssert(result != nil || [NSThread isMainThread], @"manager does not have scheduler property set");
     return result;
 }
 

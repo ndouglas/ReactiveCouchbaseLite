@@ -73,7 +73,7 @@
     } signal:[CBLManager rcl_existingDatabaseNamed:_databaseName] timeout:5.0 description:@"existing database is not nil"];
     [self expectNext:^(CBLDatabase *database) {
         XCTAssertNotNil(database);
-    } signal:[[CBLManager sharedInstance] rcl_existingDatabaseNamed:_databaseName] timeout:5.0 description:@"database is not nil"];
+    } signal:[[CBLManager sharedInstance] rcl_existingDatabaseNamed:_databaseName] timeout:5.0 description:@"existing database is not nil"];
 }
 
 - (void)testIsOnScheduler {
