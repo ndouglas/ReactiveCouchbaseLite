@@ -141,4 +141,20 @@
 
 - (RACSignal *)rcl_documentChangeNotifications;
 
+/**
+ A scheduler for this document and descendant objects.
+ 
+ @return A scheduler that will work for this document and its descendant objects.
+ */
+
+- (RACScheduler *)rcl_scheduler;
+
+/**
+ Returns whether we are operating on the scheduler devoted to this document.
+ 
+ @return YES if the schedulers are the same, otherwise NO.
+ */
+
+- (BOOL)rcl_isOnScheduler;
+
 @end
