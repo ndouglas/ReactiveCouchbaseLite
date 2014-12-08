@@ -13,6 +13,7 @@
  A signal for the next row.
  
  @return A signal of the next row.
+ @discussion This is probably not threadsafe, and should be called from the owning thread.
  */
 
 - (RACSignal *)rcl_nextRow;
@@ -21,6 +22,7 @@
  All of the rows as a sequence.
  
  @return A sequence of the rows.
+ @discussion This is probably not threadsafe, and should be called from the owning thread.
  */
 
 - (RACSequence *)rcl_sequence;
