@@ -13,6 +13,7 @@
 @implementation CBLQuery (ReactiveCouchbaseLite)
 
 - (RACSignal *)rcl_run {
+    NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [self runAsync:^(CBLQueryEnumerator *queryEnumerator, NSError *error) {
             if (queryEnumerator) {
