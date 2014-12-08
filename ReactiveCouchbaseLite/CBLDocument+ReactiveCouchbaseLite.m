@@ -51,9 +51,10 @@
 }
 
 - (RACSignal *)rcl_documentChangeNotifications {
-	RACSignal *result = [[[[NSNotificationCenter defaultCenter]
+	RACSignal *result = [[[[[NSNotificationCenter defaultCenter]
     rac_addObserverForName:kCBLDocumentChangeNotification object:self]
     takeUntil:self.rac_willDeallocSignal]
+    deliverOn:self.rcl_scheduler]
 	map:^CBLDatabaseChange *(NSNotification *notification) {
         NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
 		return (CBLDatabaseChange *)notification.userInfo[@"change"];
@@ -73,11 +74,11 @@
 
 - (RACSignal *)rcl_currentRevision {
     RACSignal *result = [[[self rcl_currentRevisionID]
-	map:^RACSignal *(NSString *revisionID) {
+    ignore:nil]
+	flattenMap:^RACSignal *(NSString *revisionID) {
         NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
         return [self rcl_revisionWithID:revisionID];
-    }]
-    switchToLatest];
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_currentRevision", result.name];
 }
 
