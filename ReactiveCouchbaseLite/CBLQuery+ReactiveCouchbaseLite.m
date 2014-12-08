@@ -8,6 +8,7 @@
 //
 
 #import "CBLQuery+ReactiveCouchbaseLite.h"
+#import "ReactiveCouchbaseLite.h"
 
 @implementation CBLQuery (ReactiveCouchbaseLite)
 
@@ -24,6 +25,14 @@
         return nil;
     }];
     return [result setNameWithFormat:@"[%@] -rcl_run", result.name];
+}
+
+- (RACScheduler *)rcl_scheduler {
+    return self.database.rcl_scheduler;
+}
+
+- (BOOL)rcl_isOnScheduler {
+    return self.database.rcl_isOnScheduler;
 }
 
 @end
