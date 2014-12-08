@@ -13,7 +13,9 @@
 @implementation CBLUnsavedRevision (ReactiveCouchbaseLite)
 
 - (RACSignal *)rcl_save {
+    @weakify(self)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self)
         NSError *error = nil;
         CBLSavedRevision *revision = [self save:&error];
         if (revision) {
@@ -28,7 +30,9 @@
 }
 
 - (RACSignal *)rcl_saveAllowingConflict {
+    @weakify(self)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self)
         NSError *error = nil;
         CBLSavedRevision *revision = [self saveAllowingConflict:&error];
         if (revision) {

@@ -16,6 +16,7 @@
  Saves this revision to the database.
  
  @return A signal completing or returning an error if the operation fails.
+ @discussion This is not likely to be thread-safe.
  */
 
 - (RACSignal *)rcl_save;
@@ -24,6 +25,7 @@
  Saves this revision to the database regardless of whether it is current.
  
  @return A signal completing or returning an error if the operation fails.
+ @discussion This is not likely to be thread-safe.
  */
 
 - (RACSignal *)rcl_saveAllowingConflict;
@@ -35,6 +37,7 @@
  @param mimeType The MIME type of the content.
  @param content The body of the attachment.
  @return A signal that completes when the operation is finished.
+ @discussion This is not likely to be thread-safe.
  */
 
 - (RACSignal *)rcl_setAttachmentNamed:(NSString *)name withContentType:(NSString *)mimeType content:(NSData *)content;
@@ -46,6 +49,7 @@
  @param mimeType The MIME type of the content.
  @param fileURL The URL to the body of the attachment.
  @return A signal that completes when the operation is finished.
+ @discussion This is not likely to be thread-safe.
  */
 
 - (RACSignal *)rcl_setAttachmentNamed:(NSString *)name withContentType:(NSString *)mimeType contentURL:(NSURL *)fileURL;
@@ -55,6 +59,7 @@
  
  @param name The attachment name.
  @return A signal that completes when the operation is finished.
+ @discussion This is not likely to be thread-safe.
  */
 
 - (RACSignal *)rcl_removeAttachmentNamed:(NSString *)name;
