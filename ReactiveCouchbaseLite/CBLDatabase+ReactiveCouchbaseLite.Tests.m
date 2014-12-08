@@ -150,44 +150,67 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     timeout:5.0 description:@"document created/opened/deleted successfully"];
 }
 
-/**
 - (void)testExistingLocalDocumentWithID {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self expectError:^(NSError *error) {
         NSLog(@"Received error: %@", error);
-    } signal:[_database rcl_existingLocalDocumentWithID:ID] timeout:5.0 description:@"local document not found"];
-    [self expectCompletionFromSignal:[_database rcl_putLocalDocumentWithProperties:@{} ID:ID] timeout:5.0 description:@"local document created"];
+    } signal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_existingLocalDocumentWithID:ID];
+    }] timeout:5.0 description:@"local document not found"];
+    [self expectCompletionFromSignal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_putLocalDocumentWithProperties:@{} ID:ID];
+    }] timeout:5.0 description:@"local document created"];
 }
 
 - (void)testDeleteLocalDocumentWithID {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self expectError:^(NSError *error) {
         NSLog(@"Received error: %@", error);
-    } signal:[_database rcl_existingLocalDocumentWithID:ID] timeout:5.0 description:@"local document not found"];
-    [self expectCompletionFromSignal:[[_database rcl_putLocalDocumentWithProperties:@{} ID:ID]
+    } signal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_existingLocalDocumentWithID:ID];
+    }] timeout:5.0 description:@"local document not found"];
+    [self expectCompletionFromSignal:[[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_putLocalDocumentWithProperties:@{} ID:ID];
+    }]
     then:^RACSignal *{
-        return [[_database rcl_deleteLocalDocumentWithID:ID]
+        return [[[CBLManager rcl_databaseNamed:_databaseName]
+        flattenMap:^RACSignal *(CBLDatabase *database) {
+            return [database rcl_deleteLocalDocumentWithID:ID];
+        }]
         then:^RACSignal *{
-            return [[[_database rcl_existingLocalDocumentWithID:ID]
+            return [[[[CBLManager rcl_databaseNamed:_databaseName]
+            flattenMap:^RACSignal *(CBLDatabase *database) {
+                return [database rcl_existingLocalDocumentWithID:ID];
+            }]
             doCompleted:^{
                 XCTFail(@"Local document '%@' was apparently not deleted", ID);
             }]
             catchTo:[RACSignal empty]];
         }];
-    }] timeout:5.0 description:@"local document created"];
+    }] timeout:5.0 description:@"local document deleted"];
 }
 
 - (void)testAllDocumentsQuery {
     [self expectNext:^(CBLQuery *query) {
         XCTAssertTrue([query isKindOfClass:[CBLQuery class]]);
-    } signal:[_database rcl_allDocumentsQuery] timeout:5.0 description:@"all documents query created"];
+    } signal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_allDocumentsQuery];
+    }] timeout:5.0 description:@"all documents query created"];
 }
 
 - (void)testAllDocumentsQueryWithMode {
     [self expectNext:^(CBLQuery *query) {
         XCTAssertTrue([query isKindOfClass:[CBLQuery class]]);
         XCTAssertEqual(kCBLOnlyConflicts, query.allDocsMode);
-    } signal:[_database rcl_allDocumentsQueryWithMode:kCBLOnlyConflicts] timeout:5.0 description:@"all documents query created"];
+    } signal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_allDocumentsQueryWithMode:kCBLOnlyConflicts];
+    }] timeout:5.0 description:@"all documents query created"];
 }
 
 - (void)testAllDocumentsQueryWithModeIndexUpdateMode {
@@ -195,12 +218,18 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         XCTAssertTrue([query isKindOfClass:[CBLQuery class]]);
         XCTAssertEqual(kCBLOnlyConflicts, query.allDocsMode);
         XCTAssertEqual(kCBLUpdateIndexAfter, query.indexUpdateMode);
-    } signal:[_database rcl_allDocumentsQueryWithMode:kCBLOnlyConflicts indexUpdateMode:kCBLUpdateIndexAfter] timeout:5.0 description:@"all documents query created"];
+    } signal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_allDocumentsQueryWithMode:kCBLOnlyConflicts indexUpdateMode:kCBLUpdateIndexAfter];
+    }] timeout:5.0 description:@"all documents query created"];
 }
 
 - (void)testSlowQueryWithMap {
     NSString *ID = [[NSUUID UUID] UUIDString];
-    [self expectCompletionFromSignal:[[[[_database rcl_documentWithID:ID]
+    [self expectCompletionFromSignal:[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_documentWithID:ID];
+    }]
     flattenMap:^RACSignal *(CBLDocument *document) {
         return [document rcl_newRevision];
     }]
@@ -208,8 +237,11 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         return [unsavedRevision rcl_save];
     }]
     then:^RACSignal *{
-        return [[[[_database rcl_slowQueryWithMap:^(NSDictionary *document, CBLMapEmitBlock emit) {
-            emit(document[@"_id"], document);
+        return [[[[[CBLManager rcl_databaseNamed:_databaseName]
+        flattenMap:^RACSignal *(CBLDatabase *database) {
+            return [database rcl_slowQueryWithMap:^(NSDictionary *document, CBLMapEmitBlock emit) {
+                emit(document[@"_id"], document);
+            }];
         }]
         flattenMap:^RACSignal *(CBLQuery *query) {
             return [query rcl_run];
@@ -229,14 +261,23 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self expectNext:^(CBLView *view) {
         XCTAssertTrue([view isKindOfClass:[CBLView class]]);
-    } signal:[_database rcl_viewNamed:ID] timeout:5.0 description:@"view opened"];
+    } signal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_viewNamed:ID];
+    }] timeout:5.0 description:@"view opened"];
 }
 
 - (void)testExistingViewNamed {
     NSString *ID = [[NSUUID UUID] UUIDString];
-    [self expectCompletionFromSignal:[[[[[[_database rcl_existingViewNamed:ID]
+    [self expectCompletionFromSignal:[[[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_existingViewNamed:ID];
+    }]
     catch:^RACSignal *(NSError *error) {
-        return [_database rcl_viewNamed:ID];
+        return [[CBLManager rcl_databaseNamed:_databaseName]
+        flattenMap:^RACSignal *(CBLDatabase *database) {
+            return [database rcl_viewNamed:ID];
+        }];
     }]
     flattenMap:^RACSignal *(CBLView *view) {
         [view setMapBlock:^(NSDictionary *document, CBLMapEmitBlock emit) {
@@ -248,7 +289,10 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         return [RACSignal empty];
     }]
     then:^RACSignal * {
-        return [_database rcl_existingViewNamed:ID];
+        return [[CBLManager rcl_databaseNamed:_databaseName]
+        flattenMap:^RACSignal *(CBLDatabase *database) {
+            return [database rcl_existingViewNamed:ID];
+        }];
     }]
     flattenMap:^RACSignal *(CBLView *view) {
         return [RACSignal empty];
@@ -258,7 +302,10 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 
 - (void)testSetValidationNamedAsBlock {
     NSString *ID = [[NSUUID UUID] UUIDString];
-    [self expectCompletionFromSignal:[_database rcl_setValidationNamed:ID asBlock:^(CBLRevision *newRevision, id<CBLValidationContext> context) {
+    [self expectCompletionFromSignal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_setValidationNamed:ID asBlock:^(CBLRevision *newRevision, id<CBLValidationContext> context) {
+        }];
     }] timeout:5.0 description:@"correctly sets validation block"];
 }
 
@@ -266,52 +313,80 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self expectNext:^(id block) {
         XCTAssertTrue([block isKindOfClass:[NSObject class]]);
-    } signal:[[[_database rcl_validationNamed:ID]
+    } signal:[[[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_validationNamed:ID];
+    }]
     catch:^RACSignal *(NSError *error) {
-        return [_database rcl_setValidationNamed:ID asBlock:^(CBLRevision *newRevision, id<CBLValidationContext> context) {
+        return [[CBLManager rcl_databaseNamed:_databaseName]
+        flattenMap:^RACSignal *(CBLDatabase *database) {
+            return [database rcl_setValidationNamed:ID asBlock:^(CBLRevision *newRevision, id<CBLValidationContext> context) {
+            }];
         }];
     }]
     then:^RACSignal *{
-        return [_database rcl_validationNamed:ID];
+        return [[CBLManager rcl_databaseNamed:_databaseName]
+        flattenMap:^RACSignal *(CBLDatabase *database) {
+            return [database rcl_validationNamed:ID];
+        }];
     }] timeout:5.0 description:@"correctly sets validation block"];
 }
 
 - (void)testSetFilterNamedAsBlock {
     NSString *ID = [[NSUUID UUID] UUIDString];
-    [self expectCompletionFromSignal:[_database rcl_setFilterNamed:ID asBlock:^BOOL(CBLSavedRevision *revision, NSDictionary *params) {
-        return YES;
-    }] timeout:5.0 description:@"correctly sets filter block"];
+    [self expectCompletionFromSignal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_setFilterNamed:ID asBlock:^BOOL(CBLSavedRevision *revision, NSDictionary *params) {
+            return YES;
+        }];
+    }]
+    timeout:5.0 description:@"correctly sets filter block"];
 }
 
 - (void)testFilterNamed {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self expectNext:^(id block) {
         XCTAssertTrue([block isKindOfClass:[NSObject class]]);
-    } signal:[[[_database rcl_filterNamed:ID]
+    } signal:[[[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_filterNamed:ID];
+    }]
     catch:^RACSignal *(NSError *error) {
-        return [_database rcl_setFilterNamed:ID asBlock:^BOOL(CBLSavedRevision *revision, NSDictionary *params) {
-            return YES;
+        return [[CBLManager rcl_databaseNamed:_databaseName]
+        flattenMap:^RACSignal *(CBLDatabase *database) {
+            return [database rcl_setFilterNamed:ID asBlock:^BOOL(CBLSavedRevision *revision, NSDictionary *params) {
+                return YES;
+            }];
         }];
     }]
     then:^RACSignal *{
-        return [_database rcl_filterNamed:ID];
+        return [[CBLManager rcl_databaseNamed:_databaseName]
+        flattenMap:^RACSignal *(CBLDatabase *database) {
+            return [database rcl_filterNamed:ID];
+        }];
     }] timeout:5.0 description:@"correctly sets filter block"];
 }
 
 - (void)testInTransaction {
     __block BOOL completed = NO;
-    [self expectCompletionFromSignal:[_database rcl_inTransaction:^BOOL{
-        completed = YES;
-        return YES;
+    [self expectCompletionFromSignal:[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_inTransaction:^BOOL{
+            completed = YES;
+            return YES;
+        }];
     }] timeout:5.0 description:@"correctly commits transaction."];
     XCTAssertTrue(completed);
 }
 
 - (void)testDoAsync {
     __block BOOL completed = NO;
-    [self expectCompletionFromSignal:[[[[_database rcl_doAsync:^{
-        sleep(1);
-        completed = YES;
+    [self expectCompletionFromSignal:[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_doAsync:^{
+            sleep(1);
+            completed = YES;
+        }];
     }]
     then:^RACSignal *{
         return [RACSignal error:[NSError errorWithDomain:NSStringFromClass([self class]) code:(0+completed) userInfo:@{}]];
@@ -326,7 +401,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         return [RACSignal empty];
     }] timeout:5.0 description:@"correctly asynchronously invokes block."];
 }
-*/
+
 @end
 
 /**
