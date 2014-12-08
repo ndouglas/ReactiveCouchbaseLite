@@ -27,13 +27,11 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 - (void)setUp {
 	[super setUp];
     _manager = [CBLManager sharedInstance];
-    NSError *error = nil;
     _databaseName = [NSString stringWithFormat:@"test_%@", @([[[NSUUID UUID] UUIDString] hash])];
     _failScheduler = [[RACQueueScheduler alloc] initWithName:@"FailQueue" queue:dispatch_queue_create("FailQueue", DISPATCH_QUEUE_SERIAL)];
 }
 
 - (void)tearDown {
-    NSError *error = nil;
 	[super tearDown];
 }
 

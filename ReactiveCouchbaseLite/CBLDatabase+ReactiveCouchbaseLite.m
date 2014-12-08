@@ -206,7 +206,7 @@
     RACSignal *result = [[self rcl_allDocumentsQuery]
     map:^CBLQuery *(CBLQuery *query) {
         @strongify(self)
-        //NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+        NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
         CBLQuery *result = query;
         result.allDocsMode = mode;
         return result;
@@ -219,7 +219,7 @@
     RACSignal *result = [[self rcl_allDocumentsQuery]
     map:^CBLQuery *(CBLQuery *query) {
         @strongify(self)
-        //NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
+        NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
         CBLQuery *result = query;
         result.allDocsMode = mode;
         result.indexUpdateMode = indexUpdateMode;
@@ -265,6 +265,7 @@
         @weakify(self)
         [self.manager.rcl_scheduler schedule:^{
             @strongify(self)
+            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
             CBLView *view = [self existingViewNamed:name];
             if (view) {
                 [subscriber sendNext:view];
@@ -285,6 +286,7 @@
         @weakify(self)
         [self.manager.rcl_scheduler schedule:^{
             @strongify(self)
+            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
             [self setValidationNamed:name asBlock:block];
             [subscriber sendCompleted];
         }];
@@ -300,6 +302,7 @@
         @weakify(self)
         [self.manager.rcl_scheduler schedule:^{
             @strongify(self)
+            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
             CBLValidationBlock block = [self validationNamed:name];
             if (block) {
                 [subscriber sendNext:block];
@@ -320,6 +323,7 @@
         @weakify(self)
         [self.manager.rcl_scheduler schedule:^{
             @strongify(self)
+            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
             [self setFilterNamed:name asBlock:block];
             [subscriber sendCompleted];
         }];
@@ -335,6 +339,7 @@
         @weakify(self)
         [self.manager.rcl_scheduler schedule:^{
             @strongify(self)
+            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
             CBLFilterBlock block = [self filterNamed:name];
             if (block) {
                 [subscriber sendNext:block];
@@ -355,6 +360,7 @@
         @weakify(self)
         [self.manager.rcl_scheduler schedule:^{
             @strongify(self)
+            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
             if (![self inTransaction:block]) {
                 [subscriber sendError:RCLErrorWithCode(RCLErrorCode_TransactionWasNotCommitted)];
             }
@@ -372,6 +378,7 @@
         @weakify(self)
         [self.manager.rcl_scheduler schedule:^{
             @strongify(self)
+            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
             [self doAsync:block];
             [subscriber sendCompleted];
         }];
@@ -393,6 +400,7 @@
         @weakify(self)
         [self.manager.rcl_scheduler schedule:^{
             @strongify(self)
+            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
             [subscriber sendNext:[self createPushReplication:URL]];
             [subscriber sendCompleted];
         }];
@@ -408,6 +416,7 @@
         @weakify(self)
         [self.manager.rcl_scheduler schedule:^{
             @strongify(self)
+            NSCAssert(self.manager.rcl_isOnScheduler, @"not on correct scheduler");
             [subscriber sendNext:[self createPullReplication:URL]];
             [subscriber sendCompleted];
         }];
