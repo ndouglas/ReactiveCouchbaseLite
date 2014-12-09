@@ -34,7 +34,7 @@
 
 - (void)testDelete {
     NSString *ID = [[NSUUID UUID] UUIDString];
-    [self expectCompletionFromSignal:[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[CBLManager rcl_databaseNamed:_databaseName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -55,7 +55,7 @@
 
 - (void)testPurge {
     NSString *ID = [[NSUUID UUID] UUIDString];
-    [self expectCompletionFromSignal:[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[CBLManager rcl_databaseNamed:_databaseName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -83,7 +83,7 @@
 - (void)testDocumentChangeNotifications {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
-    [self expectCompletionFromSignal:[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[[CBLManager rcl_databaseNamed:_databaseName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -102,7 +102,7 @@
 - (void)testCurrentRevisionID {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
-    [self expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:_databaseName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -122,7 +122,7 @@
 - (void)testCurrentRevision {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
-    [self expectCompletionFromSignal:[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[[CBLManager rcl_databaseNamed:_databaseName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -141,7 +141,7 @@
 - (void)testRevisionWithID {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
-    [self expectCompletionFromSignal:[[[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[[[[CBLManager rcl_databaseNamed:_databaseName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -170,7 +170,7 @@
 - (void)testGetRevisionHistory {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
-    [self expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:_databaseName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -190,7 +190,7 @@
 - (void)testGetRevisionHistoryFilteredWithBlock {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
-    [self expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:_databaseName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]

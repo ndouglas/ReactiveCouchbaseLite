@@ -91,7 +91,7 @@
 
 - (void)testNextRow {
 	NSString *ID = [[NSUUID UUID] UUIDString];
-    [self expectCompletionFromSignal:[[self createRandomDocumentWithID:ID]
+    [self rcl_expectCompletionFromSignal:[[self createRandomDocumentWithID:ID]
     then:^RACSignal *{
         return [[[[_database rcl_slowQueryWithMap:^(NSDictionary *document, CBLMapEmitBlock emit) {
             emit(document[@"_id"], document);
@@ -112,7 +112,7 @@
 
 - (void)testSequence {
 	NSString *ID = [[NSUUID UUID] UUIDString];
-    [self expectCompletionFromSignal:[[[[[[self createRandomDocumentWithID:ID]
+    [self rcl_expectCompletionFromSignal:[[[[[[self createRandomDocumentWithID:ID]
     then:^RACSignal *{
         return [self createRandomDocumentWithID:ID];
     }]

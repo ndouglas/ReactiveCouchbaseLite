@@ -53,34 +53,34 @@
 }
 
 - (void)testSharedInstance {
-    [self expectNext:^(CBLManager *manager) {
+    [self rcl_expectNext:^(CBLManager *manager) {
         XCTAssertNotNil(manager);
     } signal:[CBLManager rcl_manager] timeout:5.0 description:@"sharedInstance is equal to sharedInstance"];
 }
 
 - (void)testDatabaseNamed {
-    [self expectNext:^(CBLDatabase *database) {
+    [self rcl_expectNext:^(CBLDatabase *database) {
         XCTAssertNotNil(database);
     } signal:[CBLManager rcl_databaseNamed:_databaseName] timeout:5.0 description:@"database is not nil"];
-    [self expectNext:^(CBLDatabase *database) {
+    [self rcl_expectNext:^(CBLDatabase *database) {
         XCTAssertNotNil(database);
     } signal:[[CBLManager sharedInstance] rcl_databaseNamed:_databaseName] timeout:5.0 description:@"database is not nil"];
 }
 
 - (void)testExistingDatabaseNamed {
-    [self expectNext:^(CBLDatabase *database) {
+    [self rcl_expectNext:^(CBLDatabase *database) {
         XCTAssertNotNil(database);
     } signal:[CBLManager rcl_existingDatabaseNamed:_databaseName] timeout:5.0 description:@"existing database is not nil"];
-    [self expectNext:^(CBLDatabase *database) {
+    [self rcl_expectNext:^(CBLDatabase *database) {
         XCTAssertNotNil(database);
     } signal:[[CBLManager sharedInstance] rcl_existingDatabaseNamed:_databaseName] timeout:5.0 description:@"existing database is not nil"];
 }
 
 - (void)testIsOnScheduler {
-    [self expectNext:^(CBLManager *manager) {
+    [self rcl_expectNext:^(CBLManager *manager) {
     } signal:[CBLManager rcl_manager]
     timeout:5.0 description:@"sharedInstance was delivered on a correct thread"];
-    [self expectNext:^(CBLManager *manager) {
+    [self rcl_expectNext:^(CBLManager *manager) {
     } signal:[[CBLManager rcl_manager]
     deliverOn:_failScheduler]
     timeout:5.0 description:@"sharedInstance was delivered on an incorrect thread"];

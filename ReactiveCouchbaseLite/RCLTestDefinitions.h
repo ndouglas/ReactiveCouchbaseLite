@@ -21,7 +21,7 @@
  @discussion Any non-completion values are treated as failures.
  */
 
-- (void)expectCompletionFromSignal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description;
+- (void)rcl_expectCompletionFromSignal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description;
 
 /**
  Subscribes to the signal and succeeds if the signal then sends a new value before the specified timeout.
@@ -33,7 +33,7 @@
  @discussion Any non-next values are treated as failures.
  */
 
-- (void)expectNext:(void (^)(id next))nextHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description;
+- (void)rcl_expectNext:(void (^)(id next))nextHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description;
 
 /**
  Subscribes to the signal and succeeds if the signal then sends an error before the specified timeout.
@@ -45,6 +45,6 @@
  @discussion Any non-error values are treated as failures.
  */
 
-- (void)expectError:(void (^)(NSError *error))errorHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description;
+- (void)rcl_expectError:(void (^)(NSError *error))errorHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description;
 
 @end
