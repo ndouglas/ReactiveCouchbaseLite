@@ -28,15 +28,4 @@
     return [result setNameWithFormat:@"[%@ -rcl_nextRow]", self.description];
 }
 
-- (RACSequence *)rcl_sequence {
-    CBLQueryEnumerator *enumerator = [self copy];
-    [enumerator reset];
-    CBLQueryRow *row = [enumerator nextRow];
-    return [RACSequence sequenceWithHeadBlock:^CBLQueryRow *{
-        return row;
-    } tailBlock:^RACSequence *{
-        return [enumerator rcl_sequence];
-    }];
-}
-
 @end
