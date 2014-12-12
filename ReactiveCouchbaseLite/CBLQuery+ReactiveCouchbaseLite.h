@@ -26,7 +26,7 @@
  @discussion Will run the query.
  */
 
-- (RACSignal *)rcl_signal;
+- (RACSignal *)rcl_flattenedRows;
 
 /**
  A scheduler for this database and descendant objects.
