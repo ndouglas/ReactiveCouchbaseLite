@@ -13,6 +13,7 @@
 @implementation CBLLiveQuery (ReactiveCouchbaseLite)
 
 - (RACSignal *)rcl_rows {
+    NSAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
     RACSignal *result = [[[RACObserve(self, rows)
     ignore:nil]
     initially:^{
@@ -25,7 +26,17 @@
     return [result setNameWithFormat:@"[%@] -rcl_rows", result.name];
 }
 
+- (RACSignal *)rcl_flattenedRows {
+    NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+    RACSignal *result = [[self rcl_rows]
+    flattenMap:^RACSignal *(CBLQueryEnumerator *queryEnumerator) {
+        return queryEnumerator.rac_sequence.signal;
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_rows", result.name];
+}
+
 - (RACSignal *)rcl_changes {
+    NSAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
     RACSignal *result = [[[self rcl_rows]
     ignore:nil]
     flattenMap:^RACSignal *(CBLQueryEnumerator *enumerator) {
