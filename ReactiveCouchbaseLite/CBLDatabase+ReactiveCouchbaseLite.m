@@ -486,6 +486,16 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_databaseChangeNotifications", result.name];
 }
 
+- (RACSignal *)rcl_deleteDocumentWithID:(NSString *)ID {
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    RACSignal *result = [[[database rcl_existingDocumentWithID:ID]
+    catchTo:[RACSignal empty]]
+    flattenMap:^RACSignal *(CBLDocument *document) {
+        return [document rcl_delete];
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_deleteDocumentWithID: %@", result.name, ID];
+}
+
 - (RACScheduler *)rcl_scheduler {
     return self.manager.rcl_scheduler;
 }

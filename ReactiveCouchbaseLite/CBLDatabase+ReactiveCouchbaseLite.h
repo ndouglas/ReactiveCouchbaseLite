@@ -255,6 +255,14 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 - (RACSignal *)rcl_databaseChangeNotifications;
 
 /**
+ Deletes the document with the specified ID.
+ 
+ @return A signal that completes when the document is deleted.
+ */
+
+- (RACSignal *)rcl_deleteDocumentWithID:(NSString *)_ID;
+
+/**
  A scheduler for this database and descendant objects.
  
  @return A scheduler that will work for this database and its descendant objects.
