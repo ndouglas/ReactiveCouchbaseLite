@@ -67,12 +67,8 @@ CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
 
 - (RACSignal *)rcl_databaseNamed:(NSString *)name {
     CBLManager *manager = RCLSharedInstanceCurrentOrNewManager(self);
-    NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
-    @weakify(manager)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(manager)
         [manager.rcl_scheduler schedule:^{
-            @strongify(manager)
             NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
             CBLDatabase *database = [manager databaseNamed:name error:&error];
@@ -90,12 +86,8 @@ CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
 
 - (RACSignal *)rcl_existingDatabaseNamed:(NSString *)name {
     CBLManager *manager = RCLSharedInstanceCurrentOrNewManager(self);
-    NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
-    @weakify(manager)
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(manager)
         [manager.rcl_scheduler schedule:^{
-            @strongify(manager)
             NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
             CBLDatabase *database = [manager existingDatabaseNamed:name error:&error];

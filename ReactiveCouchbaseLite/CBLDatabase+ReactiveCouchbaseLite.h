@@ -135,6 +135,15 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 
 - (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode indexUpdateMode:(CBLIndexUpdateMode)indexUpdateMode;
 
+/**
+ Creates an all (including deleted) documents query.
+ 
+ @param block A block used for filtering the results.
+ @return A signal containing an all (including deleted) documents query.
+ */
+
+- (RACSignal *)rcl_allIncludingDeletedDocumentsQuery;
+
 /** 
  Creates a one-shot query with the given map block.
  
