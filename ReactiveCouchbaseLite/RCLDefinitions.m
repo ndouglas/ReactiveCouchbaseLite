@@ -47,6 +47,9 @@ extern NSError *RCLErrorWithCode(RCLErrorCodeType code) {
         case RCLErrorCode_QueryRowCouldNotBeFound:
             description = NSLocalizedString(@"Couchbase-Lite could not find the requested query row.", @"RCLErrorCode_QueryRowCouldNotBeFound");
             break;
+        case RCLErrorCode_ViewCouldNotBeUpdated:
+            description = NSLocalizedString(@"Couchbase-Lite could not update the map or reduce blocks for the row.", @"RCLErrorCode_ViewCouldNotBeUpdated");
+            break;
     }
     return [NSError errorWithDomain:RCLErrorDomain code:code userInfo:@{
         NSLocalizedDescriptionKey : description,

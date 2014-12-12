@@ -24,6 +24,7 @@ typedef enum {
     RCLErrorCode_RevisionCouldNotBeFound,                   // Couldn't find the revision.
     RCLErrorCode_AttachmentCouldNotBeFound,                 // Couldn't find the attachment.
     RCLErrorCode_QueryRowCouldNotBeFound,                   // Couldn't find the query row.
+    RCLErrorCode_ViewCouldNotBeUpdated,                     // Couldn't update the view.
 } RCLErrorCodeType;
 
 extern NSError *RCLErrorWithCode(RCLErrorCodeType code);

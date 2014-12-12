@@ -174,6 +174,31 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 - (RACSignal *)rcl_existingViewNamed:(NSString *)name;
 
 /**
+ Retrieves the view with the given name.
+ 
+ @param name The name of the view.
+ @param mapBlock The map block, which will be set if it hasn't already been set.
+ @param version The version of the view.
+ @return A signal containing the view (which may not necessarily exist in the database, if it hasn't been assigned a
+ map function).
+ */
+
+- (RACSignal *)rcl_viewNamed:(NSString *)name mapBlock:(CBLMapBlock)mapBlock version:(NSString *)version;
+
+/**
+ Retrieves the view with the given name.
+ 
+ @param name The name of the view.
+ @param mapBlock The map block, which will be set if it hasn't already been set.
+ @param reduceBlock The reduce block, which will be set if it hasn't already been set.
+ @param version The version of the view.
+ @return A signal containing the view (which may not necessarily exist in the database, if it hasn't been assigned a
+ map function).
+ */
+
+- (RACSignal *)rcl_viewNamed:(NSString *)name mapBlock:(CBLMapBlock)mapBlock reduceBlock:(CBLReduceBlock)reduceBlock version:(NSString *)version;
+
+/**
  Sets a validation function on the database.
  
  @param name The name of the validation function.

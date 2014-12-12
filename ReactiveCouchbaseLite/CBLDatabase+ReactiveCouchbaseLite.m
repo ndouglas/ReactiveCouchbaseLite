@@ -265,6 +265,32 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_existingViewNamed: %@", result.name, name];
 }
 
+- (RACSignal *)rcl_viewNamed:(NSString *)name mapBlock:(CBLMapBlock)mapBlock version:(NSString *)version {
+    return [self rcl_viewNamed:name mapBlock:mapBlock reduceBlock:nil version:version];
+}
+
+- (RACSignal *)rcl_viewNamed:(NSString *)name mapBlock:(CBLMapBlock)mapBlock reduceBlock:(CBLReduceBlock)reduceBlock version:(NSString *)version {
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [database.rcl_scheduler schedule:^{
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            CBLView *view = [database viewNamed:name];
+            if (!view.mapBlock || (reduceBlock && !view.reduceBlock)) {
+                if (![view setMapBlock:mapBlock reduceBlock:reduceBlock version:version]) {
+                    [subscriber sendError:RCLErrorWithCode(RCLErrorCode_ViewCouldNotBeUpdated)];
+                } else {
+                    [subscriber sendNext:view];
+                }
+            } else {
+                [subscriber sendNext:view];
+            }
+            [subscriber sendCompleted];
+        }];
+        return nil;
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_viewNamed: %@ mapBlock: %@ reduceBlock: %@ version: %@", result.name, name, mapBlock, reduceBlock, version];
+}
+
 - (RACSignal *)rcl_setValidationNamed:(NSString *)name asBlock:(CBLValidationBlock)block {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
