@@ -496,6 +496,36 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_deleteDocumentWithID: %@", result.name, ID];
 }
 
+- (RACSignal *)rcl_onDocumentWithID:(NSString *)ID performBlock:(void (^)(CBLDocument *document))block {
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    block([database documentWithID:ID]);
+    RACSignal *result = [RACSignal empty];
+    return [result setNameWithFormat:@"[%@] -rcl_onDocumentWithID: %@ performBlock: %@", result.name, ID, block];
+}
+
+- (RACSignal *)rcl_updateDocumentWithID:(NSString *)ID block:(BOOL(^)(CBLUnsavedRevision *unsavedRevision))block {
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    RACSignal *result = [[database documentWithID:ID] rcl_update:block];
+    return [result setNameWithFormat:@"[%@] -rcl_updateDocumentWithID: %@ block: %@", result.name, ID, block];
+}
+
+- (RACSignal *)rcl_updateLocalDocumentWithID:(NSString *)ID block:(NSDictionary *(^)(NSMutableDictionary *localDocument))block {
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [database.rcl_scheduler schedule:^{
+            NSMutableDictionary *localDocument = [[self existingLocalDocumentWithID:ID] ?: @{} mutableCopy];
+            NSError *error = nil;
+            BOOL success = [self putLocalDocument:block(localDocument) withID:ID error:&error];
+            if (!success) {
+                [subscriber sendError:error];
+            }
+            [subscriber sendCompleted];
+        }];
+        return nil;
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_updateLocalDocumentWithID: %@ block: %@", result.name, ID, block];
+}
+
 - (RACScheduler *)rcl_scheduler {
     return self.manager.rcl_scheduler;
 }

@@ -263,6 +263,36 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 - (RACSignal *)rcl_deleteDocumentWithID:(NSString *)_ID;
 
 /**
+ Performs the block with the specified document.
+ 
+ @param ID The ID of the document.
+ @param block The block performed on the document.
+ @return A signal that completes when the block has been executed.
+ */
+
+- (RACSignal *)rcl_onDocumentWithID:(NSString *)ID performBlock:(void (^)(CBLDocument *document))block;
+
+/**
+ Updates the document using the specified block.
+ 
+ @param ID The ID of the document.
+ @param block The block used to update the document.
+ @return A signal that completes when the document has been updated or returns an error if it fails.
+ */
+
+- (RACSignal *)rcl_updateDocumentWithID:(NSString *)ID block:(BOOL(^)(CBLUnsavedRevision *unsavedRevision))block;
+
+/**
+ Updates the local document using the specified block.
+ 
+ @param ID The ID of the document.
+ @param block The block used to update the local document.
+ @return A signal that completes when the local document has been updated or returns an error if it fails.
+ */
+
+- (RACSignal *)rcl_updateLocalDocumentWithID:(NSString *)ID block:(NSDictionary *(^)(NSMutableDictionary *localDocument))block;
+
+/**
  A scheduler for this database and descendant objects.
  
  @return A scheduler that will work for this database and its descendant objects.
