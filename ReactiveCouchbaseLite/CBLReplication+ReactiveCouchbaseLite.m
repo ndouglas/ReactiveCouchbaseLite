@@ -29,4 +29,11 @@ typedef NSDictionary *(^CBLPropertiesTransformationBlock)(NSDictionary *document
     return [result setNameWithFormat:@"[%@] -rcl_transferredDocuments", result.name];
 }
 
+- (RACSignal *)rcl_lastError {
+    RACSignal *result = [[RACObserve(self, lastError)
+    ignore:nil]
+    takeUntil:self.rac_willDeallocSignal];
+    return [result setNameWithFormat:@"[%@] -rcl_lastError", result.name];    
+}
+
 @end

@@ -19,4 +19,12 @@
 
 - (RACSignal *)rcl_transferredDocuments;
 
+/**
+ The last error encountered by this replication.
+
+ @return A signal streaming error objects.
+ */
+
+- (RACSignal *)rcl_lastError;
+
 @end
