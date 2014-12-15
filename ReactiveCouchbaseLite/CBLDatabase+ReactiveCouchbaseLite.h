@@ -73,6 +73,16 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 - (RACSignal *)rcl_existingDocumentWithID:(NSString *)documentID;
 
 /**
+ Opens the document with the specified ID.
+ 
+ @param documentID The unique identifier of the document.
+ @param defaultProperties Properties assigned to this document if it had to be newly created.
+ @return A signal with the document or an error if the document could not be created.
+ */
+
+- (RACSignal *)rcl_existingDocumentWithID:(NSString *)documentID defaultProperties:(NSDictionary *)defaultProperties;
+
+/**
  Creates a new document with a random UUID.
  
  @return A signal with the document or an error if the document could not be created.

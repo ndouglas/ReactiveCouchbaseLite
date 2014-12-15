@@ -111,6 +111,34 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_existingDocumentWithID: %@", result.name, documentID];
 }
 
+- (RACSignal *)rcl_existingDocumentWithID:(NSString *)documentID defaultProperties:(NSDictionary *)defaultProperties {
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [database.rcl_scheduler schedule:^{
+            NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
+            CBLDocument *document = [database existingDocumentWithID:documentID];
+            if (document) {
+                [subscriber sendNext:document];
+            } else {
+                document = [database documentWithID:(defaultProperties[@"_id"] ?: [[NSUUID UUID] UUIDString])];
+                NSError *error = nil;
+                CBLSavedRevision *revision = [document update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+                    [unsavedRevision.properties addEntriesFromDictionary:defaultProperties];
+                    return YES;
+                } error:&error];
+                if (revision) {
+                    [subscriber sendNext:revision.document];
+                } else {
+                    [subscriber sendError:error];
+                }
+            }
+            [subscriber sendCompleted];
+        }];
+        return nil;
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_existingDocumentWithID: %@", result.name, documentID];
+}
+
 - (RACSignal *)rcl_createDocument {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
