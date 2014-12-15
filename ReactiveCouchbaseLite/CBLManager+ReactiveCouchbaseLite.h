@@ -71,6 +71,14 @@ extern CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current);
 - (RACScheduler *)rcl_scheduler;
 
 /**
+ Sets a scheduler for this manager and descendant objects.
+ 
+ @param scheduler A scheduler that will work for this manager and its descendant objects.
+ */
+
+- (void)rcl_setScheduler:(RACScheduler *)scheduler;
+
+/**
  Returns whether we are operating on the scheduler devoted to this instance of the manager.
  
  @return YES if the queues have the same label, otherwise NO.

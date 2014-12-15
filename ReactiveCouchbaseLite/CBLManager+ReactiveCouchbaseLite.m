@@ -12,10 +12,6 @@
 
 static char CBLManagerAssociatedSchedulerKey;
 
-@interface CBLManager ()
-- (void)rcl_setScheduler:(RACScheduler *)scheduler;
-@end
-
 CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
     __block CBLManager *result = nil;
     if ([NSThread isMainThread]) {
