@@ -120,7 +120,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
             if (document) {
                 [subscriber sendNext:document];
             } else {
-                document = [database documentWithID:(defaultProperties[@"_id"] ?: [[NSUUID UUID] UUIDString])];
+                document = [database documentWithID:documentID];
                 NSError *error = nil;
                 CBLSavedRevision *revision = [document update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
                     [unsavedRevision.properties addEntriesFromDictionary:defaultProperties];
