@@ -17,3 +17,4 @@
 #import "CBLRevision+ReactiveCouchbaseLite.h"
 #import "CBLSavedRevision+ReactiveCouchbaseLite.h"
 #import "CBLUnsavedRevision+ReactiveCouchbaseLite.h"
+#import "RACSignal+ReactiveCouchbaseLite.h"
