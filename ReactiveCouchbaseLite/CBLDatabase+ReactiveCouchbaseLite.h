@@ -301,40 +301,64 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 /**
  Deletes the document with the specified ID.
  
+ @param documentID The document ID.
  @return A signal that completes when the document is deleted.
  */
 
-- (RACSignal *)rcl_deleteDocumentWithID:(NSString *)_ID;
+- (RACSignal *)rcl_deleteDocumentWithID:(NSString *)documentID;
+
+/**
+ Marks as deleted the document with the specified ID.
+ 
+ @param documentID The document ID.
+ @return A signal that completes when the document is deleted.
+ @discussion This is similar to -[CBLDatabase (ReactiveCouchbaseLite) rcl_deleteDocumentWithID:] in that it marks the
+ document as deleted.  However, it retains all existing properties.
+ */
+
+- (RACSignal *)rcl_markAsDeletedDocumentWithID:(NSString *)documentID;
+
+/**
+ Marks as deleted the document with the specified ID.
+ 
+ @param documentID The document ID.
+ @param additionalProperties Additional properties applied to the document.
+ @return A signal that completes when the document is deleted.
+ @discussion This is similar to -[CBLDatabase (ReactiveCouchbaseLite) rcl_deleteDocumentWithID:] in that it marks the
+ document as deleted.  However, it retains all existing properties.
+ */
+
+- (RACSignal *)rcl_markAsDeletedDocumentWithID:(NSString *)documentID additionalProperties:(NSDictionary *)additionalProperties;
 
 /**
  Performs the block with the specified document.
  
- @param ID The ID of the document.
+ @param documentID The ID of the document.
  @param block The block performed on the document.
  @return A signal that completes when the block has been executed.
  */
 
-- (RACSignal *)rcl_onDocumentWithID:(NSString *)ID performBlock:(void (^)(CBLDocument *document))block;
+- (RACSignal *)rcl_onDocumentWithID:(NSString *)documentID performBlock:(void (^)(CBLDocument *document))block;
 
 /**
  Updates the document using the specified block.
  
- @param ID The ID of the document.
+ @param documentID The ID of the document.
  @param block The block used to update the document.
  @return A signal that completes when the document has been updated or returns an error if it fails.
  */
 
-- (RACSignal *)rcl_updateDocumentWithID:(NSString *)ID block:(BOOL(^)(CBLUnsavedRevision *unsavedRevision))block;
+- (RACSignal *)rcl_updateDocumentWithID:(NSString *)documentID block:(BOOL(^)(CBLUnsavedRevision *unsavedRevision))block;
 
 /**
  Updates the local document using the specified block.
  
- @param ID The ID of the document.
+ @param documentID The ID of the document.
  @param block The block used to update the local document.
  @return A signal that completes when the local document has been updated or returns an error if it fails.
  */
 
-- (RACSignal *)rcl_updateLocalDocumentWithID:(NSString *)ID block:(NSDictionary *(^)(NSMutableDictionary *localDocument))block;
+- (RACSignal *)rcl_updateLocalDocumentWithID:(NSString *)documentID block:(NSDictionary *(^)(NSMutableDictionary *localDocument))block;
 
 /**
  A scheduler for this database and descendant objects.

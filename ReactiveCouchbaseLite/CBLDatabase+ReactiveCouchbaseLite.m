@@ -456,14 +456,41 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_databaseChangeNotifications", result.name];
 }
 
-- (RACSignal *)rcl_deleteDocumentWithID:(NSString *)ID {
+- (RACSignal *)rcl_deleteDocumentWithID:(NSString *)documentID {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
-    RACSignal *result = [[[database rcl_existingDocumentWithID:ID]
+    RACSignal *result = [[[database rcl_existingDocumentWithID:documentID]
     catchTo:[RACSignal empty]]
     flattenMap:^RACSignal *(CBLDocument *document) {
         return [document rcl_delete];
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_deleteDocumentWithID: %@", result.name, ID];
+    return [result setNameWithFormat:@"[%@] -rcl_deleteDocumentWithID: %@", result.name, documentID];
+}
+
+- (RACSignal *)rcl_markAsDeletedDocumentWithID:(NSString *)documentID {
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    RACSignal *result = [[[database rcl_existingDocumentWithID:documentID]
+    catchTo:[RACSignal empty]]
+    flattenMap:^RACSignal *(CBLDocument *document) {
+        return [document rcl_update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+            unsavedRevision.properties[@"_deleted"] = @YES;
+            return YES;
+        }];
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_markAsDeletedDocumentWithID: %@", result.name, documentID];
+}
+
+- (RACSignal *)rcl_markAsDeletedDocumentWithID:(NSString *)documentID additionalProperties:(NSDictionary *)additionalProperties {
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    RACSignal *result = [[[database rcl_existingDocumentWithID:documentID]
+    catchTo:[RACSignal empty]]
+    flattenMap:^RACSignal *(CBLDocument *document) {
+        return [document rcl_update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+            unsavedRevision.properties[@"_deleted"] = @YES;
+            [unsavedRevision.properties addEntriesFromDictionary:additionalProperties];
+            return YES;
+        }];
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_markAsDeletedDocumentWithID: %@ additionalProperties: %@", result.name, documentID, additionalProperties];
 }
 
 - (RACSignal *)rcl_onDocumentWithID:(NSString *)ID performBlock:(void (^)(CBLDocument *document))block {
