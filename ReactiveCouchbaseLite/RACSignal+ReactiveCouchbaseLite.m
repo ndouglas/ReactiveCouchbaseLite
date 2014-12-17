@@ -19,7 +19,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_documentWithID:documentID];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_documentWithID: %@", result.name, documentID];
 }
 
@@ -28,7 +28,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_existingDocumentWithID:documentID];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_existingDocumentWithID: %@", result.name, documentID];
 }
 
@@ -37,7 +37,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_existingDocumentWithID:documentID defaultProperties:defaultProperties];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_existingDocumentWithID: %@ defaultProperties: %@", result.name, documentID, defaultProperties];
 }
 
@@ -46,7 +46,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_createDocument];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_createDocument", result.name];
 }
 
@@ -55,7 +55,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_existingLocalDocumentWithID:documentID];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_existingLocalDocumentWithID: %@", result.name, documentID];
 }
 
@@ -64,7 +64,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_putLocalDocumentWithProperties:properties ID:documentID];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_putLocalDocumentWithProperties: %@ ID: %@", result.name, properties, documentID];
 }
 
@@ -73,7 +73,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_deleteLocalDocumentWithID:documentID];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_deleteLocalDocumentWithID: %@", result.name, documentID];
 }
 
@@ -82,7 +82,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_allDocumentsQuery];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_allDocumentsQuery", result.name];
 }
 
@@ -91,7 +91,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_allDocumentsQueryWithMode:mode];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_allDocumentsQueryWithMode: %@", result.name, @(mode)];
 }
 
@@ -100,7 +100,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_allDocumentsQueryWithMode:mode indexUpdateMode:indexUpdateMode];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_allDocumentsQueryWithMode: %@ indexUpdateMode: %@", result.name, @(mode), @(indexUpdateMode)];
 }
 
@@ -109,7 +109,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_allIncludingDeletedDocumentsQuery];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_allIncludingDeletedDocumentsQuery", result.name];
 }
 
@@ -118,7 +118,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_viewNamed:name];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_viewNamed: %@", result.name, name];
 }
 
@@ -127,7 +127,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_existingViewNamed:name];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_existingViewNamed: %@", result.name, name];
 }
 
@@ -136,7 +136,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_viewNamed:name mapBlock:mapBlock version:version];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_viewNamed: %@ mapBlock: %@ version: %@", result.name, name, mapBlock, version];
 }
 
@@ -145,7 +145,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_viewNamed:name mapBlock:mapBlock reduceBlock:reduceBlock version:version];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_viewNamed: %@ mapBlock: %@ reduceBlock: %@ version: %@", result.name, name, mapBlock, reduceBlock, version];
 }
 
@@ -154,7 +154,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_setValidationNamed:name asBlock:block];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_setValidationNamed: %@ asBlock: %@", result.name, name, block];
 }
 
@@ -163,7 +163,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_validationNamed:name];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_validationNamed: %@", result.name, name];
 }
 
@@ -172,7 +172,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_setFilterNamed:name asBlock:block];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_setFilterNamed: %@ asBlock: %@", result.name, name, block];
 }
 
@@ -181,7 +181,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_filterNamed:name];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_filterNamed: %@", result.name, name];
 }
 
@@ -190,7 +190,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_inTransaction:block];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_inTransaction: %@", result.name, block];
 }
 
@@ -199,7 +199,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_doAsync:block];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_doAsync: %@", result.name, block];
 }
 
@@ -208,7 +208,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_allReplications];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_allReplications", result.name];
 }
 
@@ -217,7 +217,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_createPushReplication:URL];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_createPushReplication: %@", result.name, URL];
 }
 
@@ -226,7 +226,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_createPullReplication:URL];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_createPullReplication: %@", result.name, URL];
 }
 
@@ -235,7 +235,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_databaseChangeNotifications];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_databaseChangeNotifications", result.name];
 }
 
@@ -244,7 +244,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_deleteDocumentWithID:documentID];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_deleteDocumentWithID: %@", result.name, documentID];
 }
 
@@ -253,7 +253,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_onDocumentWithID:documentID performBlock:block];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_onDocumentWithID: %@ performBlock: %@", result.name, documentID, block];
 }
 
@@ -262,7 +262,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_updateDocumentWithID:documentID block:block];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_updateDocumentWithID: %@ block: %@", result.name, documentID, block];
 }
 
@@ -271,7 +271,7 @@
     flattenMap:^RACSignal *(CBLDatabase *database) {
         NSAssert([database isKindOfClass:[CBLDatabase class]], @"This method should only be called on signals of instances of CBLDatabase.");
         return [database rcl_updateLocalDocumentWithID:documentID block:block];
-    }]
+    }];
     return [result setNameWithFormat:@"[%@] -rcl_cbldatabase_updateLocalDocumentWithID: %@ block: %@", result.name, documentID, block];
 }
 
