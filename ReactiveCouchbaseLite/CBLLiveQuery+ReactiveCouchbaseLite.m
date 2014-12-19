@@ -37,20 +37,18 @@
 
 - (RACSignal *)rcl_changes {
     NSAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-    RACSignal *result = [[[self rcl_rows]
+    RACSignal *result = [[[[self rcl_rows]
     ignore:nil]
-    flattenMap:^RACSignal *(CBLQueryEnumerator *enumerator) {
-        NSAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
-        static UInt64 lastSequence = 0;
-        UInt64 lastSequenceCopy = lastSequence;
-        RACSequence *filteredSequence = [enumerator.rac_sequence filter:^BOOL (CBLQueryRow *row) {
-            BOOL result = row.sequenceNumber >= lastSequenceCopy;
+    combinePreviousWithStart:nil reduce:^RACSignal *(CBLQueryEnumerator *previous, CBLQueryEnumerator *current) {
+        UInt64 lastSequence = previous ? previous.sequenceNumber : 0;
+        RACSequence *filteredSequence = [current.rac_sequence filter:^BOOL(CBLQueryRow *row) {
+            BOOL result = row.sequenceNumber >= lastSequence;
             return result;
         }];
         RACSignal *result = filteredSequence.signal;
-        lastSequence = enumerator.sequenceNumber;
         return result;
-    }];
+    }]
+    flatten];
     return [result setNameWithFormat:@"[%@] -rcl_changes", result.name];
 }
 
