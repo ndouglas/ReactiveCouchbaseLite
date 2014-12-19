@@ -42,8 +42,9 @@
     flattenMap:^RACSignal *(CBLQueryEnumerator *enumerator) {
         NSAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
         static UInt64 lastSequence = 0;
+        UInt64 lastSequenceCopy = lastSequence;
         RACSequence *filteredSequence = [enumerator.rac_sequence filter:^BOOL (CBLQueryRow *row) {
-            BOOL result = row.sequenceNumber >= lastSequence;
+            BOOL result = row.sequenceNumber >= lastSequenceCopy;
             return result;
         }];
         RACSignal *result = filteredSequence.signal;

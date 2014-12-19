@@ -126,4 +126,37 @@
     NSLog(@"%@", liveQuerySignal);
 }
 
+- (void)testMultipleChanges {
+    RACSignal *liveQuerySignal = [[[_manager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_allDocumentsQuery];
+    }]
+    flattenMap:^RACSignal *(CBLQuery *query) {
+        CBLLiveQuery *liveQuery = query.asLiveQuery;
+        return [liveQuery rcl_changes];
+    }];
+    NSString *UUID1 = [[NSUUID UUID] UUIDString];
+    NSString *UUID2 = [[NSUUID UUID] UUIDString];
+    NSString *UUID3 = [[NSUUID UUID] UUIDString];
+    [self asynchronouslyPostTrivialChangeToDocumentWithID:UUID1];
+    [self asynchronouslyPostTrivialChangeToDocumentWithID:UUID2];
+    [self asynchronouslyPostTrivialChangeToDocumentWithID:UUID3];
+    __block BOOL result1 = NO;
+    __block BOOL result2 = NO;
+    __block BOOL result3 = NO;
+    [self rcl_expectCompletionFromSignal:[[[liveQuerySignal
+    doCompleted:^{
+        XCTFail(@"This signal is not supposed to complete.");
+    }]
+    takeUntilBlock:^BOOL (CBLQueryRow *row) {
+        result1 = result1 || [row.key isEqualToString:UUID1];
+        result2 = result2 || [row.key isEqualToString:UUID2];
+        result3 = result3 || [row.key isEqualToString:UUID3];
+        BOOL result = result1 && result2 && result3;
+        return result;
+    }]
+    ignoreValues]
+    timeout:5.0 description:@"observed first added row"];
+}
+
 @end
