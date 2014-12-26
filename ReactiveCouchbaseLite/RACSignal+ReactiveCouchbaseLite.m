@@ -8,7 +8,7 @@
 //
 
 #import "RACSignal+ReactiveCouchbaseLite.h"
-#import "Sync.h"
+#import "CBLDatabase+ReactiveCouchbaseLite.h"
 
 @implementation RACSignal (ReactiveCouchbaseLite)
 
