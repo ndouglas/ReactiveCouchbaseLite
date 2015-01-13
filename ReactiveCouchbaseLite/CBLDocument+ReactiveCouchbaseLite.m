@@ -76,7 +76,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_deletePreservingPropertiesWithBlock: %@", result.name, block];
+    return [result setNameWithFormat:@"[%@] -rcl_deleteModifyingPropertiesWithBlock: %@", result.name, block];
 }
 
 - (RACSignal *)rcl_purge {
