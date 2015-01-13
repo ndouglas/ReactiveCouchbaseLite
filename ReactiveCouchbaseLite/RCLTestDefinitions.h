@@ -36,6 +36,18 @@
 - (void)rcl_expectNext:(void (^)(id next))nextHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description;
 
 /**
+ Subscribes to the signal and succeeds if the signal then sends a new value before the specified timeout.
+ 
+ @param nextHandlers A block that can test the next values further.
+ @param signal A signal to test.
+ @param timeout A timeout within which the signal must complete.
+ @param description A description of this test.
+ @discussion Any non-next values are treated as failures.
+ */
+
+- (void)rcl_expectNexts:(NSArray *)nextHandlers signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description;
+
+/**
  Subscribes to the signal and succeeds if the signal then sends an error before the specified timeout.
  
  @param errorHandler A block that can test the error further.

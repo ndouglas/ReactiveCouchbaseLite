@@ -92,6 +92,20 @@
     } timeout:timeout];
 }
 
+- (void)rcl_expectNexts:(NSArray *)nextHandlers signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
+    XCTestExpectation *expectation = [self expectationWithDescription:description];
+    __block NSUInteger step = 0;
+    [self rcl_expectation:expectation signal:signal subscribeNext:^(id next) {
+        NSCAssert(nextHandlers.count - 1 >= step, @"insufficient number of next handlers provided");
+        void (^nextHandler)(id next) = nextHandlers[step];
+        nextHandler(next);
+        if (step == nextHandlers.count) {
+            [expectation fulfill];
+        }
+        step++;
+    } timeout:timeout];
+}
+
 - (void)rcl_expectError:(void (^)(NSError *error))errorHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     [self rcl_expectation:expectation signal:signal subscribeError:^(NSError *error) {

@@ -518,9 +518,46 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     }] timeout:5.0 description:@"correctly asynchronously invokes block."];
 }
 
+- (CBLDatabase *)replicationTarget {
+    NSError *error = nil;
+    CBLDatabase *result = [[CBLManager sharedInstance] databaseNamed:[NSString stringWithFormat:@"replication_%@", _databaseName] error:&error];
+    XCTAssertNotNil(result);
+    return result;
+}
+
+- (RACSignal *)replicateTestDatabaseWithDatabase:(CBLDatabase *)targetDatabase {
+    return [[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_createPullReplication:targetDatabase.internalURL];
+    }]
+    doNext:^(CBLReplication *replication) {
+        [replication start];
+    }];
+}
+
+- (void)testAllReplications {
+    __block BOOL completed = NO;
+    [self rcl_expectNexts:@[
+        ^(NSArray *_replications_) {
+            XCTAssertTrue(_replications_.count == 0);
+        },
+        ^(NSArray *_replications_) {
+            XCTAssertTrue(_replications_.count == 2);
+        },
+    ] signal:[[self replicateTestDatabaseWithDatabase:[self replicationTarget]]
+        then:^RACSignal *{
+            return [[CBLManager rcl_databaseNamed:_databaseName]
+            flattenMap:^RACSignal *(CBLDatabase *database) {
+                return [database rcl_allReplications];
+            }];
+        }]
+     timeout:5.0 description:@"replications changed"];
+}
+
 @end
 
 /**
+// TODO:
 - (RACSignal *)rcl_allReplications;
 - (RACSignal *)rcl_createPushReplication:(NSURL *)URL;
 - (RACSignal *)rcl_createPullReplication:(NSURL *)URL;
