@@ -26,6 +26,14 @@ extern CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current);
 - (RACSignal *)rcl_delete;
 
 /**
+ Attempts to delete the document, preserving its properties.
+ 
+ @return A signal that completes when the document is deleted, or returns an error if the attempt was unsuccessful.
+ */
+
+- (RACSignal *)rcl_deletePreservingProperties;
+
+/**
  Attempts to purge the document.
  
  @return A signal that completes when the document is purged, or returns an error if the attempt was unsuccessful.

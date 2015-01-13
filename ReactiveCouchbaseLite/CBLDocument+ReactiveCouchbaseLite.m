@@ -38,6 +38,25 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
     return [result setNameWithFormat:@"[%@] -rcl_delete", result.name];
 }
 
+- (RACSignal *)rcl_deletePreservingProperties {
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [document.rcl_scheduler schedule:^{
+            NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
+            NSError *error = nil;
+            CBLSavedRevision *savedDeletionRevision = [document update: ^BOOL(CBLUnsavedRevision *deletionRevision) {
+                deletionRevision.isDeletion = YES;
+                return YES;
+            } error:&error];
+            if (savedDeletionRevision == nil) {
+                [subscriber sendError:error];
+            }
+            [subscriber sendCompleted];
+        }];
+        return nil;
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_delete", result.name];
+}
 - (RACSignal *)rcl_purge {
     CBLDocument *document = RCLCurrentOrNewDocument(self);
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
