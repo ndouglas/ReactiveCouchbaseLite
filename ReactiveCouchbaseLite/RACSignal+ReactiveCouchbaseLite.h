@@ -9,6 +9,10 @@
 
 #import "RCLDefinitions.h"
 
+/**
+ I don't really know if this is useful or not.  It's probably not.  It's extremely ugly.  I don't know.
+ */
+
 @interface RACSignal (ReactiveCouchbaseLite)
 
 #pragma mark - CBLDatabase
