@@ -144,6 +144,14 @@ extern CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current);
 - (RACSignal *)rcl_documentChangeNotifications;
 
 /**
+ Resolves any conflicts in this document with the specified block.
+ 
+ @return A signal streaming errors in conflict resolution.
+ */
+
+- (RACSignal *)rcl_resolveConflictsWithBlock:(NSDictionary *(^)(NSArray *conflictingRevisions))block;
+
+/**
  A scheduler for this document and descendant objects.
  
  @return A scheduler that will work for this document and its descendant objects.

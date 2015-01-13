@@ -236,6 +236,38 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
     return [result setNameWithFormat:@"[%@] -rcl_update: %@", result.name, block];
 }
 
+- (RACSignal *)rcl_resolveConflictsWithBlock:(NSDictionary *(^)(NSArray *conflictingRevisions))block {
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [document.rcl_scheduler schedule:^{
+            NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
+            NSError *error = nil;
+            NSArray *revisions = [document getConflictingRevisions:&error];
+            if (revisions.count > 1) {
+                [document.database inTransaction:^BOOL {
+                    NSDictionary *mergedProperties = block(revisions);
+                    CBLSavedRevision *currentRevision = document.currentRevision;
+                    for (CBLSavedRevision *savedRevision in revisions) {
+                        CBLUnsavedRevision *newRevision = [savedRevision createRevision];
+                        if ([savedRevision isEqualTo:currentRevision]) {
+                            newRevision.properties = mergedProperties.mutableCopy;
+                        } else {
+                            newRevision.isDeletion = YES;
+                        }
+                        NSError *error = nil;
+                        if (![newRevision saveAllowingConflict:&error]) {
+                            [subscriber sendNext:error];
+                        }
+                    }
+                }];
+            }
+            [subscriber sendCompleted];
+        }];
+        return nil;
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_getConflictingRevisions", result.name];
+}
+
 - (RACScheduler *)rcl_scheduler {
     return self.database.rcl_scheduler;
 }
