@@ -44,12 +44,13 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 
 - (void)updateDocument:(CBLDocument *)document withBlock:(BOOL (^)(CBLUnsavedRevision *newRevision))updater completionHandler:(void (^)(BOOL success, NSError *error))block {
     NSError *error = nil;
-    BOOL success = [document update:updater error:&error];
+    BOOL success = [document update:updater error:&error] != nil;
     block(success, error);
 }
 
 - (void)triviallyUpdateDocument:(CBLDocument *)document times:(NSUInteger)times interval:(NSTimeInterval)interval {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSLog(@"Trivially updating document: %@", document);
         [self updateDocument:document withBlock:^BOOL(CBLUnsavedRevision *newRevision) {
             newRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
             return YES;
@@ -551,6 +552,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 - (void)testCreatePushReplicationWithURL {
     [self rcl_expectNext:^(CBLReplication *replication) {
         XCTAssertNotNil(replication);
+        XCTAssertTrue(!replication.pull);
     } signal:[self createPushReplicationWithDatabase:[self replicationTarget]]
      timeout:5.0 description:@"replication created"];
 }
@@ -558,16 +560,54 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 - (void)testCreatePullReplicationWithURL {
     [self rcl_expectNext:^(CBLReplication *replication) {
         XCTAssertNotNil(replication);
-    } signal:[self createPushReplicationWithDatabase:[self replicationTarget]]
+        XCTAssertTrue(replication.pull);
+    } signal:[self createPullReplicationWithDatabase:[self replicationTarget]]
      timeout:5.0 description:@"replication created"];
 }
+
+- (void)testDatabaseChangeNotifications {
+    CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
+    NSString *documentID = [[NSUUID UUID] UUIDString];
+    CBLDocument *document = [database documentWithID:documentID];
+    [self triviallyUpdateDocument:document times:2 interval:0.1];
+    [self rcl_expectNexts:@[
+        ^(CBLDatabaseChange *databaseChange) {
+            XCTAssertTrue([databaseChange.revisionID characterAtIndex:0] == '1');
+        },
+        ^(CBLDatabaseChange *databaseChange) {
+            XCTAssertTrue([databaseChange.revisionID characterAtIndex:0] == '2');
+        },
+        ^(CBLDatabaseChange *databaseChange) {
+             XCTAssertTrue([databaseChange.revisionID characterAtIndex:0] == '3');
+        },
+    ] signal:[database rcl_databaseChangeNotifications] timeout:5.0 description:@"received database change notifications"];
+}
+
+- (void)testDeleteDocumentWithID {
+}
+
+- (void)testDeletePreservingPropertiesDocumentWithID {
+}
+
+- (void)testDeleteDocumentWithIDModifyingPropertiesWithBlock {
+}
+
+- (void)testOnDocumentWithIDPerformBlock {
+}
+
+- (void)testUpdateDocumentWithIDBlock {
+}
+
+- (void)testUpdateLocalDocumentWithIDBlock {
+}
+
+- (void)testResolveConflictsWithBlock {
+}
+
 @end
 
 /**
 // TODO:
-- (RACSignal *)rcl_createPushReplication:(NSURL *)URL;
-- (RACSignal *)rcl_createPullReplication:(NSURL *)URL;
-- (RACSignal *)rcl_databaseChangeNotifications;
 - (RACSignal *)rcl_deleteDocumentWithID:(NSString *)documentID;
 - (RACSignal *)rcl_deletePreservingPropertiesDocumentWithID:(NSString *)documentID;
 - (RACSignal *)rcl_deleteDocumentWithID:(NSString *)documentID modifyingPropertiesWithBlock:(void(^)(CBLUnsavedRevision *proposedRevision))block;

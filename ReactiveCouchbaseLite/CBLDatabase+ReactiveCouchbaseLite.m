@@ -460,14 +460,13 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
 
 - (RACSignal *)rcl_databaseChangeNotifications {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
-	RACSignal *result = [[[[[NSNotificationCenter defaultCenter]
+	RACSignal *result = [[[NSNotificationCenter defaultCenter]
     rac_addObserverForName:kCBLDatabaseChangeNotification object:database]
-    takeUntil:database.rac_willDeallocSignal]
-	map:^RACSignal *(NSNotification *notification) {
+	flattenMap:^RACSignal *(NSNotification *notification) {
+        NSLog(@"Database: %@", database);
 		RACSignal *result = ((NSArray *)notification.userInfo[@"changes"]).rac_sequence.signal;
 		return result;
-	}]
-	flatten];
+	}];
     return [result setNameWithFormat:@"[%@] -rcl_databaseChangeNotifications", result.name];
 }
 
