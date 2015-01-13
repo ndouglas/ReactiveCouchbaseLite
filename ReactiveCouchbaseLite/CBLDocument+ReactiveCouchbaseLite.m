@@ -58,15 +58,15 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
     return [result setNameWithFormat:@"[%@] -rcl_deletePreservingProperties", result.name];
 }
 
-- (RACSignal *)rcl_deletePreservingPropertiesWithBlock:(NSDictionary *(^)(CBLUnsavedRevision *proposedRevision))block {
+- (RACSignal *)rcl_deleteModifyingPropertiesWithBlock:(void(^)(CBLUnsavedRevision *proposedRevision))block {
     CBLDocument *document = RCLCurrentOrNewDocument(self);
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [document.rcl_scheduler schedule:^{
             NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
             CBLSavedRevision *savedDeletionRevision = [document update:^BOOL(CBLUnsavedRevision *deletionRevision) {
+                block(deletionRevision);
                 deletionRevision.isDeletion = YES;
-                [deletionRevision.properties addEntriesFromDictionary:block(deletionRevision)];
                 return YES;
             } error:&error];
             if (savedDeletionRevision == nil) {
