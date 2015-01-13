@@ -94,7 +94,6 @@
     XCTestExpectation *expectation2 = [self expectationWithDescription:@"all next handlers executed"];
     __block NSUInteger step = 0;
     [self rcl_expectation:expectation signal:signal subscribeNext:^(id next) {
-        NSLog(@"Step: %@", @(step));
         XCTAssertTrue(nextHandlers.count > step, @"insufficient number of next handlers provided");
         @synchronized (self) {
             void (^nextHandler)(id next) = nil;
@@ -105,7 +104,6 @@
                     [expectation fulfill];
                     [expectation2 fulfill];
                 } else {
-                    NSLog(@"Step: %@ -> %@", @(step), @(step+1));
                     step++;
                 }
             } @catch (NSException *exception) {

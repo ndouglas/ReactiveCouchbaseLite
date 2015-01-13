@@ -50,7 +50,6 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 
 - (void)triviallyUpdateDocument:(CBLDocument *)document times:(NSUInteger)times interval:(NSTimeInterval)interval {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSLog(@"Trivially updating document: %@", document);
         [self updateDocument:document withBlock:^BOOL(CBLUnsavedRevision *newRevision) {
             newRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
             return YES;
@@ -584,6 +583,10 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 }
 
 - (void)testDeleteDocumentWithID {
+    CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
+    NSString *documentID = [[NSUUID UUID] UUIDString];
+    CBLDocument *document = [database documentWithID:documentID];
+    
 }
 
 - (void)testDeletePreservingPropertiesDocumentWithID {
