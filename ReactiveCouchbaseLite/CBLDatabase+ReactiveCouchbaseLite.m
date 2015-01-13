@@ -37,7 +37,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_close", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_close", self];
 }
 
 - (RACSignal *)rcl_compact {
@@ -53,7 +53,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_compact", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_compact", self];
 }
 
 - (RACSignal *)rcl_delete {
@@ -69,7 +69,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_delete", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_delete", self];
 }
 
 #pragma mark - Documents
@@ -89,7 +89,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_documentWithID: %@", result.name, documentID];
+    return [result setNameWithFormat:@"[%@ -rcl_documentWithID: %@]", self, documentID];
 }
 
 - (RACSignal *)rcl_existingDocumentWithID:(NSString *)documentID {
@@ -107,7 +107,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_existingDocumentWithID: %@", result.name, documentID];
+    return [result setNameWithFormat:@"[%@ -rcl_existingDocumentWithID: %@]", self, documentID];
 }
 
 - (RACSignal *)rcl_existingDocumentWithID:(NSString *)documentID defaultProperties:(NSDictionary *)defaultProperties {
@@ -135,7 +135,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_existingDocumentWithID: %@", result.name, documentID];
+    return [result setNameWithFormat:@"[%@ -rcl_existingDocumentWithID: %@]", self, documentID];
 }
 
 - (RACSignal *)rcl_createDocument {
@@ -153,7 +153,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_createDocument", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_createDocument", self];
 }
 
 #pragma mark - Local Documents
@@ -173,7 +173,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_existingLocalDocumentWithID: %@", result.name, documentID];
+    return [result setNameWithFormat:@"[%@ -rcl_existingLocalDocumentWithID: %@]", self, documentID];
 }
 
 - (RACSignal *)rcl_putLocalDocumentWithProperties:(NSDictionary *)properties ID:(NSString *)documentID {
@@ -189,7 +189,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_putLocalDocumentWithProperties:%@ ID: %@", result.name, properties, documentID];
+    return [result setNameWithFormat:@"[%@ -rcl_putLocalDocumentWithProperties:%@ ID: %@]", self, properties, documentID];
 }
 
 - (RACSignal *)rcl_deleteLocalDocumentWithID:(NSString *)documentID {
@@ -205,7 +205,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_deleteLocalDocumentWithID: %@", result.name, documentID];
+    return [result setNameWithFormat:@"[%@ -rcl_deleteLocalDocumentWithID: %@]", self, documentID];
 }
 
 #pragma mark - All Documents Queries
@@ -220,7 +220,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_allDocumentsQuery", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_allDocumentsQuery", self];
 }
 
 - (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode {
@@ -232,7 +232,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         result.allDocsMode = mode;
         return result;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_allDocumentsQueryWithMode: %@", result.name, @(mode)];
+    return [result setNameWithFormat:@"[%@ -rcl_allDocumentsQueryWithMode: %@]", self, @(mode)];
 }
 
 - (RACSignal *)rcl_allDocumentsQueryWithMode:(CBLAllDocsMode)mode indexUpdateMode:(CBLIndexUpdateMode)indexUpdateMode {
@@ -245,7 +245,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         result.indexUpdateMode = indexUpdateMode;
         return result;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_allDocumentsQueryWithMode: %@ indexUpdateMode: %@", result.name, @(mode), @(indexUpdateMode)];
+    return [result setNameWithFormat:@"[%@ -rcl_allDocumentsQueryWithMode: %@ indexUpdateMode: %@]", self, @(mode), @(indexUpdateMode)];
 }
 
 - (RACSignal *)rcl_allIncludingDeletedDocumentsQuery {
@@ -266,7 +266,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_slowQueryWithMap: %@", result.name, block];
+    return [result setNameWithFormat:@"[%@ -rcl_slowQueryWithMap: %@]", self, block];
 }
 
 #pragma mark - Views
@@ -281,7 +281,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_viewNamed: %@", result.name, name];
+    return [result setNameWithFormat:@"[%@ -rcl_viewNamed: %@]", self, name];
 }
 
 - (RACSignal *)rcl_existingViewNamed:(NSString *)name {
@@ -299,7 +299,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_existingViewNamed: %@", result.name, name];
+    return [result setNameWithFormat:@"[%@ -rcl_existingViewNamed: %@]", self, name];
 }
 
 - (RACSignal *)rcl_viewNamed:(NSString *)name mapBlock:(CBLMapBlock)mapBlock version:(NSString *)version {
@@ -325,7 +325,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_viewNamed: %@ mapBlock: %@ reduceBlock: %@ version: %@", result.name, name, mapBlock, reduceBlock, version];
+    return [result setNameWithFormat:@"[%@ -rcl_viewNamed: %@ mapBlock: %@ reduceBlock: %@ version: %@]", self, name, mapBlock, reduceBlock, version];
 }
 
 #pragma mark - Validation
@@ -340,7 +340,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_setValidationNamed: %@ asBlock: %@", result.name, name, block];
+    return [result setNameWithFormat:@"[%@ -rcl_setValidationNamed: %@ asBlock: %@]", self, name, block];
 }
 
 - (RACSignal *)rcl_validationNamed:(NSString *)name {
@@ -358,7 +358,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_validationNamed: %@", result.name, name];
+    return [result setNameWithFormat:@"[%@ -rcl_validationNamed: %@]", self, name];
 }
 
 #pragma mark - Filters
@@ -373,7 +373,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_setFilterNamed: %@ asBlock: %@", result.name, name, block];
+    return [result setNameWithFormat:@"[%@ -rcl_setFilterNamed: %@ asBlock: %@]", self, name, block];
 }
 
 - (RACSignal *)rcl_filterNamed:(NSString *)name {
@@ -391,7 +391,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_filterNamed: %@", result.name, name];
+    return [result setNameWithFormat:@"[%@ -rcl_filterNamed: %@]", self, name];
 }
 
 #pragma mark - Transactions
@@ -410,7 +410,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_inTransaction: %@", result.name, block];
+    return [result setNameWithFormat:@"[%@ -rcl_inTransaction: %@]", self, block];
 }
 
 #pragma mark - Asynchronous Operations
@@ -425,7 +425,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_doAsync: %@ ", result.name, block];
+    return [result setNameWithFormat:@"[%@ -rcl_doAsync: %@]", self, block];
 }
 
 #pragma mark - Replications
@@ -440,7 +440,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_createPushReplication: %@", result.name, URL];
+    return [result setNameWithFormat:@"[%@ -rcl_createPushReplication: %@]", self, URL];
 }
 
 - (RACSignal *)rcl_createPullReplication:(NSURL *)URL {
@@ -453,7 +453,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_createPullReplication: %@", result.name, URL];
+    return [result setNameWithFormat:@"[%@ -rcl_createPullReplication: %@]", self, URL];
 }
 
 #pragma mark - Notifications
@@ -466,7 +466,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
 		RACSignal *result = ((NSArray *)notification.userInfo[@"changes"]).rac_sequence.signal;
 		return result;
 	}];
-    return [result setNameWithFormat:@"[%@] -rcl_databaseChangeNotifications", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_databaseChangeNotifications", self];
 }
 
 #pragma mark - Document Operations
@@ -478,7 +478,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     flattenMap:^RACSignal *(CBLDocument *document) {
         return [document rcl_delete];
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_deleteDocumentWithID: %@", result.name, documentID];
+    return [result setNameWithFormat:@"[%@ -rcl_deleteDocumentWithID: %@]", self, documentID];
 }
 
 - (RACSignal *)rcl_deletePreservingPropertiesDocumentWithID:(NSString *)documentID {
@@ -488,7 +488,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     flattenMap:^RACSignal *(CBLDocument *document) {
         return [document rcl_deletePreservingProperties];
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_deletePreservingPropertiesDocumentWithID: %@", result.name, documentID];
+    return [result setNameWithFormat:@"[%@ -rcl_deletePreservingPropertiesDocumentWithID: %@]", self, documentID];
 }
 
 - (RACSignal *)rcl_deleteDocumentWithID:(NSString *)documentID modifyingPropertiesWithBlock:(void(^)(CBLUnsavedRevision *proposedRevision))block {
@@ -498,20 +498,20 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     flattenMap:^RACSignal *(CBLDocument *document) {
         return [document rcl_deleteModifyingPropertiesWithBlock:block];
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_deleteDocumentWithID: %@ modifyingPropertiesWithBlock: %@", result.name, documentID, block];
+    return [result setNameWithFormat:@"[%@ -rcl_deleteDocumentWithID: %@ modifyingPropertiesWithBlock: %@]", self, documentID, block];
 }
 
 - (RACSignal *)rcl_onDocumentWithID:(NSString *)ID performBlock:(void (^)(CBLDocument *document))block {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     block([database documentWithID:ID]);
     RACSignal *result = [RACSignal empty];
-    return [result setNameWithFormat:@"[%@] -rcl_onDocumentWithID: %@ performBlock: %@", result.name, ID, block];
+    return [result setNameWithFormat:@"[%@ -rcl_onDocumentWithID: %@ performBlock: %@]", self, ID, block];
 }
 
 - (RACSignal *)rcl_updateDocumentWithID:(NSString *)ID block:(BOOL(^)(CBLUnsavedRevision *unsavedRevision))block {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     RACSignal *result = [[database documentWithID:ID] rcl_update:block];
-    return [result setNameWithFormat:@"[%@] -rcl_updateDocumentWithID: %@ block: %@", result.name, ID, block];
+    return [result setNameWithFormat:@"[%@ -rcl_updateDocumentWithID: %@ block: %@]", self, ID, block];
 }
 
 #pragma mark - Local Document Operations
@@ -530,7 +530,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_updateLocalDocumentWithID: %@ block: %@", result.name, ID, block];
+    return [result setNameWithFormat:@"[%@ -rcl_updateLocalDocumentWithID: %@ block: %@]", self, ID, block];
 }
 
 #pragma mark - Conflict Resolution
@@ -551,7 +551,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         return [[document rcl_resolveConflictsWithBlock:block]
         logAll];
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_resolveConflictsWithBlock: %@", result.name, block];
+    return [result setNameWithFormat:@"[%@ -rcl_resolveConflictsWithBlock: %@]", self, block];
 }
 
 #pragma mark - Scheduler
