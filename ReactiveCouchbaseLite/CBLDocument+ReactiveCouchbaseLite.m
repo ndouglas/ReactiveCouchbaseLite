@@ -55,7 +55,28 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_delete", result.name];
+    return [result setNameWithFormat:@"[%@] -rcl_deletePreservingProperties", result.name];
+}
+
+- (RACSignal *)rcl_deletePreservingPropertiesWithBlock:(NSDictionary *(^)(CBLUnsavedRevision *proposedRevision))block {
+    CBLDocument *document = RCLCurrentOrNewDocument(self);
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [document.rcl_scheduler schedule:^{
+            NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
+            NSError *error = nil;
+            CBLSavedRevision *savedDeletionRevision = [document update:^BOOL(CBLUnsavedRevision *deletionRevision) {
+                deletionRevision.isDeletion = YES;
+                [deletionRevision.properties addEntriesFromDictionary:block(deletionRevision)];
+                return YES;
+            } error:&error];
+            if (savedDeletionRevision == nil) {
+                [subscriber sendError:error];
+            }
+            [subscriber sendCompleted];
+        }];
+        return nil;
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_deletePreservingPropertiesWithBlock: %@", result.name, block];
 }
 
 - (RACSignal *)rcl_purge {

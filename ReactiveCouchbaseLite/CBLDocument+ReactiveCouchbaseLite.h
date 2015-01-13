@@ -34,6 +34,16 @@ extern CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current);
 - (RACSignal *)rcl_deletePreservingProperties;
 
 /**
+ Attempts to delete the document, preserving the properties returned by the block executed on the new revision.
+ 
+ @param block A block executed on the proposed deletion revision and returning a dictionary of properties.
+ @return A signal that completes when the document is deleted, or returns an error if the attempt was unsuccessful.
+ @discussion The block may be executed multiple times.
+ */
+
+- (RACSignal *)rcl_deletePreservingPropertiesWithBlock:(NSDictionary *(^)(CBLUnsavedRevision *proposedRevision))block;
+
+/**
  Attempts to purge the document.
  
  @return A signal that completes when the document is purged, or returns an error if the attempt was unsuccessful.
