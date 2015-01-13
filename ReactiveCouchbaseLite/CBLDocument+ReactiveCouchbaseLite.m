@@ -35,7 +35,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_delete", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_delete]", self];
 }
 
 - (RACSignal *)rcl_deletePreservingProperties {
@@ -55,7 +55,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_deletePreservingProperties", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_deletePreservingProperties]", self];
 }
 
 - (RACSignal *)rcl_deleteModifyingPropertiesWithBlock:(void(^)(CBLUnsavedRevision *proposedRevision))block {
@@ -76,7 +76,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_deleteModifyingPropertiesWithBlock: %@", result.name, block];
+    return [result setNameWithFormat:@"[%@ -rcl_deleteModifyingPropertiesWithBlock: %@]", self, block];
 }
 
 - (RACSignal *)rcl_purge {
@@ -92,7 +92,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_purge", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_purge]", self];
 }
 
 - (RACSignal *)rcl_documentChangeNotifications {
@@ -105,7 +105,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
 		return (CBLDatabaseChange *)notification.userInfo[@"change"];
 	}];
-    return [result setNameWithFormat:@"[%@] -rcl_documentChangeNotifications", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_documentChangeNotifications]", self];
 }
 
 - (RACSignal *)rcl_currentRevisionID {
@@ -116,7 +116,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
 		return change.revisionID;
 	}]
     startWith:[document currentRevisionID]];
-    return [result setNameWithFormat:@"[%@] -rcl_currentRevisionID", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_currentRevisionID]", self];
 }
 
 - (RACSignal *)rcl_currentRevision {
@@ -127,7 +127,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
         return [document rcl_revisionWithID:revisionID];
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_currentRevision", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_currentRevision]", self];
 }
 
 - (RACSignal *)rcl_revisionWithID:(NSString *)revisionID {
@@ -145,7 +145,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_revisionWithID: %@", result.name, revisionID];
+    return [result setNameWithFormat:@"[%@ -rcl_revisionWithID: %@]", self, revisionID];
 }
 
 - (RACSignal *)rcl_getRevisionHistory {
@@ -158,7 +158,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
     }]
     switchToLatest]
     startWith:[document getRevisionHistory:NULL]];
-    return [result setNameWithFormat:@"[%@] -rcl_getRevisionHistory", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_getRevisionHistory]", self];
 }
 
 - (RACSignal *)rcl_getRevisionHistoryFilteredWithBlock:(BOOL (^)(CBLSavedRevision *revision))block {
@@ -169,7 +169,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         return [[revisionList.rac_sequence filter:block] array];
     }]
     distinctUntilChanged];
-    return [result setNameWithFormat:@"[%@] -rcl_getRevisionHistoryFilteredWithBlock: %@", result.name, block];
+    return [result setNameWithFormat:@"[%@ -rcl_getRevisionHistoryFilteredWithBlock: %@]", self, block];
 }
 
 - (RACSignal *)rcl_getConflictingRevisions {
@@ -188,7 +188,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_getConflictingRevisions", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_getConflictingRevisions]", self];
 }
 
 - (RACSignal *)rcl_getLeafRevisions {
@@ -207,7 +207,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_getLeafRevisions", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_getLeafRevisions]", self];
 }
 
 - (RACSignal *)rcl_newRevision {
@@ -220,7 +220,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_newRevision", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_newRevision]", self];
 }
 
 - (RACSignal *)rcl_properties {
@@ -228,7 +228,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
     RACSignal *result = [[RACObserve(document, properties)
     takeUntil:document.rac_willDeallocSignal]
     sample:[document rcl_documentChangeNotifications]];
-    return [result setNameWithFormat:@"[%@] -rcl_properties", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_properties]", self];
 }
 
 - (RACSignal *)rcl_userProperties {
@@ -236,7 +236,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
     RACSignal *result = [[RACObserve(document, userProperties)
     takeUntil:document.rac_willDeallocSignal]
     sample:[document rcl_documentChangeNotifications]];
-    return [result setNameWithFormat:@"[%@] -rcl_userProperties", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_userProperties]", self];
 }
 
 - (RACSignal *)rcl_putProperties:(NSDictionary *)properties {
@@ -255,7 +255,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_putProperties: %@", result.name, properties];
+    return [result setNameWithFormat:@"[%@ -rcl_putProperties: %@]", self, properties];
 }
 
 - (RACSignal *)rcl_update:(BOOL(^)(CBLUnsavedRevision *))block {
@@ -274,7 +274,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_update: %@", result.name, block];
+    return [result setNameWithFormat:@"[%@ -rcl_update: %@]", self, block];
 }
 
 - (RACSignal *)rcl_resolveConflictsWithBlock:(NSDictionary *(^)(NSArray *conflictingRevisions))block {
@@ -301,7 +301,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
                             NSError *error = nil;
                             result = [newRevision saveAllowingConflict:&error] != nil;
                             if (!result) {
-                                [subscriber sendNext:error];
+                                [subscriber sendError:error];
                             }
                         }
                     }
@@ -312,7 +312,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_getConflictingRevisions", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_getConflictingRevisions]", self];
 }
 
 - (RACScheduler *)rcl_scheduler {

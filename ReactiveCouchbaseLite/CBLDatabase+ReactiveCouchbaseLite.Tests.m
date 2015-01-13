@@ -17,6 +17,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 @interface CBLDatabase_ReactiveCouchbaseLiteTests : XCTestCase {
     CBLManager *_manager;
     NSString *_databaseName;
+    NSString *_peerDatabaseName;
     RACScheduler *_failScheduler;
     CBLListener *_listener;
 }
@@ -29,6 +30,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 	[super setUp];
     _manager = [CBLManager sharedInstance];
     _databaseName = [NSString stringWithFormat:@"test_%@", @([[[NSUUID UUID] UUIDString] hash])];
+    _peerDatabaseName = [NSString stringWithFormat:@"test_%@", @([[[NSUUID UUID] UUIDString] hash])];
     _failScheduler = [[RACQueueScheduler alloc] initWithName:@"FailQueue" queue:dispatch_queue_create("FailQueue", DISPATCH_QUEUE_SERIAL)];
     _listener = [[CBLListener alloc] initWithManager:[CBLManager sharedInstance] port:2014];
     NSError *error = nil;
@@ -585,38 +587,115 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 - (void)testDeleteDocumentWithID {
     CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
     NSString *documentID = [[NSUUID UUID] UUIDString];
-    CBLDocument *document = [database documentWithID:documentID];
-    
+    [[database documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+        return YES;
+    } error:NULL];
+    [self rcl_expectCompletionFromSignal:[database rcl_deleteDocumentWithID:documentID] timeout:5.0 description:@"document deleted"];
 }
 
 - (void)testDeletePreservingPropertiesDocumentWithID {
+    CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
+    NSString *documentID = [[NSUUID UUID] UUIDString];
+    [[database documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+        return YES;
+    } error:NULL];
+    [self rcl_expectCompletionFromSignal:[database rcl_deletePreservingPropertiesDocumentWithID:documentID] timeout:5.0 description:@"document deleted"];
 }
 
 - (void)testDeleteDocumentWithIDModifyingPropertiesWithBlock {
+    CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
+    NSString *documentID = [[NSUUID UUID] UUIDString];
+    [[database documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+        return YES;
+    } error:NULL];
+    [self rcl_expectCompletionFromSignal:[database rcl_deleteDocumentWithID:documentID modifyingPropertiesWithBlock:^(CBLUnsavedRevision *proposedRevision) {
+        proposedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+    }] timeout:5.0 description:@"document deleted"];
 }
 
 - (void)testOnDocumentWithIDPerformBlock {
+    __block BOOL complete = NO;
+    CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
+    NSString *documentID = [[NSUUID UUID] UUIDString];
+    NSString *UUID = [[NSUUID UUID] UUIDString];
+    [[database documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"name"] = UUID;
+        return YES;
+    } error:NULL];
+    [self rcl_expectCompletionFromSignal:[database rcl_onDocumentWithID:documentID performBlock:^(CBLDocument *document) {
+        XCTAssertTrue([document.properties[@"name"] isEqualToString:UUID]);
+        complete = YES;
+    }] timeout:5.0 description:@"document deleted"];
+    XCTAssertTrue(complete);
 }
 
 - (void)testUpdateDocumentWithIDBlock {
+    CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
+    NSString *documentID = [[NSUUID UUID] UUIDString];
+    NSString *UUID = [[NSUUID UUID] UUIDString];
+    [[database documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"name"] = UUID;
+        return YES;
+    } error:NULL];
+    [self rcl_expectCompletionFromSignal:[[database rcl_updateDocumentWithID:documentID block:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"UUID"] = unsavedRevision.properties[@"name"];
+        return YES;
+    }]
+    then:^RACSignal *{
+        return [RACSignal empty];
+    }] timeout:5.0 description:@"document deleted"];
+    CBLDocument *document = [database documentWithID:documentID];
+    XCTAssertTrue([document.properties[@"UUID"] isEqualToString:UUID]);
 }
 
 - (void)testUpdateLocalDocumentWithIDBlock {
+    CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
+    NSString *documentID = [[NSUUID UUID] UUIDString];
+    NSString *UUID = [[NSUUID UUID] UUIDString];
+    [database putLocalDocument:@{
+        @"name" : UUID,
+    } withID:documentID error:NULL];
+    [self rcl_expectCompletionFromSignal:[[database rcl_updateLocalDocumentWithID:documentID block:^NSDictionary *(NSMutableDictionary *localDocument) {
+        localDocument[@"UUID"] = localDocument[@"name"];
+        return localDocument;
+    }]
+    then:^RACSignal *{
+        return [RACSignal empty];
+    }] timeout:5.0 description:@"document deleted"];
+    NSDictionary *localDocument = [database existingLocalDocumentWithID:documentID];
+    XCTAssertTrue([localDocument[@"UUID"] isEqualToString:UUID]);
 }
 
 - (void)testResolveConflictsWithBlock {
+    CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
+    CBLDatabase *peerDatabase = [[CBLManager sharedInstance] databaseNamed:_peerDatabaseName error:NULL];
+    NSString *documentID = [[NSUUID UUID] UUIDString];
+    XCTAssertTrue([[database documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+        return YES;
+    } error:NULL]);
+    XCTAssertTrue([[peerDatabase documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+        return YES;
+    } error:NULL]);
+    CBLReplication *replication = [database createPushReplication:peerDatabase.internalURL];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [replication start];
+    });
+    [self rcl_expectCompletionFromSignal:[[database rcl_resolveConflictsWithBlock:^NSDictionary *(NSArray *conflictingRevisions) {
+
+        return @{};
+    }]
+    take:1] timeout:5.0 description:@"conflict resolved"];
 }
 
 @end
 
 /**
 // TODO:
-- (RACSignal *)rcl_deleteDocumentWithID:(NSString *)documentID;
-- (RACSignal *)rcl_deletePreservingPropertiesDocumentWithID:(NSString *)documentID;
-- (RACSignal *)rcl_deleteDocumentWithID:(NSString *)documentID modifyingPropertiesWithBlock:(void(^)(CBLUnsavedRevision *proposedRevision))block;
-- (RACSignal *)rcl_onDocumentWithID:(NSString *)documentID performBlock:(void (^)(CBLDocument *document))block;
-- (RACSignal *)rcl_updateDocumentWithID:(NSString *)documentID block:(BOOL(^)(CBLUnsavedRevision *unsavedRevision))block;
-- (RACSignal *)rcl_updateLocalDocumentWithID:(NSString *)documentID block:(NSDictionary *(^)(NSMutableDictionary *localDocument))block;
 - (RACSignal *)rcl_resolveConflictsWithBlock:(NSDictionary *(^)(NSArray *conflictingRevisions))block;
 */
 

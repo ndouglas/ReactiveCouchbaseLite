@@ -539,14 +539,17 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     RACSignal *result = [[[[database rcl_allConflictingDocumentsQuery]
     flattenMap:^RACSignal *(CBLQuery *allConflictingDocumentsQuery) {
-        return [[allConflictingDocumentsQuery asLiveQuery]
-        rcl_changes];
+        return [[[allConflictingDocumentsQuery asLiveQuery]
+        rcl_changes]
+        logAll];
     }]
     flattenMap:^RACSignal *(CBLQueryRow *row) {
-        return [database rcl_documentWithID:row.documentID];
+        return [[database rcl_documentWithID:row.documentID]
+        logAll];
     }]
     flattenMap:^RACSignal *(CBLDocument *document) {
-        return [document rcl_resolveConflictsWithBlock:block];
+        return [[document rcl_resolveConflictsWithBlock:block]
+        logAll];
     }];
     return [result setNameWithFormat:@"[%@] -rcl_resolveConflictsWithBlock: %@", result.name, block];
 }
