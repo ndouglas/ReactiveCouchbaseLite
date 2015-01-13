@@ -315,7 +315,7 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 - (RACSignal *)rcl_deleteDocumentWithID:(NSString *)documentID;
 
 /**
- Marks as deleted the document with the specified ID.
+ Marks as deleted the document with the specified ID, preserving the existing properties.
  
  @param documentID The document ID.
  @return A signal that completes when the document is deleted.
@@ -323,7 +323,7 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
  document as deleted.  However, it retains all existing properties.
  */
 
-- (RACSignal *)rcl_markAsDeletedDocumentWithID:(NSString *)documentID;
+- (RACSignal *)rcl_deletePreservingPropertiesDocumentWithID:(NSString *)documentID;
 
 /**
  Marks as deleted the document with the specified ID.

@@ -470,17 +470,14 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_deleteDocumentWithID: %@", result.name, documentID];
 }
 
-- (RACSignal *)rcl_markAsDeletedDocumentWithID:(NSString *)documentID {
+- (RACSignal *)rcl_deletePreservingPropertiesDocumentWithID:(NSString *)documentID {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     RACSignal *result = [[[database rcl_existingDocumentWithID:documentID]
     catchTo:[RACSignal empty]]
     flattenMap:^RACSignal *(CBLDocument *document) {
-        return [document rcl_update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
-            unsavedRevision.properties[@"_deleted"] = @YES;
-            return YES;
-        }];
+        return [document rcl_deletePreservingProperties];
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_markAsDeletedDocumentWithID: %@", result.name, documentID];
+    return [result setNameWithFormat:@"[%@] -rcl_deletePreservingPropertiesDocumentWithID: %@", result.name, documentID];
 }
 
 - (RACSignal *)rcl_markAsDeletedDocumentWithID:(NSString *)documentID additionalProperties:(NSDictionary *)additionalProperties {
