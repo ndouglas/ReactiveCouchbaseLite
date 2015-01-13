@@ -527,6 +527,22 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_updateLocalDocumentWithID: %@ block: %@", result.name, ID, block];
 }
 
+- (RACSignal *)rcl_resolveConflictsWithBlock:(NSDictionary *(^)(NSArray *conflictingRevisions))block {
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    RACSignal *result = [[[[database rcl_allConflictingDocumentsQuery]
+    flattenMap:^RACSignal *(CBLQuery *allConflictingDocumentsQuery) {
+        return [[allConflictingDocumentsQuery asLiveQuery]
+        rcl_changes];
+    }]
+    flattenMap:^RACSignal *(CBLQueryRow *row) {
+        return [database rcl_documentWithID:row.documentID];
+    }]
+    flattenMap:^RACSignal *(CBLDocument *document) {
+        return [document rcl_resolveConflictsWithBlock:block];
+    }];
+    return [result setNameWithFormat:@"[%@] -rcl_resolveConflictsWithBlock: %@", result.name, block];
+}
+
 - (RACScheduler *)rcl_scheduler {
     return self.manager.rcl_scheduler;
 }

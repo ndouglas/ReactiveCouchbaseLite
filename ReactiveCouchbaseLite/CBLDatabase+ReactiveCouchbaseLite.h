@@ -368,6 +368,15 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 - (RACSignal *)rcl_updateLocalDocumentWithID:(NSString *)documentID block:(NSDictionary *(^)(NSMutableDictionary *localDocument))block;
 
 /**
+ Resolves conflicting revisions of a document using a block.
+ 
+ @param block The block used to merge the conflicting revisions.
+ @return A signal that passes errors resolving conflicts.
+ */
+
+- (RACSignal *)rcl_resolveConflictsWithBlock:(NSDictionary *(^)(NSArray *conflictingRevisions))block;
+
+/**
  A scheduler for this database and descendant objects.
  
  @return A scheduler that will work for this database and its descendant objects.
