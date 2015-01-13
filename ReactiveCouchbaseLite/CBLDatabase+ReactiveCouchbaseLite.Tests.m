@@ -18,6 +18,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     CBLManager *_manager;
     NSString *_databaseName;
     RACScheduler *_failScheduler;
+    CBLListener *_listener;
 }
 
 @end
@@ -29,37 +30,39 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     _manager = [CBLManager sharedInstance];
     _databaseName = [NSString stringWithFormat:@"test_%@", @([[[NSUUID UUID] UUIDString] hash])];
     _failScheduler = [[RACQueueScheduler alloc] initWithName:@"FailQueue" queue:dispatch_queue_create("FailQueue", DISPATCH_QUEUE_SERIAL)];
+    _listener = [[CBLListener alloc] initWithManager:[CBLManager sharedInstance] port:2014];
+    NSError *error = nil;
+    XCTAssertTrue([_listener start:&error]);
 }
 
 - (void)tearDown {
+    [_listener stop];
+    NSError *error = nil;
+    [[[CBLManager sharedInstance] databaseNamed:_databaseName error:&error] deleteDatabase:&error];
 	[super tearDown];
 }
 
-- (void)testLastSequenceNumber {
+- (void)updateDocument:(CBLDocument *)document withBlock:(BOOL (^)(CBLUnsavedRevision *newRevision))updater completionHandler:(void (^)(BOOL success, NSError *error))block {
     NSError *error = nil;
-    RACSignal *signal = [[CBLManager rcl_databaseNamed:_databaseName]
-    flattenMap:^RACSignal *(CBLDatabase *database) {
-        return [database rcl_lastSequenceNumber];
-    }];
-    RCLObjectTesterGeneratorBlock generator = ^(id testValue) {
-        return ^(id inValue) {
-            XCTAssertTrue((!inValue && !testValue) || [inValue isEqual:testValue], @"inValue %@ is not equal to testValue %@", inValue, testValue);
-        };
-    };
-    [self rcl_expectNext:generator(@0) signal:signal timeout:5.0 description:@"last sequence number matches"];
-    
-    CBLDocument *document = [[_manager databaseNamed:_databaseName error:&error] createDocument];
-    XCTAssertTrue([document update:^BOOL(CBLUnsavedRevision *newRevision) {
-        newRevision[@"name"] = [[NSUUID UUID] UUIDString];
-        return YES;
-    } error:&error], @"%@", error);
-    [self rcl_expectNext:generator(@1) signal:signal timeout:5.0 description:@"last sequence number matches"];
-    
-    XCTAssertTrue([document update:^BOOL(CBLUnsavedRevision *newRevision) {
-        newRevision[@"name"] = [[NSUUID UUID] UUIDString];
-        return YES;
-    } error:&error], @"%@", error);
-    [self rcl_expectNext:generator(@2) signal:signal timeout:5.0 description:@"last sequence number matches"];
+    BOOL success = [document update:updater error:&error];
+    block(success, error);
+}
+
+- (void)triviallyUpdateDocument:(CBLDocument *)document times:(NSUInteger)times interval:(NSTimeInterval)interval {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self updateDocument:document withBlock:^BOOL(CBLUnsavedRevision *newRevision) {
+            newRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+            return YES;
+        } completionHandler:^(BOOL success, NSError *error) {
+            if (!success) {
+                NSLog(@"Error: %@", error);
+            }
+            XCTAssertTrue(success);
+            if (times > 0) {
+                [self triviallyUpdateDocument:document times:times - 1 interval:interval];
+            }
+        }];
+    });
 }
 
 - (void)testClose {
@@ -525,7 +528,17 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     return result;
 }
 
-- (RACSignal *)replicateTestDatabaseWithDatabase:(CBLDatabase *)targetDatabase {
+- (RACSignal *)createPushReplicationWithDatabase:(CBLDatabase *)targetDatabase {
+    return [[[CBLManager rcl_databaseNamed:_databaseName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_createPushReplication:targetDatabase.internalURL];
+    }]
+    doNext:^(CBLReplication *replication) {
+        [replication start];
+    }];
+}
+
+- (RACSignal *)createPullReplicationWithDatabase:(CBLDatabase *)targetDatabase {
     return [[[CBLManager rcl_databaseNamed:_databaseName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_createPullReplication:targetDatabase.internalURL];
@@ -535,30 +548,23 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     }];
 }
 
-- (void)testAllReplications {
-    __block BOOL completed = NO;
-    [self rcl_expectNexts:@[
-        ^(NSArray *_replications_) {
-            XCTAssertTrue(_replications_.count == 0);
-        },
-        ^(NSArray *_replications_) {
-            XCTAssertTrue(_replications_.count == 2);
-        },
-    ] signal:[[self replicateTestDatabaseWithDatabase:[self replicationTarget]]
-        then:^RACSignal *{
-            return [[CBLManager rcl_databaseNamed:_databaseName]
-            flattenMap:^RACSignal *(CBLDatabase *database) {
-                return [database rcl_allReplications];
-            }];
-        }]
-     timeout:5.0 description:@"replications changed"];
+- (void)testCreatePushReplicationWithURL {
+    [self rcl_expectNext:^(CBLReplication *replication) {
+        XCTAssertNotNil(replication);
+    } signal:[self createPushReplicationWithDatabase:[self replicationTarget]]
+     timeout:5.0 description:@"replication created"];
 }
 
+- (void)testCreatePullReplicationWithURL {
+    [self rcl_expectNext:^(CBLReplication *replication) {
+        XCTAssertNotNil(replication);
+    } signal:[self createPushReplicationWithDatabase:[self replicationTarget]]
+     timeout:5.0 description:@"replication created"];
+}
 @end
 
 /**
 // TODO:
-- (RACSignal *)rcl_allReplications;
 - (RACSignal *)rcl_createPushReplication:(NSURL *)URL;
 - (RACSignal *)rcl_createPullReplication:(NSURL *)URL;
 - (RACSignal *)rcl_databaseChangeNotifications;

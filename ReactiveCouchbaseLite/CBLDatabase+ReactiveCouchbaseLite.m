@@ -22,13 +22,6 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
 
 @implementation CBLDatabase (ReactiveCouchbaseLite)
 
-#pragma mark - Properties
-
-- (RACSignal *)rcl_lastSequenceNumber {
-    RACSignal *result = RACObserve(self, lastSequenceNumber);
-    return [result setNameWithFormat:@"[%@] -rcl_lastSequenceNumber", result.name];
-}
-
 #pragma mark - Operations
 
 - (RACSignal *)rcl_close {
@@ -436,12 +429,6 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
 }
 
 #pragma mark - Replications
-
-- (RACSignal *)rcl_allReplications {
-    RACSignal *result = [RACObserve(self, allReplications)
-    takeUntil:self.rac_willDeallocSignal];
-    return [result setNameWithFormat:@"[%@] -rcl_allReplications", result.name];
-}
 
 - (RACSignal *)rcl_createPushReplication:(NSURL *)URL {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);

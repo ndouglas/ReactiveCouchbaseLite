@@ -19,18 +19,6 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 
 @interface CBLDatabase (ReactiveCouchbaseLite)
 
-#pragma mark - Properties
-
-/**
-  When a new revision is added to the database, it receives a new sequence number; 
-  this can be used to check whether the database has changed between two points 
-  in time.
-  
-  @return A signal of NSNumber instances containing the last sequence number.
- */
-
-- (RACSignal *)rcl_lastSequenceNumber;
-
 #pragma mark - Operations
 
 /**
@@ -292,14 +280,6 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 - (RACSignal *)rcl_doAsync:(void (^)(void))block;
 
 #pragma mark - Replications
-
-/**
- All current, running CBLReplications involving this database.
- 
- @return A signal of NSArray objects containing the replications involving this database.
- */
-
-- (RACSignal *)rcl_allReplications;
 
 /**
  Creates a push replication.
