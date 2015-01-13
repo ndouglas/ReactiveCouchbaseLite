@@ -249,6 +249,10 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [self rcl_allDocumentsQueryWithMode:kCBLIncludeDeleted];
 }
 
+- (RACSignal *)rcl_allConflictingDocumentsQuery {
+    return [self rcl_allDocumentsQueryWithMode:kCBLShowConflicts];
+}
+
 - (RACSignal *)rcl_slowQueryWithMap:(CBLMapBlock)block {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {

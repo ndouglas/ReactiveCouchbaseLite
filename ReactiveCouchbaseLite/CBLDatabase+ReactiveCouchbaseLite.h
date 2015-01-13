@@ -148,11 +148,18 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 /**
  Creates an all (including deleted) documents query.
  
- @param block A block used for filtering the results.
  @return A signal containing an all (including deleted) documents query.
  */
 
 - (RACSignal *)rcl_allIncludingDeletedDocumentsQuery;
+
+/**
+ Creates an all documents query showing conflicts.
+ 
+ @return A signal containing a conflicts query.
+ */
+
+- (RACSignal *)rcl_allConflictingDocumentsQuery;
 
 /** 
  Creates a one-shot query with the given map block.
