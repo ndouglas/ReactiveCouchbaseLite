@@ -525,5 +525,12 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 - (RACSignal *)rcl_createPushReplication:(NSURL *)URL;
 - (RACSignal *)rcl_createPullReplication:(NSURL *)URL;
 - (RACSignal *)rcl_databaseChangeNotifications;
+- (RACSignal *)rcl_deleteDocumentWithID:(NSString *)documentID;
+- (RACSignal *)rcl_deletePreservingPropertiesDocumentWithID:(NSString *)documentID;
+- (RACSignal *)rcl_deleteDocumentWithID:(NSString *)documentID modifyingPropertiesWithBlock:(void(^)(CBLUnsavedRevision *proposedRevision))block;
+- (RACSignal *)rcl_onDocumentWithID:(NSString *)documentID performBlock:(void (^)(CBLDocument *document))block;
+- (RACSignal *)rcl_updateDocumentWithID:(NSString *)documentID block:(BOOL(^)(CBLUnsavedRevision *unsavedRevision))block;
+- (RACSignal *)rcl_updateLocalDocumentWithID:(NSString *)documentID block:(NSDictionary *(^)(NSMutableDictionary *localDocument))block;
+- (RACSignal *)rcl_resolveConflictsWithBlock:(NSDictionary *(^)(NSArray *conflictingRevisions))block;
 */
 

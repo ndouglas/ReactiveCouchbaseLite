@@ -19,6 +19,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 
 @interface CBLDatabase (ReactiveCouchbaseLite)
 
+#pragma mark - Properties
+
 /**
   When a new revision is added to the database, it receives a new sequence number; 
   this can be used to check whether the database has changed between two points 
@@ -28,6 +30,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
  */
 
 - (RACSignal *)rcl_lastSequenceNumber;
+
+#pragma mark - Operations
 
 /**
   Closes this database.
@@ -52,6 +56,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
  */
 
 - (RACSignal *)rcl_delete;
+
+#pragma mark - Documents
 
 /**
  Creates or opens the document with the specified ID.
@@ -90,6 +96,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 
 - (RACSignal *)rcl_createDocument;
 
+#pragma mark - Local Documents
+
 /**
  Opens the local document with the specified ID.
  
@@ -117,6 +125,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
  */
 
 - (RACSignal *)rcl_deleteLocalDocumentWithID:(NSString *)documentID;
+
+#pragma mark - All Documents Queries
 
 /**
  Creates an all documents query.
@@ -171,6 +181,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 
 - (RACSignal *)rcl_slowQueryWithMap:(CBLMapBlock)block;
 
+#pragma mark - Views
+
 /**
  Retrieves the view with the given name.
  
@@ -215,6 +227,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 
 - (RACSignal *)rcl_viewNamed:(NSString *)name mapBlock:(CBLMapBlock)mapBlock reduceBlock:(CBLReduceBlock)reduceBlock version:(NSString *)version;
 
+#pragma mark - Validation
+
 /**
  Sets a validation function on the database.
  
@@ -233,6 +247,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
  */
 
 - (RACSignal *)rcl_validationNamed:(NSString *)name;
+
+#pragma mark - Filters
 
 /**
  Sets a filter function on the database.
@@ -253,6 +269,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 
 - (RACSignal *)rcl_filterNamed:(NSString *)name;
 
+#pragma mark - Transactions
+
 /**
  Runs the specified block in a transaction. 
  
@@ -262,6 +280,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 
 - (RACSignal *)rcl_inTransaction:(BOOL (^)(CBLDatabase *database))block;
 
+#pragma mark - Asynchronous Operations
+
 /**
  Runs the specified block asynchronously on the database's dispatch queue or thread.
  
@@ -270,6 +290,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
  */
 
 - (RACSignal *)rcl_doAsync:(void (^)(void))block;
+
+#pragma mark - Replications
 
 /**
  All current, running CBLReplications involving this database.
@@ -297,6 +319,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 
 - (RACSignal *)rcl_createPullReplication:(NSURL *)URL;
 
+#pragma mark - Notifications
+
 /**
  Observes changes in the database.
  
@@ -304,6 +328,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
  */
 
 - (RACSignal *)rcl_databaseChangeNotifications;
+
+#pragma mark - Document Operations
 
 /**
  Deletes the document with the specified ID.
@@ -357,6 +383,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 
 - (RACSignal *)rcl_updateDocumentWithID:(NSString *)documentID block:(BOOL(^)(CBLUnsavedRevision *unsavedRevision))block;
 
+#pragma mark - Local Document Operations
+
 /**
  Updates the local document using the specified block.
  
@@ -367,6 +395,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 
 - (RACSignal *)rcl_updateLocalDocumentWithID:(NSString *)documentID block:(NSDictionary *(^)(NSMutableDictionary *localDocument))block;
 
+#pragma mark - Conflict Resolution
+
 /**
  Resolves conflicting revisions of a document using a block.
  
@@ -375,6 +405,8 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
  */
 
 - (RACSignal *)rcl_resolveConflictsWithBlock:(NSDictionary *(^)(NSArray *conflictingRevisions))block;
+
+#pragma mark - Scheduler
 
 /**
  A scheduler for this database and descendant objects.

@@ -22,10 +22,14 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
 
 @implementation CBLDatabase (ReactiveCouchbaseLite)
 
+#pragma mark - Properties
+
 - (RACSignal *)rcl_lastSequenceNumber {
     RACSignal *result = RACObserve(self, lastSequenceNumber);
     return [result setNameWithFormat:@"[%@] -rcl_lastSequenceNumber", result.name];
 }
+
+#pragma mark - Operations
 
 - (RACSignal *)rcl_close {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
@@ -74,6 +78,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     }];
     return [result setNameWithFormat:@"[%@] -rcl_delete", result.name];
 }
+
+#pragma mark - Documents
 
 - (RACSignal *)rcl_documentWithID:(NSString *)documentID {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
@@ -157,6 +163,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_createDocument", result.name];
 }
 
+#pragma mark - Local Documents
+
 - (RACSignal *)rcl_existingLocalDocumentWithID:(NSString *)documentID {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -206,6 +214,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     }];
     return [result setNameWithFormat:@"[%@] -rcl_deleteLocalDocumentWithID: %@", result.name, documentID];
 }
+
+#pragma mark - All Documents Queries
 
 - (RACSignal *)rcl_allDocumentsQuery {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
@@ -266,6 +276,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_slowQueryWithMap: %@", result.name, block];
 }
 
+#pragma mark - Views
+
 - (RACSignal *)rcl_viewNamed:(NSString *)name {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -323,6 +335,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_viewNamed: %@ mapBlock: %@ reduceBlock: %@ version: %@", result.name, name, mapBlock, reduceBlock, version];
 }
 
+#pragma mark - Validation
+
 - (RACSignal *)rcl_setValidationNamed:(NSString *)name asBlock:(CBLValidationBlock)block {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -353,6 +367,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     }];
     return [result setNameWithFormat:@"[%@] -rcl_validationNamed: %@", result.name, name];
 }
+
+#pragma mark - Filters
 
 - (RACSignal *)rcl_setFilterNamed:(NSString *)name asBlock:(CBLFilterBlock)block {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
@@ -385,6 +401,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_filterNamed: %@", result.name, name];
 }
 
+#pragma mark - Transactions
+
 - (RACSignal *)rcl_inTransaction:(BOOL (^)(CBLDatabase *database))block {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -402,6 +420,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_inTransaction: %@", result.name, block];
 }
 
+#pragma mark - Asynchronous Operations
+
 - (RACSignal *)rcl_doAsync:(void (^)(void))block {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -414,6 +434,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     }];
     return [result setNameWithFormat:@"[%@] -rcl_doAsync: %@ ", result.name, block];
 }
+
+#pragma mark - Replications
 
 - (RACSignal *)rcl_allReplications {
     RACSignal *result = [RACObserve(self, allReplications)
@@ -447,6 +469,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_createPullReplication: %@", result.name, URL];
 }
 
+#pragma mark - Notifications
+
 - (RACSignal *)rcl_databaseChangeNotifications {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
 	RACSignal *result = [[[[[NSNotificationCenter defaultCenter]
@@ -459,6 +483,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
 	flatten];
     return [result setNameWithFormat:@"[%@] -rcl_databaseChangeNotifications", result.name];
 }
+
+#pragma mark - Document Operations
 
 - (RACSignal *)rcl_deleteDocumentWithID:(NSString *)documentID {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
@@ -503,6 +529,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_updateDocumentWithID: %@ block: %@", result.name, ID, block];
 }
 
+#pragma mark - Local Document Operations
+
 - (RACSignal *)rcl_updateLocalDocumentWithID:(NSString *)ID block:(NSDictionary *(^)(NSMutableDictionary *localDocument))block {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -520,6 +548,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     return [result setNameWithFormat:@"[%@] -rcl_updateLocalDocumentWithID: %@ block: %@", result.name, ID, block];
 }
 
+#pragma mark - Conflict Resolution
+
 - (RACSignal *)rcl_resolveConflictsWithBlock:(NSDictionary *(^)(NSArray *conflictingRevisions))block {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
     RACSignal *result = [[[[database rcl_allConflictingDocumentsQuery]
@@ -535,6 +565,8 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
     }];
     return [result setNameWithFormat:@"[%@] -rcl_resolveConflictsWithBlock: %@", result.name, block];
 }
+
+#pragma mark - Scheduler
 
 - (RACScheduler *)rcl_scheduler {
     return self.manager.rcl_scheduler;
