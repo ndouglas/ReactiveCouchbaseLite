@@ -23,7 +23,7 @@
         }];
     }]
     deliverOn:self.rcl_scheduler];
-    return [result setNameWithFormat:@"[%@] -rcl_rows", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_rows]", self];
 }
 
 - (RACSignal *)rcl_flattenedRows {
@@ -32,7 +32,7 @@
     flattenMap:^RACSignal *(CBLQueryEnumerator *queryEnumerator) {
         return queryEnumerator.rac_sequence.signal;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_rows", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_rows]", self];
 }
 
 - (RACSignal *)rcl_changes {
@@ -49,7 +49,7 @@
         return result;
     }]
     flatten];
-    return [result setNameWithFormat:@"[%@] -rcl_changes", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_changes]", self];
 }
 
 @end

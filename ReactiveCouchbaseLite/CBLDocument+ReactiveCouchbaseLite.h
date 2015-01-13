@@ -164,7 +164,7 @@ extern CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current);
 /**
  Resolves any conflicts in this document with the specified block.
  
- @return A signal streaming errors in conflict resolution.
+ @return A signal streaming winning revisions and errors in conflict resolution.
  */
 
 - (RACSignal *)rcl_resolveConflictsWithBlock:(NSDictionary *(^)(NSArray *conflictingRevisions))block;

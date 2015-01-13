@@ -29,6 +29,14 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 - (void)setUp {
 	[super setUp];
     _manager = [CBLManager sharedInstance];
+    [CBLManager enableLogging:@"TDRouter"];
+    [CBLManager enableLogging:@"Sync"];
+    [CBLManager enableLogging:@"SyncVerbose"];
+    [CBLManager enableLogging:@"RemoteRequest"];
+    [CBLManager enableLogging:@"ChangeTracker"];
+    [CBLManager enableLogging:@"Query"];
+    [CBLManager enableLogging:@"CBLDatabase"];
+    [CBLManager enableLogging:@"CBLListener"];
     _databaseName = [NSString stringWithFormat:@"test_%@", @([[[NSUUID UUID] UUIDString] hash])];
     _peerDatabaseName = [NSString stringWithFormat:@"test_%@", @([[[NSUUID UUID] UUIDString] hash])];
     _failScheduler = [[RACQueueScheduler alloc] initWithName:@"FailQueue" queue:dispatch_queue_create("FailQueue", DISPATCH_QUEUE_SERIAL)];
@@ -536,6 +544,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         return [database rcl_createPushReplication:targetDatabase.internalURL];
     }]
     doNext:^(CBLReplication *replication) {
+        replication.continuous = YES;
         [replication start];
     }];
 }
@@ -546,6 +555,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         return [database rcl_createPullReplication:targetDatabase.internalURL];
     }]
     doNext:^(CBLReplication *replication) {
+        replication.continuous = YES;
         [replication start];
     }];
 }
@@ -673,23 +683,31 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
     CBLDatabase *peerDatabase = [[CBLManager sharedInstance] databaseNamed:_peerDatabaseName error:NULL];
     NSString *documentID = [[NSUUID UUID] UUIDString];
-    XCTAssertTrue([[database documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+    [[database documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
         unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+        unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
         return YES;
-    } error:NULL]);
-    XCTAssertTrue([[peerDatabase documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+    } error:NULL];
+    [[peerDatabase documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
         unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+        unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
         return YES;
-    } error:NULL]);
-    CBLReplication *replication = [database createPushReplication:peerDatabase.internalURL];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [replication start];
+    } error:NULL];
+    XCTAssertNotNil([database documentWithID:documentID]);
+    XCTAssertNotNil([peerDatabase documentWithID:documentID]);
+    NSURL *peerURL = [[NSURL URLWithString:@"http://localhost:2014/"] URLByAppendingPathComponent:peerDatabase.name];
+    CBLReplication *push = [database createPushReplication:peerURL];
+    CBLReplication *pull = [database createPullReplication:peerURL];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        push.continuous = pull.continuous = YES;
+        [push start];
+        [pull start];
     });
     [self rcl_expectCompletionFromSignal:[[database rcl_resolveConflictsWithBlock:^NSDictionary *(NSArray *conflictingRevisions) {
-
-        return @{};
+        NSLog(@"conflicting revisions: %@", conflictingRevisions);
+        return [[[conflictingRevisions[0] document] currentRevision] properties];
     }]
-    take:1] timeout:5.0 description:@"conflict resolved"];
+    take:1] timeout:5000.0 description:@"conflict resolved"];
 }
 
 @end

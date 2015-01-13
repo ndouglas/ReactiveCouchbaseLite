@@ -212,7 +212,6 @@
 @end
 
 /**
-- (RACSignal *)rcl_getConflictingRevisions;
 - (RACSignal *)rcl_getLeafRevisions;
 - (RACSignal *)rcl_newRevision;
 - (RACSignal *)rcl_properties;

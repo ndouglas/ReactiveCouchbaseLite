@@ -312,7 +312,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@ -rcl_getConflictingRevisions]", self];
+    return [result setNameWithFormat:@"[%@ -rcl_resolveConflictsWithBlock: %@]", self, block];
 }
 
 - (RACScheduler *)rcl_scheduler {
