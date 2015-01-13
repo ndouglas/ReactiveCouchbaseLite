@@ -247,18 +247,23 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
                 [document.database inTransaction:^BOOL {
                     NSDictionary *mergedProperties = block(revisions);
                     CBLSavedRevision *currentRevision = document.currentRevision;
+                    BOOL result = YES;
                     for (CBLSavedRevision *savedRevision in revisions) {
-                        CBLUnsavedRevision *newRevision = [savedRevision createRevision];
-                        if ([savedRevision isEqualTo:currentRevision]) {
-                            newRevision.properties = mergedProperties.mutableCopy;
-                        } else {
-                            newRevision.isDeletion = YES;
-                        }
-                        NSError *error = nil;
-                        if (![newRevision saveAllowingConflict:&error]) {
-                            [subscriber sendNext:error];
+                        if (result) {
+                            CBLUnsavedRevision *newRevision = [savedRevision createRevision];
+                            if ([savedRevision isEqualTo:currentRevision]) {
+                                newRevision.properties = mergedProperties.mutableCopy;
+                            } else {
+                                newRevision.isDeletion = YES;
+                            }
+                            NSError *error = nil;
+                            result = [newRevision saveAllowingConflict:&error] != nil;
+                            if (!result) {
+                                [subscriber sendNext:error];
+                            }
                         }
                     }
+                    return result;
                 }];
             }
             [subscriber sendCompleted];
