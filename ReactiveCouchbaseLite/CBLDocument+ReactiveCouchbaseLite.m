@@ -287,6 +287,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
             if (revisions.count > 1) {
                 [document.database inTransaction:^BOOL {
                     NSDictionary *mergedProperties = block(revisions);
+                    NSCAssert(mergedProperties, @"invalid merged properties");
                     CBLSavedRevision *currentRevision = document.currentRevision;
                     BOOL result = YES;
                     for (CBLSavedRevision *savedRevision in revisions) {
