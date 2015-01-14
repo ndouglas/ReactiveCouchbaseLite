@@ -703,17 +703,27 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         [push start];
         [pull start];
     });
-    [self rcl_expectCompletionFromSignal:[[database rcl_resolveConflictsWithBlock:^NSDictionary *(NSArray *conflictingRevisions) {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"conflict resolved"];
+    RACDisposable *disposable = [[database rcl_resolveConflictsWithBlock:^NSDictionary *(NSArray *conflictingRevisions) {
         NSLog(@"conflicting revisions: %@", conflictingRevisions);
+        [expectation fulfill];
         return [[[conflictingRevisions[0] document] currentRevision] properties];
     }]
-    take:1] timeout:5000.0 description:@"conflict resolved"];
+    subscribeNext:^(id x) {
+        XCTFail(@"signal not supposed to next: %@", x);
+    } error:^(NSError *error) {
+        XCTFail(@"signal not supposed to error: %@", error);
+    } completed:^{
+        XCTFail(@"signal not supposed to complete");
+    }];
+    [self waitForExpectationsWithTimeout:5.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Encountered error: %@", error);
+        }
+        [push stop];
+        [pull stop];
+        [disposable dispose];
+    }];
 }
 
 @end
-
-/**
-// TODO:
-- (RACSignal *)rcl_resolveConflictsWithBlock:(NSDictionary *(^)(NSArray *conflictingRevisions))block;
-*/
-
