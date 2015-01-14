@@ -209,13 +209,22 @@
     timeout:5.0 description:@"revision history fetched successfully"];
 }
 
-@end
+- (void)testGetLeafRevisions {
+}
 
-/**
-- (RACSignal *)rcl_getLeafRevisions;
-- (RACSignal *)rcl_newRevision;
-- (RACSignal *)rcl_properties;
-- (RACSignal *)rcl_userProperties;
-- (RACSignal *)rcl_putProperties:(NSDictionary *)properties;
-- (RACSignal *)rcl_update:(BOOL(^)(CBLUnsavedRevision *))block;
- */
+- (void)testNewRevision {
+}
+
+- (void)testProperties {
+}
+
+- (void)testUserProperties {
+}
+
+- (void)testPutProperties {
+}
+
+- (void)testResolveConflictsWithBlock {
+}
+
+@end
