@@ -58,6 +58,25 @@
     } signal:[CBLManager rcl_manager] timeout:5.0 description:@"sharedInstance is equal to sharedInstance"];
 }
 
+- (void)testLog {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [CBLManager enableLogging:@"CBLDatabase"];
+        [[_database documentWithID:[[NSUUID UUID] UUIDString]] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+            unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+            return YES;
+        } error:NULL];
+    });
+    [self rcl_expectNexts:@[
+        ^(RACTuple *tuple) {
+            XCTAssertNotNil(tuple);
+        },
+        ^(RACTuple *tuple) {
+            XCTAssertNotNil(tuple);
+        },
+    ] signal:[[CBLManager rcl_log]
+    take:2] timeout:5.0 description:@"log received"];
+}
+
 - (void)testDatabaseNamed {
     [self rcl_expectNext:^(CBLDatabase *database) {
         XCTAssertNotNil(database);
@@ -87,4 +106,3 @@
 }
 
 @end
-

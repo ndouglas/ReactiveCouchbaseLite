@@ -103,9 +103,8 @@
                 if (step == nextHandlers.count - 1) {
                     [expectation fulfill];
                     [expectation2 fulfill];
-                } else {
-                    step++;
                 }
+                step++;
             } @catch (NSException *exception) {
                 NSLog(@"Exception: %@", exception);
             }

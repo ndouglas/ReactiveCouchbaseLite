@@ -45,6 +45,18 @@ CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
     setNameWithFormat:@"%@ +rcl_sharedInstance", self];
 }
 
++ (RACSignal *)rcl_log {
+    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self redirectLogging:^(NSString *type, NSString *message) {
+            [subscriber sendNext:RACTuplePack(type, message)];
+        }];
+        return [RACDisposable disposableWithBlock:^{
+            [self redirectLogging:nil];
+        }];
+    }];
+    return [result setNameWithFormat:@"[%@ +rcl_logSignal]", self];
+}
+
 + (RACSignal *)rcl_databaseNamed:(NSString *)name {
     return [[self rcl_manager]
     flattenMap:^RACSignal *(CBLManager *manager) {
