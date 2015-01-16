@@ -60,3 +60,13 @@
 - (void)rcl_expectError:(void (^)(NSError *error))errorHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description;
 
 @end
+
+@interface CBLManager (RCLTestDefinitions)
+
+/**
+ Enables a lot of useful logging.
+ */
+
++ (void)rcl_enableUsefulLogs;
+
+@end

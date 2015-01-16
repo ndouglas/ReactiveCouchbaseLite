@@ -125,3 +125,18 @@
 }
 
 @end
+
+@implementation CBLManager (RCLTestDefinitions)
+
++ (void)rcl_enableUsefulLogs {
+    [CBLManager enableLogging:@"TDRouter"];
+    [CBLManager enableLogging:@"Sync"];
+    [CBLManager enableLogging:@"SyncVerbose"];
+    [CBLManager enableLogging:@"RemoteRequest"];
+    [CBLManager enableLogging:@"ChangeTracker"];
+    [CBLManager enableLogging:@"Query"];
+    [CBLManager enableLogging:@"CBLDatabase"];
+    [CBLManager enableLogging:@"CBLListener"];
+}
+
+@end
