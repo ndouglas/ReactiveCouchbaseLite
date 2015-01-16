@@ -27,4 +27,12 @@
 
 - (RACSignal *)rcl_lastError;
 
+/**
+ The document IDs that are pending upload to the server.
+ 
+ @return A signal of individual document IDs, or error if an error occurs.
+ */
+
+- (RACSignal *)rcl_pendingDocumentIDs;
+
 @end
