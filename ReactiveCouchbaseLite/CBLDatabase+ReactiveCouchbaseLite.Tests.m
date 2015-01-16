@@ -29,14 +29,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 - (void)setUp {
 	[super setUp];
     _manager = [CBLManager sharedInstance];
-    [CBLManager enableLogging:@"TDRouter"];
-    [CBLManager enableLogging:@"Sync"];
-    [CBLManager enableLogging:@"SyncVerbose"];
-    [CBLManager enableLogging:@"RemoteRequest"];
-    [CBLManager enableLogging:@"ChangeTracker"];
-    [CBLManager enableLogging:@"Query"];
-    [CBLManager enableLogging:@"CBLDatabase"];
-    [CBLManager enableLogging:@"CBLListener"];
+    [CBLManager rcl_enableUsefulLogs];
     _databaseName = [NSString stringWithFormat:@"test_%@", @([[[NSUUID UUID] UUIDString] hash])];
     _peerDatabaseName = [NSString stringWithFormat:@"test_%@", @([[[NSUUID UUID] UUIDString] hash])];
     _failScheduler = [[RACQueueScheduler alloc] initWithName:@"FailQueue" queue:dispatch_queue_create("FailQueue", DISPATCH_QUEUE_SERIAL)];
@@ -50,29 +43,6 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     NSError *error = nil;
     [[[CBLManager sharedInstance] databaseNamed:_databaseName error:&error] deleteDatabase:&error];
 	[super tearDown];
-}
-
-- (void)updateDocument:(CBLDocument *)document withBlock:(BOOL (^)(CBLUnsavedRevision *newRevision))updater completionHandler:(void (^)(BOOL success, NSError *error))block {
-    NSError *error = nil;
-    BOOL success = [document update:updater error:&error] != nil;
-    block(success, error);
-}
-
-- (void)triviallyUpdateDocument:(CBLDocument *)document times:(NSUInteger)times interval:(NSTimeInterval)interval {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self updateDocument:document withBlock:^BOOL(CBLUnsavedRevision *newRevision) {
-            newRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
-            return YES;
-        } completionHandler:^(BOOL success, NSError *error) {
-            if (!success) {
-                NSLog(@"Error: %@", error);
-            }
-            XCTAssertTrue(success);
-            if (times > 0) {
-                [self triviallyUpdateDocument:document times:times - 1 interval:interval];
-            }
-        }];
-    });
 }
 
 - (void)testClose {
@@ -580,7 +550,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     CBLDatabase *database = [[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL];
     NSString *documentID = [[NSUUID UUID] UUIDString];
     CBLDocument *document = [database documentWithID:documentID];
-    [self triviallyUpdateDocument:document times:2 interval:0.1];
+    [self rcl_triviallyUpdateDocument:document times:2 interval:0.1];
     [self rcl_expectNexts:@[
         ^(CBLDatabaseChange *databaseChange) {
             XCTAssertTrue([databaseChange.revisionID characterAtIndex:0] == '1');
