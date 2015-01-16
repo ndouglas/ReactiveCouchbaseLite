@@ -19,6 +19,7 @@ typedef NSDictionary *(^CBLPropertiesTransformationBlock)(NSDictionary *document
 @implementation CBLReplication (ReactiveCouchbaseLite)
 
 - (RACSignal *)rcl_transferredDocuments {
+    NSCAssert(!self.propertiesTransformationBlock, @"Only one properties transformation block can be used at a time.");
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [self setPropertiesTransformationBlock:^NSDictionary *(NSDictionary *document) {
             [subscriber sendNext:document];
@@ -36,17 +37,21 @@ typedef NSDictionary *(^CBLPropertiesTransformationBlock)(NSDictionary *document
     return [result setNameWithFormat:@"[%@ -rcl_lastError]", self];
 }
 
-- (RACSignal *)rcl_pendingDocumentIDs {
-    RACSignal *result = [[[[[NSNotificationCenter defaultCenter] rac_addObserverForName:kCBLReplicationChangeNotification object:self]
+- (RACSignal *)rcl_pendingPushDocumentIDs {
+    NSCAssert(!self.pull, @"This method is unavailable on pull replications.");
+    RACSignal *result = [[[[[[[[NSNotificationCenter defaultCenter] rac_addObserverForName:kCBLReplicationChangeNotification object:self]
     map:^NSSet *(NSNotification *_notification_) {
         (void)_notification_;
         return [self pendingDocumentIDs];
     }]
+    ignore:[NSSet set]]
+    distinctUntilChanged]
     combinePreviousWithStart:[NSSet set] reduce:^NSSet *(NSSet *previous, NSSet *current) {
         NSMutableSet *result = current.mutableCopy;
         [result minusSet:previous];
         return result;
     }]
+    ignore:[NSSet set]]
     flattenMap:^RACSignal *(NSSet *newPendingDocumentIDs) {
         return newPendingDocumentIDs.rac_sequence.signal;
     }];

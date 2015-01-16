@@ -31,8 +31,10 @@
  The document IDs that are pending upload to the server.
  
  @return A signal of individual document IDs, or error if an error occurs.
+ @discussion Available only on push replications.
+ @discussion This is not terribly useful for processing purposes.
  */
 
-- (RACSignal *)rcl_pendingDocumentIDs;
+- (RACSignal *)rcl_pendingPushDocumentIDs;
 
 @end
