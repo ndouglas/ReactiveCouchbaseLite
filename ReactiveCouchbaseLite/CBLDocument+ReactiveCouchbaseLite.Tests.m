@@ -11,30 +11,24 @@
 #import "RCLTestDefinitions.h"
 #import "ReactiveCouchbaseLite.h"
 
-@interface CBLDocument_ReactiveCouchbaseLiteTests : XCTestCase {
-    CBLManager *_manager;
-    NSString *_databaseName;
-    RACScheduler *_failScheduler;
-}
-
+@interface CBLDocument_ReactiveCouchbaseLiteTests : RCLTestCase
 @end
 
 @implementation CBLDocument_ReactiveCouchbaseLiteTests
 
 - (void)setUp {
 	[super setUp];
-    _manager = [CBLManager sharedInstance];
-    _databaseName = [NSString stringWithFormat:@"test_%@", @([[[NSUUID UUID] UUIDString] hash])];
-    _failScheduler = [[RACQueueScheduler alloc] initWithName:@"FailQueue" queue:dispatch_queue_create("FailQueue", DISPATCH_QUEUE_SERIAL)];
+    [self rcl_setupEverything];
 }
 
 - (void)tearDown {
+    [self rcl_tearDown];
 	[super tearDown];
 }
 
 - (void)testDelete {
     NSString *ID = [[NSUUID UUID] UUIDString];
-    [self rcl_expectCompletionFromSignal:[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[CBLManager rcl_databaseNamed:self.testName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -42,7 +36,7 @@
         return [document rcl_putProperties:@{}];
     }]
     then:^RACSignal *{
-        return [[[CBLManager rcl_databaseNamed:_databaseName]
+        return [[[CBLManager rcl_databaseNamed:self.testName]
         flattenMap:^RACSignal *(CBLDatabase *database) {
             return [database rcl_documentWithID:ID];
         }]
@@ -55,7 +49,7 @@
 
 - (void)testPurge {
     NSString *ID = [[NSUUID UUID] UUIDString];
-    [self rcl_expectCompletionFromSignal:[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[CBLManager rcl_databaseNamed:self.testName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -63,7 +57,7 @@
         return [document rcl_putProperties:@{}];
     }]
     then:^RACSignal *{
-        return [[[CBLManager rcl_databaseNamed:_databaseName]
+        return [[[CBLManager rcl_databaseNamed:self.testName]
         flattenMap:^RACSignal *(CBLDatabase *database) {
             return [database rcl_documentWithID:ID];
         }]
@@ -76,14 +70,14 @@
 
 - (void)asynchronouslyPostTrivialChangeToDocumentWithID:(NSString *)ID {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [[[[CBLManager sharedInstance] databaseNamed:_databaseName error:NULL] documentWithID:ID] putProperties:@{} error:NULL];
+        [[[[CBLManager sharedInstance] databaseNamed:self.testName error:NULL] documentWithID:ID] putProperties:@{} error:NULL];
     });
 }
 
 - (void)testDocumentChangeNotifications {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
-    [self rcl_expectCompletionFromSignal:[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[[CBLManager rcl_databaseNamed:self.testName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -102,7 +96,7 @@
 - (void)testCurrentRevisionID {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
-    [self rcl_expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:self.testName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -122,7 +116,7 @@
 - (void)testCurrentRevision {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
-    [self rcl_expectCompletionFromSignal:[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[[CBLManager rcl_databaseNamed:self.testName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -141,7 +135,7 @@
 - (void)testRevisionWithID {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
-    [self rcl_expectCompletionFromSignal:[[[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[[[[CBLManager rcl_databaseNamed:self.testName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -152,7 +146,7 @@
     take:2]
     ignore:nil]
     flattenMap:^RACSignal *(NSString *currentRevisionID) {
-        return [[[CBLManager rcl_databaseNamed:_databaseName]
+        return [[[CBLManager rcl_databaseNamed:self.testName]
         flattenMap:^RACSignal *(CBLDatabase *database) {
             return [database rcl_documentWithID:ID];
         }]
@@ -170,7 +164,7 @@
 - (void)testGetRevisionHistory {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
-    [self rcl_expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:self.testName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -190,7 +184,7 @@
 - (void)testGetRevisionHistoryFilteredWithBlock {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self asynchronouslyPostTrivialChangeToDocumentWithID:ID];
-    [self rcl_expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:_databaseName]
+    [self rcl_expectCompletionFromSignal:[[[[[[CBLManager rcl_databaseNamed:self.testName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
@@ -210,6 +204,25 @@
 }
 
 - (void)testGetLeafRevisions {
+    NSString *documentID = [[NSUUID UUID] UUIDString];
+    [[self.testDatabase documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+        unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+        return YES;
+    } error:NULL];
+    [[self.peerDatabase documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+        unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+        return YES;
+    } error:NULL];
+    XCTAssertNotNil([self.testDatabase documentWithID:documentID]);
+    XCTAssertNotNil([self.peerDatabase documentWithID:documentID]);
+    self.pushReplication.continuous = self.pullReplication.continuous = YES;
+    [self.pushReplication start];
+    [self.pullReplication start];
+    [self rcl_expectNext:^(NSArray *leafRevisions) {
+        XCTAssertTrue(leafRevisions.count == 2);
+    } signal:[[self.testDatabase documentWithID:documentID] rcl_getLeafRevisions] timeout:5.0 description:@"leaf revisions found"];
 }
 
 - (void)testNewRevision {

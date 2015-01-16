@@ -92,6 +92,12 @@
 @property (strong, nonatomic, readwrite) CBLManager *manager;
 
 /**
+ A scheduler that will be on a non-main thread.
+ */
+
+@property (strong, nonatomic, readwrite) RACScheduler *backgroundScheduler;
+
+/**
  The shared CBLListener instance, for replications.
  */
 
