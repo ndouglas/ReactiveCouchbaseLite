@@ -13,7 +13,7 @@
 typedef NSDictionary *(^CBLPropertiesTransformationBlock)(NSDictionary *document);
 
 @interface CBLReplication (Transformation)
-@property (strong) CBLPropertiesTransformationBlock propertiesTransformationBlock;
+@property (strong, nonatomic, readwrite) CBLPropertiesTransformationBlock propertiesTransformationBlock;
 @end
 
 @implementation CBLReplication (ReactiveCouchbaseLite)
