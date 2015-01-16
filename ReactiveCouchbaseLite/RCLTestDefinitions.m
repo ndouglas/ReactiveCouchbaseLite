@@ -149,6 +149,114 @@
 
 @end
 
+@implementation RCLTestCase
+@synthesize manager;
+@synthesize listener;
+@synthesize port;
+@synthesize testID;
+@synthesize testName;
+@synthesize peerName;
+@synthesize testDatabase;
+@synthesize peerDatabase;
+@synthesize peerURL;
+@synthesize pullReplication;
+@synthesize pushReplication;
+
+- (void)rcl_setupManager {
+    [CBLManager rcl_enableUsefulLogs];
+    self.manager = [CBLManager sharedInstance];
+}
+
+- (void)rcl_setupDatabase {
+    if (!self.manager) {
+        [self rcl_setupManager];
+    }
+    self.testID = @([[[NSUUID UUID] UUIDString] hash]);
+    self.testName = [NSString stringWithFormat:@"test_%@", self.testID];
+    NSError *error = nil;
+    XCTAssertTrue(self.testDatabase = [self.manager databaseNamed:self.testName error:&error], @"Error: %@", error);
+}
+
+- (void)rcl_setupPeer {
+    if (!self.testDatabase) {
+        [self rcl_setupDatabase];
+    }
+    self.peerName = [NSString stringWithFormat:@"peer_%@", self.testID ?: self.testName ?: self.testDatabase.name ?: @([[[NSUUID UUID] UUIDString] hash])];
+    NSError *error = nil;
+    XCTAssertTrue(self.peerDatabase = [self.manager databaseNamed:self.peerName error:&error], @"Error: %@", error);
+}
+
+- (void)rcl_setupListener {
+    if (!self.peerDatabase) {
+        [self rcl_setupPeer];
+    }
+    self.listener = [[CBLListener alloc] initWithManager:self.manager port:self.port ? self.port.unsignedIntegerValue : RCL_DEFAULT_LISTENER_PORT];
+    NSError *error = nil;
+    XCTAssertTrue([self.listener start:&error], @"Error: %@", error);
+    self.port = @(self.listener.port);
+    self.peerURL = [self.listener.URL URLByAppendingPathComponent:self.peerDatabase.name];
+}
+
+- (void)rcl_setupPushReplication {
+    if (!self.listener) {
+        [self rcl_setupListener];
+    }
+    NSError *error = nil;
+    XCTAssertTrue(self.pushReplication = [self.testDatabase createPushReplication:self.peerURL], @"Error: %@", error);
+    self.pushReplication.continuous = YES;
+    [self.pushReplication start];
+}
+
+- (void)rcl_setupPullReplication {
+    if (!self.listener) {
+        [self rcl_setupListener];
+    }
+    NSError *error = nil;
+    XCTAssertTrue(self.pullReplication = [self.testDatabase createPullReplication:self.peerURL], @"Error: %@", error);
+    self.pullReplication.continuous = YES;
+    [self.pullReplication start];
+}
+
+- (void)rcl_setupEverything {
+    [self rcl_setupPushReplication];
+    [self rcl_setupPullReplication];
+}
+
+- (void)rcl_tearDown {
+    NSError *error = nil;
+    if (self.pushReplication) {
+        [self.pushReplication stop];
+        self.pushReplication = nil;
+    }
+    if (self.pullReplication) {
+        [self.pullReplication stop];
+        self.pullReplication = nil;
+    }
+    if (self.listener) {
+        [self.listener stop];
+        self.listener = nil;
+    }
+    if (self.testDatabase) {
+        XCTAssertTrue([self.testDatabase deleteDatabase:&error], @"Error: %@", error);
+        self.testDatabase = nil;
+    }
+    if (self.peerDatabase) {
+        XCTAssertTrue([self.peerDatabase deleteDatabase:&error], @"Error: %@", error);
+        self.peerDatabase = nil;
+    }
+    if (self.manager) {
+        self.manager = nil;
+    }
+}
+
+- (void)tearDown {
+	[super tearDown];
+}
+
+
+@end
+
+
 @implementation CBLManager (RCLTestDefinitions)
 
 + (void)rcl_enableUsefulLogs {
