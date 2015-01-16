@@ -59,6 +59,26 @@
 
 - (void)rcl_expectError:(void (^)(NSError *error))errorHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description;
 
+/**
+ Updates the document with the specified block.
+ 
+ @param document The document to update.
+ @param updater The block executed on the document.
+ @param block A block executed when the document has been updated.
+ */
+
+- (void)rcl_updateDocument:(CBLDocument *)document withBlock:(BOOL (^)(CBLUnsavedRevision *newRevision))updater completionHandler:(void (^)(BOOL success, NSError *error))block;
+
+/**
+ Repeatedly updates the document by adding a new property with a UUID name and giving it a new UUID as a value.
+ 
+ @param document The document to update.
+ @param times The number of times to update the document.
+ @param interval The interval between updates.
+ */
+
+- (void)rcl_triviallyUpdateDocument:(CBLDocument *)document times:(NSUInteger)times interval:(NSTimeInterval)interval;
+
 @end
 
 @interface CBLManager (RCLTestDefinitions)

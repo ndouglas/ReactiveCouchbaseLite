@@ -124,6 +124,29 @@
     } timeout:timeout];
 }
 
+- (void)rcl_updateDocument:(CBLDocument *)document withBlock:(BOOL (^)(CBLUnsavedRevision *newRevision))updater completionHandler:(void (^)(BOOL success, NSError *error))block {
+    NSError *error = nil;
+    BOOL success = [document update:updater error:&error] != nil;
+    block(success, error);
+}
+
+- (void)rcl_triviallyUpdateDocument:(CBLDocument *)document times:(NSUInteger)times interval:(NSTimeInterval)interval {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self updateDocument:document withBlock:^BOOL(CBLUnsavedRevision *newRevision) {
+            newRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+            return YES;
+        } completionHandler:^(BOOL success, NSError *error) {
+            if (!success) {
+                NSLog(@"Error: %@", error);
+            }
+            XCTAssertTrue(success);
+            if (times > 0) {
+                [self triviallyUpdateDocument:document times:times - 1 interval:interval];
+            }
+        }];
+    });
+}
+
 @end
 
 @implementation CBLManager (RCLTestDefinitions)
