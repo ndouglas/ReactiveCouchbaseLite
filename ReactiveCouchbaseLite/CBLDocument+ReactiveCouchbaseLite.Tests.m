@@ -226,18 +226,61 @@
 }
 
 - (void)testNewRevision {
+    sleep(1);
 }
 
 - (void)testProperties {
+    sleep(1);
 }
 
 - (void)testUserProperties {
+    sleep(1);
 }
 
 - (void)testPutProperties {
+    sleep(1);
 }
 
 - (void)testResolveConflictsWithBlock {
+    NSString *documentID = [[NSUUID UUID] UUIDString];
+    [[self.testDatabase documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+        unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+        return YES;
+    } error:NULL];
+    [[self.peerDatabase documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+        unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+        return YES;
+    } error:NULL];
+    XCTAssertNotNil([self.testDatabase documentWithID:documentID]);
+    XCTAssertNotNil([self.peerDatabase documentWithID:documentID]);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.pushReplication.continuous = self.pullReplication.continuous = YES;
+        [self.pushReplication start];
+        [self.pullReplication start];
+    });
+    XCTestExpectation *expectation = [self expectationWithDescription:@"conflict resolved"];
+    RACDisposable *disposable = [[self.testDatabase rcl_resolveConflictsWithBlock:^NSDictionary *(NSArray *conflictingRevisions) {
+        NSLog(@"conflicting revisions: %@", conflictingRevisions);
+        [expectation fulfill];
+        return [[[conflictingRevisions[0] document] currentRevision] properties];
+    }]
+    subscribeNext:^(id x) {
+        XCTFail(@"signal not supposed to next: %@", x);
+    } error:^(NSError *error) {
+        XCTFail(@"signal not supposed to error: %@", error);
+    } completed:^{
+        XCTFail(@"signal not supposed to complete");
+    }];
+    [self waitForExpectationsWithTimeout:5.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Encountered error: %@", error);
+        }
+        [self.pushReplication stop];
+        [self.pullReplication stop];
+        [disposable dispose];
+    }];
 }
 
 @end

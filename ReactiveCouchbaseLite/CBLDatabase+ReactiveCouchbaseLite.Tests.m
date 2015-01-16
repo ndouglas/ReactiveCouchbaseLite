@@ -76,6 +76,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         }]
         catchTo:[RACSignal empty]];
     }] timeout:5.0 description:@"database deleted successfully"];
+    self.testDatabase = nil;
 }
 
 - (void)testDocumentWithID {

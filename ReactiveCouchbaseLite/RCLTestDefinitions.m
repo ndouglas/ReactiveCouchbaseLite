@@ -237,22 +237,17 @@
         self.listener = nil;
     }
     if (self.testDatabase) {
-        XCTAssertTrue([self.testDatabase deleteDatabase:&error], @"Error: %@", error);
+        //XCTAssertTrue([self.testDatabase deleteDatabase:&error], @"Error: %@", error);
         self.testDatabase = nil;
     }
     if (self.peerDatabase) {
-        XCTAssertTrue([self.peerDatabase deleteDatabase:&error], @"Error: %@", error);
+        //XCTAssertTrue([self.peerDatabase deleteDatabase:&error], @"Error: %@", error);
         self.peerDatabase = nil;
     }
     if (self.manager) {
         self.manager = nil;
     }
 }
-
-- (void)tearDown {
-	[super tearDown];
-}
-
 
 @end
 
