@@ -28,7 +28,7 @@
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_run", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_run]", self];
 }
 
 - (RACSignal *)rcl_flattenedRows {
@@ -37,7 +37,7 @@
     flattenMap:^RACSignal *(CBLQueryEnumerator *queryEnumerator) {
         return queryEnumerator.rac_sequence.signal;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_rows", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_rows]", self];
 }
 
 - (RACScheduler *)rcl_scheduler {

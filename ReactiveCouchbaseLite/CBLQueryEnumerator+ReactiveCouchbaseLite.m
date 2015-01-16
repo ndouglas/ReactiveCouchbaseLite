@@ -25,7 +25,7 @@
         [subscriber sendCompleted];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@ -rcl_nextRow]", self.description];
+    return [result setNameWithFormat:@"[%@ -rcl_nextRow]", self];
 }
 
 @end

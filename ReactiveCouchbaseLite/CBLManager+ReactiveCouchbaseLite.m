@@ -42,7 +42,7 @@ CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
     __block CBLManager *manager = RCLSharedInstanceCurrentOrNewManager(nil);
     return [[[RACSignal return:manager]
     deliverOn:manager.rcl_scheduler]
-    setNameWithFormat:@"%@ +rcl_sharedInstance", self];
+    setNameWithFormat:@"[%@ +rcl_sharedInstance]", self];
 }
 
 + (RACSignal *)rcl_log {
@@ -58,19 +58,21 @@ CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
 }
 
 + (RACSignal *)rcl_databaseNamed:(NSString *)name {
-    return [[self rcl_manager]
+    RACSignal *result = [[self rcl_manager]
     flattenMap:^RACSignal *(CBLManager *manager) {
         NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
         return [manager rcl_databaseNamed:name];
     }];
+    return [result setNameWithFormat:@"[%@ +rcl_databaseNamed: %@]", self, name];
 }
 
 + (RACSignal *)rcl_existingDatabaseNamed:(NSString *)name {
-    return [[self rcl_manager]
+    RACSignal *result = [[self rcl_manager]
     flattenMap:^RACSignal *(CBLManager *manager) {
         NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
         return [manager rcl_existingDatabaseNamed:name];
     }];
+    return [result setNameWithFormat:@"[%@ +rcl_existingDatabaseNamed: %@]", self, name];
 }
 
 - (RACSignal *)rcl_databaseNamed:(NSString *)name {
@@ -89,7 +91,7 @@ CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"%@ -rcl_databaseNamed: %@", result.name, name];
+    return [result setNameWithFormat:@"[%@ -rcl_databaseNamed: %@]", self, name];
 }
 
 - (RACSignal *)rcl_existingDatabaseNamed:(NSString *)name {
@@ -108,7 +110,7 @@ CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"%@ -rcl_existingDatabaseNamed: %@", result.name, name];
+    return [result setNameWithFormat:@"[%@ -rcl_existingDatabaseNamed: %@]", self, name];
 }
 
 - (void)rcl_setScheduler:(RACScheduler *)scheduler {

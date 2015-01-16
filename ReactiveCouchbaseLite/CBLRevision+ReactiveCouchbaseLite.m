@@ -26,7 +26,7 @@
         [subscriber sendCompleted];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_getRevisionHistory", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_getRevisionHistory]", self];
 }
 
 - (RACSignal *)rcl_attachmentNamed:(NSString *)name {
@@ -42,7 +42,7 @@
         [subscriber sendCompleted];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_attachmentNamed: %@", result.name, name];
+    return [result setNameWithFormat:@"[%@ -rcl_attachmentNamed: %@]", self, name];
 }
 
 - (RACScheduler *)rcl_scheduler {

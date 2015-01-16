@@ -42,7 +42,7 @@ static inline CBLSavedRevision *RCLCurrentOrNewSavedRevision(CBLSavedRevision *c
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_getRevisionHistory", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_getRevisionHistory]", self];
 }
 
 - (RACSignal *)rcl_attachmentNamed:(NSString *)name {
@@ -64,7 +64,7 @@ static inline CBLSavedRevision *RCLCurrentOrNewSavedRevision(CBLSavedRevision *c
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_attachmentNamed: %@", result.name, name];
+    return [result setNameWithFormat:@"[%@ -rcl_attachmentNamed: %@]", self, name];
 }
 
 - (RACSignal *)rcl_createRevision {
@@ -81,7 +81,7 @@ static inline CBLSavedRevision *RCLCurrentOrNewSavedRevision(CBLSavedRevision *c
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_createRevision", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_createRevision]", self];
 }
 
 - (RACSignal *)rcl_createRevisionWithProperties:(NSDictionary *)properties {
@@ -104,7 +104,7 @@ static inline CBLSavedRevision *RCLCurrentOrNewSavedRevision(CBLSavedRevision *c
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_createRevisionWithProperties: %@", result.name, properties];
+    return [result setNameWithFormat:@"[%@ -rcl_createRevisionWithProperties: %@]", self, properties];
 }
 
 - (RACSignal *)rcl_delete {
@@ -127,7 +127,7 @@ static inline CBLSavedRevision *RCLCurrentOrNewSavedRevision(CBLSavedRevision *c
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_delete", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_delete]", self];
 }
 
 @end

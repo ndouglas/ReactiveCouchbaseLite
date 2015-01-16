@@ -189,7 +189,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         }];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@ -rcl_putLocalDocumentWithProperties:%@ ID: %@]", self, properties, documentID];
+    return [result setNameWithFormat:@"[%@ -rcl_putLocalDocumentWithProperties: %@ ID: %@]", self, properties, documentID];
 }
 
 - (RACSignal *)rcl_deleteLocalDocumentWithID:(NSString *)documentID {

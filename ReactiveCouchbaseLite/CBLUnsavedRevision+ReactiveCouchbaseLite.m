@@ -26,7 +26,7 @@
         [subscriber sendCompleted];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_save", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_save]", self];
 }
 
 - (RACSignal *)rcl_saveAllowingConflict {
@@ -43,25 +43,25 @@
         [subscriber sendCompleted];
         return nil;
     }];
-    return [result setNameWithFormat:@"[%@] -rcl_saveAllowingConflict", result.name];
+    return [result setNameWithFormat:@"[%@ -rcl_saveAllowingConflict]", self];
 }
 
 - (RACSignal *)rcl_setAttachmentNamed:(NSString *)name withContentType:(NSString *)mimeType content:(NSData *)content {
     [self setAttachmentNamed:name withContentType:mimeType content:content];
     RACSignal *result = [RACSignal empty];
-    return [result setNameWithFormat:@"[%@] -rcl_setAttachmentNamed: %@ withContentType: %@ content: %@", result.name, name, mimeType, content];
+    return [result setNameWithFormat:@"[%@ -rcl_setAttachmentNamed: %@ withContentType: %@ content: %@]", self, name, mimeType, content];
 }
 
 - (RACSignal *)rcl_setAttachmentNamed:(NSString *)name withContentType:(NSString *)mimeType contentURL:(NSURL *)fileURL {
     [self setAttachmentNamed:name withContentType:mimeType contentURL:fileURL];
     RACSignal *result = [RACSignal empty];
-    return [result setNameWithFormat:@"[%@] -rcl_setAttachmentNamed: %@ withContentType: %@ contentURL: %@", result.name, name, mimeType, fileURL];
+    return [result setNameWithFormat:@"[%@ -rcl_setAttachmentNamed: %@ withContentType: %@ contentURL: %@]", self, name, mimeType, fileURL];
 }
 
 - (RACSignal *)rcl_removeAttachmentNamed:(NSString *)name {
     [self removeAttachmentNamed:name];
     RACSignal *result = [RACSignal empty];
-    return [result setNameWithFormat:@"[%@] -rcl_removeAttachmentNamed: %@", result.name, name];
+    return [result setNameWithFormat:@"[%@ -rcl_removeAttachmentNamed: %@]", self, name];
 }
 
 @end
