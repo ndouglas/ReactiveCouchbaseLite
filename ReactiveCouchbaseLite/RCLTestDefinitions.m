@@ -132,7 +132,7 @@
 
 - (void)rcl_triviallyUpdateDocument:(CBLDocument *)document times:(NSUInteger)times interval:(NSTimeInterval)interval {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self updateDocument:document withBlock:^BOOL(CBLUnsavedRevision *newRevision) {
+        [self rcl_updateDocument:document withBlock:^BOOL(CBLUnsavedRevision *newRevision) {
             newRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
             return YES;
         } completionHandler:^(BOOL success, NSError *error) {
@@ -141,7 +141,7 @@
             }
             XCTAssertTrue(success);
             if (times > 0) {
-                [self triviallyUpdateDocument:document times:times - 1 interval:interval];
+                [self rcl_triviallyUpdateDocument:document times:times - 1 interval:interval];
             }
         }];
     });
