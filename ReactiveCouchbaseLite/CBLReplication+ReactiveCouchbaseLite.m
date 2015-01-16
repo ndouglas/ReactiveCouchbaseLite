@@ -25,7 +25,11 @@ typedef NSDictionary *(^CBLPropertiesTransformationBlock)(NSDictionary *document
             [subscriber sendNext:document];
             return document;
         }];
-        return nil;
+        [self restart];
+        return [RACDisposable disposableWithBlock:^{
+            [self setPropertiesTransformationBlock:nil];
+            [self restart];
+        }];
     }];
     return [result setNameWithFormat:@"[%@ -rcl_transferredDocuments]", self];
 }
@@ -39,23 +43,30 @@ typedef NSDictionary *(^CBLPropertiesTransformationBlock)(NSDictionary *document
 
 - (RACSignal *)rcl_pendingPushDocumentIDs {
     NSCAssert(!self.pull, @"This method is unavailable on pull replications.");
-    RACSignal *result = [[[[[[[[NSNotificationCenter defaultCenter] rac_addObserverForName:kCBLReplicationChangeNotification object:self]
-    map:^NSSet *(NSNotification *_notification_) {
-        (void)_notification_;
+    RACSignal *result = [[[[RACObserve(self, changesCount)
+    map:^NSSet *(NSNumber *changesCount) {
+        (void)changesCount;
         return [self pendingDocumentIDs];
     }]
-    ignore:[NSSet set]]
-    distinctUntilChanged]
+    ignore:nil]
     combinePreviousWithStart:[NSSet set] reduce:^NSSet *(NSSet *previous, NSSet *current) {
         NSMutableSet *result = current.mutableCopy;
         [result minusSet:previous];
         return result;
     }]
-    ignore:[NSSet set]]
     flattenMap:^RACSignal *(NSSet *newPendingDocumentIDs) {
         return newPendingDocumentIDs.rac_sequence.signal;
     }];
-    return [result setNameWithFormat:@"[%@ -rcl_pendingDocumentIDs]", self];
+    return [result setNameWithFormat:@"[%@ -rcl_pendingPushDocumentIDs]", self];
+}
+
+- (RACSignal *)rcl_pendingPushDocuments {
+    NSCAssert(!self.pull, @"This method is unavailable on pull replications.");
+    RACSignal *result = [[self rcl_pendingPushDocumentIDs]
+    flattenMap:^RACSignal *(NSString *pendingPushDocumentID) {
+        return [self.localDatabase rcl_documentWithID:pendingPushDocumentID];
+    }];
+    return [result setNameWithFormat:@"[%@ -rcl_pendingPushDocuments]", self];
 }
 
 @end
