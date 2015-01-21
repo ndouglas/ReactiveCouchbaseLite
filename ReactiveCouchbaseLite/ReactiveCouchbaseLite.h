@@ -12,7 +12,6 @@
 #import "CBLLiveQuery+ReactiveCouchbaseLite.h"
 #import "CBLManager+ReactiveCouchbaseLite.h"
 #import "CBLQuery+ReactiveCouchbaseLite.h"
-#import "CBLQueryEnumerator+ReactiveCouchbaseLite.h"
 #import "CBLReplication+ReactiveCouchbaseLite.h"
 #import "CBLRevision+ReactiveCouchbaseLite.h"
 #import "CBLSavedRevision+ReactiveCouchbaseLite.h"
