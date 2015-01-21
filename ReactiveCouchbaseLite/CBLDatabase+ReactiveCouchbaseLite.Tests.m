@@ -280,7 +280,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         return [unsavedRevision rcl_save];
     }]
     then:^RACSignal *{
-        return [[[[[CBLManager rcl_databaseNamed:self.testName]
+        return [[[[CBLManager rcl_databaseNamed:self.testName]
         flattenMap:^RACSignal *(CBLDatabase *database) {
             return [database rcl_slowQueryWithMap:^(NSDictionary *document, CBLMapEmitBlock emit) {
                 emit(document[@"_id"], document);
@@ -290,10 +290,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
             return [query rcl_run];
         }]
         flattenMap:^RACSignal *(CBLQueryEnumerator *enumerator) {
-            return [enumerator rcl_nextRow];
-        }]
-        flattenMap:^RACStream *(CBLQueryRow *row) {
-            XCTAssertEqualObjects(row.documentID, ID);
+            XCTAssertEqualObjects([[enumerator nextRow] documentID], ID);
             return [RACSignal empty];
         }];
     }]
