@@ -71,8 +71,7 @@
 
 - (void)testIsOnScheduler {
     [self rcl_expectNext:^(CBLManager *manager) {
-    } signal:[CBLManager rcl_manager]
-    timeout:5.0 description:@"sharedInstance was delivered on a correct thread"];
+    } signal:[CBLManager rcl_manager] timeout:5.0 description:@"sharedInstance was delivered on a correct thread"];
 }
 
 @end
