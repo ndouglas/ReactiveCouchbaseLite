@@ -80,48 +80,6 @@ extern CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current);
 - (RACSignal *)rcl_revisionWithID:(NSString *)revisionID;
 
 /**
- The full revision history of the document.
- 
- @return A signal streaming the full revision history of the document.
- */
-
-- (RACSignal *)rcl_getRevisionHistory;
-
-/**
- The full revision history of the document, filtered by the specified block.
- 
- @block A block used to accept or reject individual revisions in the revision history.
- @return A signal streaming the filtered revision history of the document.
- */
-
-- (RACSignal *)rcl_getRevisionHistoryFilteredWithBlock:(BOOL (^)(CBLSavedRevision *revision))block;
-
-/**
- The conflicting revisions of the document.
- 
- @return A signal that returns conflicting versions of the document or an error if the operation failed.
- */
-
-- (RACSignal *)rcl_getConflictingRevisions;
-
-/**
- All leaf revisions of the document.
- 
- @return A signal that returns leaf versions of the document or an error if the operation failed.
- */
-
-- (RACSignal *)rcl_getLeafRevisions;
-
-/**
- A new, unsaved revision of the document whose parent is the current revision,
- or which will be the first revision for an unsaved document.
- 
- @return A signal that returns a new revision of the document.
- */
-
-- (RACSignal *)rcl_newRevision;
-
-/**
  The properties of the document.
  
  @return A signal streaming the document properties.
