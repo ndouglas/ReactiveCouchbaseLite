@@ -110,35 +110,22 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 
 - (void)testExistingDocumentWithID {
     NSString *ID = [[NSUUID UUID] UUIDString];
-    [self rcl_expectCompletionFromSignal:[[[[[[self.testDatabase documentWithID:ID] newRevision] rcl_save]
-    ignoreValues]
-    then:^RACSignal *{
-        return [[self.testDatabase existingDocumentWithID:ID] rcl_delete];
-    }]
+    NSError *error = nil;
+    [[self.testDatabase documentWithID:ID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+        return YES;
+    } error:&error];
+    [self rcl_expectCompletionFromSignal:[[[self.testDatabase existingDocumentWithID:ID] rcl_delete]
     then:^RACSignal *{
         return [[self.testDatabase rcl_existingDocumentWithID:ID]
         catchTo:[RACSignal empty]];
     }]
     timeout:5.0 description:@"document created/opened/deleted successfully"];
+    
     ID = [[NSUUID UUID] UUIDString];
-    [self rcl_expectCompletionFromSignal:[[[[[[[[[[[CBLManager rcl_databaseNamed:self.testName]
-    flattenMap:^RACSignal *(CBLDatabase *database) {
-        return [database rcl_documentWithID:ID];
-    }]
-    flattenMap:^RACSignal *(CBLDocument *document) {
-        return [document rcl_newRevision];
-    }]
-    flattenMap:^RACSignal *(CBLUnsavedRevision *unsavedRevision) {
-        return [unsavedRevision rcl_save];
-    }]
-    doNext:^(id _next_) {
-        NSLog(@"Next");
-    }]
-    doError:^(NSError *error) {
-        NSLog(@"Error");
-    }]
-    doCompleted:^{
-        NSLog(@"Completed");
+    [self rcl_expectCompletionFromSignal:[[[[[[RACSignal empty]
+    then:^RACSignal *{
+        return [RACSignal empty];
     }]
     then:^RACSignal *{
         return [[CBLManager rcl_databaseNamed:self.testName]
@@ -269,15 +256,13 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 
 - (void)testSlowQueryWithMap {
     NSString *ID = [[NSUUID UUID] UUIDString];
-    [self rcl_expectCompletionFromSignal:[[[[[CBLManager rcl_databaseNamed:self.testName]
+    [self rcl_expectCompletionFromSignal:[[[[CBLManager rcl_databaseNamed:self.testName]
     flattenMap:^RACSignal *(CBLDatabase *database) {
         return [database rcl_documentWithID:ID];
     }]
     flattenMap:^RACSignal *(CBLDocument *document) {
-        return [document rcl_newRevision];
-    }]
-    flattenMap:^RACSignal *(CBLUnsavedRevision *unsavedRevision) {
-        return [unsavedRevision rcl_save];
+        [[document newRevision] save:NULL];
+        return [RACSignal empty];
     }]
     then:^RACSignal *{
         return [[[[CBLManager rcl_databaseNamed:self.testName]
