@@ -8,6 +8,7 @@
 //
 
 #import "CBLManager+ReactiveCouchbaseLite.h"
+#import "ReactiveCouchbaseLite.h"
 #import <objc/runtime.h>
 
 static char CBLManagerAssociatedSchedulerKey;
@@ -78,7 +79,7 @@ CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
 - (RACSignal *)rcl_databaseNamed:(NSString *)name {
     CBLManager *manager = RCLSharedInstanceCurrentOrNewManager(self);
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [manager.rcl_scheduler schedule:^{
+        [manager.rcl_scheduler rcl_runOrScheduleBlock:^{
             NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
             CBLDatabase *database = [manager databaseNamed:name error:&error];
@@ -97,7 +98,7 @@ CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
 - (RACSignal *)rcl_existingDatabaseNamed:(NSString *)name {
     CBLManager *manager = RCLSharedInstanceCurrentOrNewManager(self);
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [manager.rcl_scheduler schedule:^{
+        [manager.rcl_scheduler rcl_runOrScheduleBlock:^{
             NSCAssert(manager.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
             CBLDatabase *database = [manager existingDatabaseNamed:name error:&error];

@@ -17,7 +17,7 @@
     RACSignal *result = [[[RACObserve(self, rows)
     ignore:nil]
     initially:^{
-        [self.rcl_scheduler schedule:^{
+        [self.rcl_scheduler rcl_runOrScheduleBlock:^{
             NSAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
             [self start];
         }];

@@ -16,7 +16,7 @@
     NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [self runAsync:^(CBLQueryEnumerator *queryEnumerator, NSError *error) {
-            [self.database.rcl_scheduler schedule:^{
+            [self.database.rcl_scheduler rcl_runOrScheduleBlock:^{
                 NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
                 if (queryEnumerator) {
                     [subscriber sendNext:queryEnumerator];
