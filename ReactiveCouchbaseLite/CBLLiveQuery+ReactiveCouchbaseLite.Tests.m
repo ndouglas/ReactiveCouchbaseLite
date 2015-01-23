@@ -104,31 +104,24 @@
     [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID3] times:6 interval:0.1];
     [self rcl_expectNexts:@[
         ^(CBLQueryRow *_row_) {
-            NSLog(@"Reached line: %@", @(__LINE__));
             XCTAssertNotNil(_row_);
         },
         ^(CBLQueryRow *_row_) {
-            NSLog(@"Reached line: %@", @(__LINE__));
             XCTAssertNotNil(_row_);
         },
         ^(CBLQueryRow *_row_) {
-            NSLog(@"Reached line: %@", @(__LINE__));
             XCTAssertNotNil(_row_);
         },
         ^(CBLQueryRow *_row_) {
-            NSLog(@"Reached line: %@", @(__LINE__));
             XCTAssertNotNil(_row_);
         },
         ^(CBLQueryRow *_row_) {
-            NSLog(@"Reached line: %@", @(__LINE__));
             XCTAssertNotNil(_row_);
         },
         ^(CBLQueryRow *_row_) {
-            NSLog(@"Reached line: %@", @(__LINE__));
             XCTAssertNotNil(_row_);
         },
     ] signal:[liveQuerySignal take:6] timeout:5.0 description:@"all updates received"];
-    NSLog(@"%@", liveQuerySignal);
 }
 
 - (void)testMultipleChanges {
