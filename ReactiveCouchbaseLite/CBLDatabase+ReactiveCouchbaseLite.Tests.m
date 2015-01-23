@@ -439,7 +439,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 - (void)testDatabaseChangeNotifications {
     NSString *documentID = [[NSUUID UUID] UUIDString];
     CBLDocument *document = [self.testDatabase documentWithID:documentID];
-    [self rcl_triviallyUpdateDocument:document times:2 interval:0.1];
+    [self rcl_triviallyUpdateDocument:document times:3 interval:0.1];
     [self rcl_expectNexts:@[
         ^(CBLDatabaseChange *databaseChange) {
             XCTAssertTrue([databaseChange.revisionID characterAtIndex:0] == '1');
@@ -450,7 +450,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         ^(CBLDatabaseChange *databaseChange) {
              XCTAssertTrue([databaseChange.revisionID characterAtIndex:0] == '3');
         },
-    ] signal:[self.testDatabase rcl_databaseChangeNotifications] timeout:5.0 description:@"received database change notifications"];
+    ] signal:[[self.testDatabase rcl_databaseChangeNotifications] take:3] timeout:5.0 description:@"received database change notifications"];
 }
 
 - (void)testDeleteDocumentWithID {

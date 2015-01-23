@@ -93,17 +93,14 @@
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     XCTestExpectation *expectation2 = [self expectationWithDescription:@"all next handlers executed"];
     __block NSUInteger step = 0;
-    [self rcl_expectation:expectation signal:signal subscribeNext:^(id next) {
-        XCTAssertTrue(nextHandlers.count > step, @"insufficient number of next handlers provided");
+    RACDisposable *disposable = [signal subscribeNext:^(id next) {
         @synchronized (self) {
             void (^nextHandler)(id next) = nil;
             @try {
+                XCTAssertTrue(step < nextHandlers.count, @"insufficient number of next handlers provided");
                 nextHandler = nextHandlers[step];
+                XCTAssertNotNil(nextHandler, @"insufficient number of next handlers provided");
                 nextHandler(next);
-                if (step == nextHandlers.count - 1) {
-                    [expectation fulfill];
-                    [expectation2 fulfill];
-                }
                 step++;
             } @catch (NSException *exception) {
                 NSLog(@"Exception: %@", exception);
@@ -111,9 +108,17 @@
         }
     } error:^(NSError *error) {
         XCTFail(@"Encountered error: %@", error);
-    } completion:^{
+    } completed:^{
         XCTAssertTrue(step == nextHandlers.count, @"not all next handlers invoked");
-    } timeout:timeout];
+        [expectation fulfill];
+        [expectation2 fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:timeout handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Expectation '%@' for signal '%@' failed with error: %@", expectation.description, signal, error);
+        }
+        [disposable dispose];
+    }];
 }
 
 - (void)rcl_expectError:(void (^)(NSError *error))errorHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
@@ -131,20 +136,20 @@
 }
 
 - (void)rcl_triviallyUpdateDocument:(CBLDocument *)document times:(NSUInteger)times interval:(NSTimeInterval)interval {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self rcl_updateDocument:document withBlock:^BOOL(CBLUnsavedRevision *newRevision) {
-            newRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
-            return YES;
-        } completionHandler:^(BOOL success, NSError *error) {
-            if (!success) {
-                NSLog(@"Error: %@", error);
-            }
-            XCTAssertTrue(success);
-            if (times > 0) {
+    if (times) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self rcl_updateDocument:document withBlock:^BOOL(CBLUnsavedRevision *newRevision) {
+                newRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+                return YES;
+            } completionHandler:^(BOOL success, NSError *error) {
+                if (!success) {
+                    NSLog(@"Error: %@", error);
+                }
+                XCTAssertTrue(success);
                 [self rcl_triviallyUpdateDocument:document times:times - 1 interval:interval];
-            }
-        }];
-    });
+            }];
+        });
+    }
 }
 
 @end

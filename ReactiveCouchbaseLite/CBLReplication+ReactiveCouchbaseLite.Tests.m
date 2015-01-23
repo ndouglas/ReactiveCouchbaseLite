@@ -29,7 +29,7 @@
 
 - (void)testPendingPushDocumentIDs {
 	NSString *documentID = [[NSUUID UUID] UUIDString];
-    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:documentID] times:1 interval:1];
+    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:documentID] times:1 interval:0.1];
     [self rcl_expectNexts:@[
         ^(NSString *pendingDocumentID) {
             XCTAssertTrue([pendingDocumentID isEqualToString:documentID]);
@@ -39,7 +39,7 @@
 
 - (void)testTransferredDocuments {
 	NSString *documentID = [[NSUUID UUID] UUIDString];
-    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:documentID] times:3 interval:1];
+    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:documentID] times:3 interval:0.1];
     [self rcl_expectNexts:@[
         ^(NSDictionary *transferringDocument) {
             XCTAssertTrue([transferringDocument[@"_id"] isEqualToString:documentID]);

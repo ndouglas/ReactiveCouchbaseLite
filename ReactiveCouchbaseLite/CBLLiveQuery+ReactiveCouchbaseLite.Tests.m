@@ -45,7 +45,7 @@
         return result;
     }]
     timeout:5.0 description:@"observed initial value for rows"];
-    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:[[NSUUID UUID] UUIDString]] times:1 interval:1.0];
+    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:[[NSUUID UUID] UUIDString]] times:1 interval:0.1];
     [self rcl_expectCompletionFromSignal:[[[liveQuerySignal
     doCompleted:^{
         XCTFail(@"This signal is not supposed to complete.");
@@ -57,7 +57,7 @@
         return result;
     }]
     timeout:5.0 description:@"observed initial value for rows"];
-    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:[[NSUUID UUID] UUIDString]] times:1 interval:1.0];
+    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:[[NSUUID UUID] UUIDString]] times:1 interval:0.1];
     [self rcl_expectCompletionFromSignal:[[liveQuerySignal
     skip:1]
     takeUntilBlock:^BOOL (CBLQueryEnumerator *rows) {
@@ -78,7 +78,7 @@
         return [liveQuery rcl_changes];
     }];
     NSString *UUID1 = [[NSUUID UUID] UUIDString];
-    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID1] times:1 interval:1.0];
+    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID1] times:1 interval:0.1];
     [self rcl_expectCompletionFromSignal:[[liveQuerySignal
     doCompleted:^{
         XCTFail(@"This signal is not supposed to complete.");
@@ -89,7 +89,7 @@
     }]
     timeout:5.0 description:@"observed first added row"];
     NSString *UUID2 = [[NSUUID UUID] UUIDString];
-    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID2] times:1 interval:1.0];
+    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID2] times:1 interval:0.1];
     [self rcl_expectCompletionFromSignal:[[[liveQuerySignal
     doCompleted:^{
         XCTFail(@"This signal is not supposed to complete.");
@@ -101,14 +101,33 @@
     ignoreValues]
     timeout:5.0 description:@"observed second added row"];
     NSString *UUID3 = [[NSUUID UUID] UUIDString];
-    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID3] times:1 interval:1.0];
-    [self rcl_expectCompletionFromSignal:[[liveQuerySignal
-    takeUntilBlock:^BOOL (CBLQueryRow *row) {
-        BOOL result = [row.key isEqualToString:UUID3];
-        return result;
-    }]
-    ignoreValues]
-    timeout:5.0 description:@"observed third added row"];
+    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID3] times:6 interval:0.1];
+    [self rcl_expectNexts:@[
+        ^(CBLQueryRow *_row_) {
+            NSLog(@"Reached line: %@", @(__LINE__));
+            XCTAssertNotNil(_row_);
+        },
+        ^(CBLQueryRow *_row_) {
+            NSLog(@"Reached line: %@", @(__LINE__));
+            XCTAssertNotNil(_row_);
+        },
+        ^(CBLQueryRow *_row_) {
+            NSLog(@"Reached line: %@", @(__LINE__));
+            XCTAssertNotNil(_row_);
+        },
+        ^(CBLQueryRow *_row_) {
+            NSLog(@"Reached line: %@", @(__LINE__));
+            XCTAssertNotNil(_row_);
+        },
+        ^(CBLQueryRow *_row_) {
+            NSLog(@"Reached line: %@", @(__LINE__));
+            XCTAssertNotNil(_row_);
+        },
+        ^(CBLQueryRow *_row_) {
+            NSLog(@"Reached line: %@", @(__LINE__));
+            XCTAssertNotNil(_row_);
+        },
+    ] signal:[liveQuerySignal take:6] timeout:5.0 description:@"all updates received"];
     NSLog(@"%@", liveQuerySignal);
 }
 
@@ -124,9 +143,9 @@
     NSString *UUID1 = [[NSUUID UUID] UUIDString];
     NSString *UUID2 = [[NSUUID UUID] UUIDString];
     NSString *UUID3 = [[NSUUID UUID] UUIDString];
-    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID1] times:1 interval:1.0];
-    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID2] times:1 interval:1.0];
-    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID3] times:1 interval:1.0];
+    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID1] times:1 interval:0.1];
+    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID2] times:1 interval:0.1];
+    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID3] times:1 interval:0.1];
     __block BOOL result1 = NO;
     __block BOOL result2 = NO;
     __block BOOL result3 = NO;
