@@ -10,7 +10,6 @@
 #import "RCLDefinitions.h"
 #import "CBLQuery+ReactiveCouchbaseLite.h"
 
-
 @interface CBLLiveQuery (ReactiveCouchbaseLite)
 
 /**
