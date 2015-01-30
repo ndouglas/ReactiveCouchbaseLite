@@ -163,6 +163,7 @@
 @synthesize peerName;
 @synthesize testDatabase;
 @synthesize peerDatabase;
+@synthesize testURL;
 @synthesize peerURL;
 @synthesize pullReplication;
 @synthesize pushReplication;
@@ -180,6 +181,7 @@
     self.testName = [NSString stringWithFormat:@"test_%@", self.testID];
     NSError *error = nil;
     XCTAssertTrue(self.testDatabase = [self.manager databaseNamed:self.testName error:&error], @"Error: %@", error);
+    NSLog(@"Test Database Name: %@", self.testDatabase.name);
 }
 
 - (void)rcl_setupPeer {
@@ -189,6 +191,7 @@
     self.peerName = [NSString stringWithFormat:@"peer_%@", self.testID ?: self.testName ?: self.testDatabase.name ?: @([[[NSUUID UUID] UUIDString] hash])];
     NSError *error = nil;
     XCTAssertTrue(self.peerDatabase = [self.manager databaseNamed:self.peerName error:&error], @"Error: %@", error);
+    NSLog(@"Peer Database Name: %@", self.peerDatabase.name);
 }
 
 - (void)rcl_setupListener {
@@ -199,7 +202,11 @@
     NSError *error = nil;
     XCTAssertTrue([self.listener start:&error], @"Error: %@", error);
     self.port = @(self.listener.port);
+    NSLog(@"Listening on port: %@", self.port);
+    self.testURL = [self.listener.URL URLByAppendingPathComponent:self.testDatabase.name];
+    NSLog(@"Test URL: %@", self.testURL);
     self.peerURL = [self.listener.URL URLByAppendingPathComponent:self.peerDatabase.name];
+    NSLog(@"Peer URL: %@", self.peerURL);
 }
 
 - (void)rcl_setupPushReplication {
@@ -210,6 +217,7 @@
     XCTAssertTrue(self.pushReplication = [self.testDatabase createPushReplication:self.peerURL], @"Error: %@", error);
     self.pushReplication.continuous = YES;
     [self.pushReplication start];
+    NSLog(@"Push replication started.");
 }
 
 - (void)rcl_setupPullReplication {
@@ -220,6 +228,7 @@
     XCTAssertTrue(self.pullReplication = [self.testDatabase createPullReplication:self.peerURL], @"Error: %@", error);
     self.pullReplication.continuous = YES;
     [self.pullReplication start];
+    NSLog(@"Pull replication started.");
 }
 
 - (void)rcl_setupEverything {

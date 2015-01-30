@@ -134,6 +134,12 @@
 @property (strong, nonatomic, readwrite) CBLDatabase *peerDatabase;
 
 /**
+ The URL of the test database.
+ */
+
+@property (strong, nonatomic, readwrite) NSURL *testURL;
+
+/**
  The URL of the peer database.
  */
 
