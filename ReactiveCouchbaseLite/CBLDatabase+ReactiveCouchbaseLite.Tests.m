@@ -146,6 +146,32 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     timeout:5.0 description:@"document created/opened/deleted successfully"];
 }
 
+- (void)testExistingDocumentWithIDDefaultProperties {
+    NSString *ID = [[NSUUID UUID] UUIDString];
+    [self rcl_expectCompletionFromSignal:[[[[[RACSignal empty]
+    then:^RACSignal *{
+        return [[CBLManager rcl_databaseNamed:self.testName]
+        flattenMap:^RACSignal *(CBLDatabase *database) {
+            return [database rcl_existingDocumentWithID:ID defaultProperties:@{
+                @"UUID" : ID,
+            }];
+        }];
+    }]
+    flattenMap:^RACSignal *(CBLDocument *document) {
+        XCTAssertTrue([document.properties[@"UUID"] isEqualToString:ID]);
+        return [document rcl_delete];
+    }]
+    then:^RACSignal *{
+        return [[CBLManager rcl_databaseNamed:self.testName]
+        flattenMap:^RACSignal *(CBLDatabase *database) {
+            return [database rcl_existingDocumentWithID:ID];
+        }];
+    }]
+    catchTo:[RACSignal empty]]
+    timeout:5.0 description:@"document created/opened/deleted successfully"];
+}
+
+
 - (void)testExistingLocalDocumentWithID {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self rcl_expectCompletionFromSignal:[[[[[[self.testDatabase rcl_existingLocalDocumentWithID:ID]
