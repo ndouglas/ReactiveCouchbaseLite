@@ -13,7 +13,7 @@
 CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
     __block CBLDocument *result = nil;
     if (!current.rcl_isOnScheduler) {
-        result = [RCLCurrentOrNewDatabase(current.database) existingDocumentWithID:current.documentID];
+        result = [RCLCurrentOrNewDatabase(current.database) documentWithID:current.documentID];
     } else {
         result = current;
     }
