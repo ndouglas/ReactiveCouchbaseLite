@@ -11,4 +11,12 @@
 
 @interface CBLModel (ReactiveCouchbaseLite)
 
+/**
+ Indicates when the model's properties were changed externally.
+
+ @return A signal that sends references to this model object whenever it is updated externally.
+ */
+
+- (RACSignal *)rcl_didLoadFromDocument;
+
 @end

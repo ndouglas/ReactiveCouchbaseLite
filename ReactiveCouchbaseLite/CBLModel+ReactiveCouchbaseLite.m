@@ -12,4 +12,10 @@
 
 @implementation CBLModel (ReactiveCouchbaseLite)
 
+- (RACSignal *)rcl_didLoadFromDocument {
+    return [[[self rac_signalForSelector:@selector(didLoadFromDocument)]
+        mapReplace:self]
+        setNameWithFormat:@"[%@ -rcl_didLoadFromDocument]", self];
+}
+
 @end
