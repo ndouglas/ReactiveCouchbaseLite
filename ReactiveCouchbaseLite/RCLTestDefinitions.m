@@ -12,7 +12,7 @@
 
 @implementation XCTestCase (ReactiveCouchbaseLite)
 
-- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal subscribeNext:(void (^)(id next))nextHandler error:(void (^)(NSError *error))errorHandler completion:(void (^)(void))completionHandler timeout:(NSTimeInterval)timeout {
+- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal initially:(void (^)(void))initialBlock subscribeNext:(void (^)(id next))nextHandler error:(void (^)(NSError *error))errorHandler completion:(void (^)(void))completionHandler timeout:(NSTimeInterval)timeout {
     __block BOOL nextEncountered = NO;
     nextHandler = nextHandler ?: ^(id next) {
         XCTFail(@"Expectation '%@' for signal '%@' received unexpected next: %@", expectation.description, signal, next);
@@ -42,6 +42,7 @@
             NSLog(@"Ignoring post-test completion for expectation '%@' for signal '%@'.", expectation.description, signal);
         }
     }];
+    initialBlock();
     [self waitForExpectationsWithTimeout:timeout handler:^(NSError *error) {
         if (error) {
             XCTFail(@"Expectation '%@' for signal '%@' failed with error: %@", expectation.description, signal, error);
@@ -50,46 +51,54 @@
     }];
 }
 
-- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal subscribeNext:(void (^)(id))nextHandler error:(void (^)(NSError *))errorHandler timeout:(NSTimeInterval)timeout {
-    [self rcl_expectation:expectation signal:[signal take:1] subscribeNext:nextHandler error:errorHandler completion:nil timeout:timeout];
+- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal initially:(void (^)(void))initialBlock subscribeNext:(void (^)(id))nextHandler error:(void (^)(NSError *))errorHandler timeout:(NSTimeInterval)timeout {
+    [self rcl_expectation:expectation signal:[signal take:1] initially:initialBlock subscribeNext:nextHandler error:errorHandler completion:nil timeout:timeout];
 }
 
-- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal subscribeNext:(void (^)(id))nextHandler completion:(void (^)(void))completionHandler timeout:(NSTimeInterval)timeout {
-    [self rcl_expectation:expectation signal:[signal take:1] subscribeNext:nextHandler error:nil completion:completionHandler timeout:timeout];
+- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal initially:(void (^)(void))initialBlock subscribeNext:(void (^)(id))nextHandler completion:(void (^)(void))completionHandler timeout:(NSTimeInterval)timeout {
+    [self rcl_expectation:expectation signal:[signal take:1] initially:initialBlock subscribeNext:nextHandler error:nil completion:completionHandler timeout:timeout];
 }
 
-- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal subscribeNext:(void (^)(id))nextHandler timeout:(NSTimeInterval)timeout {
-    [self rcl_expectation:expectation signal:[signal take:1] subscribeNext:nextHandler error:nil completion:nil timeout:timeout];
+- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal initially:(void (^)(void))initialBlock subscribeNext:(void (^)(id))nextHandler timeout:(NSTimeInterval)timeout {
+    [self rcl_expectation:expectation signal:[signal take:1] initially:initialBlock subscribeNext:nextHandler error:nil completion:nil timeout:timeout];
 }
 
-- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal subscribeError:(void (^)(NSError *))errorHandler completion:(void (^)(void))completionHandler timeout:(NSTimeInterval)timeout {
-    [self rcl_expectation:expectation signal:[signal take:1] subscribeNext:nil error:errorHandler completion:completionHandler timeout:timeout];
+- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal initially:(void (^)(void))initialBlock subscribeError:(void (^)(NSError *))errorHandler completion:(void (^)(void))completionHandler timeout:(NSTimeInterval)timeout {
+    [self rcl_expectation:expectation signal:[signal take:1] initially:initialBlock subscribeNext:nil error:errorHandler completion:completionHandler timeout:timeout];
 }
 
-- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal subscribeError:(void (^)(NSError *))errorHandler timeout:(NSTimeInterval)timeout {
-    [self rcl_expectation:expectation signal:[signal take:1] subscribeNext:nil error:errorHandler completion:nil timeout:timeout];
+- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal initially:(void (^)(void))initialBlock subscribeError:(void (^)(NSError *))errorHandler timeout:(NSTimeInterval)timeout {
+    [self rcl_expectation:expectation signal:[signal take:1] initially:initialBlock subscribeNext:nil error:errorHandler completion:nil timeout:timeout];
 }
 
-- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal subscribeCompletion:(void (^)(void))completionHandler timeout:(NSTimeInterval)timeout {
-    [self rcl_expectation:expectation signal:[signal take:1] subscribeNext:nil error:nil completion:completionHandler timeout:timeout];
+- (void)rcl_expectation:(XCTestExpectation *)expectation signal:(RACSignal *)signal initially:(void (^)(void))initialBlock subscribeCompletion:(void (^)(void))completionHandler timeout:(NSTimeInterval)timeout {
+    [self rcl_expectation:expectation signal:[signal take:1] initially:initialBlock subscribeNext:nil error:nil completion:completionHandler timeout:timeout];
 }
 
-- (void)rcl_expectCompletionFromSignal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
+- (void)rcl_expectCompletionFromSignal:(RACSignal *)signal initially:(void (^)(void))initialBlock timeout:(NSTimeInterval)timeout description:(NSString *)description {
     XCTestExpectation *expectation = [self expectationWithDescription:description];
-    [self rcl_expectation:expectation signal:[signal take:1] subscribeCompletion:^{
+    [self rcl_expectation:expectation signal:[signal take:1] initially:initialBlock subscribeCompletion:^{
         [expectation fulfill];
     } timeout:timeout];
 }
 
-- (void)rcl_expectNext:(void (^)(id next))nextHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
+- (void)rcl_expectCompletionFromSignal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
+    [self rcl_expectCompletionFromSignal:signal initially:^{;} timeout:timeout description:description];
+}
+
+- (void)rcl_expectNext:(void (^)(id next))nextHandler signal:(RACSignal *)signal initially:(void (^)(void))initialBlock timeout:(NSTimeInterval)timeout description:(NSString *)description {
     XCTestExpectation *expectation = [self expectationWithDescription:description];
-    [self rcl_expectation:expectation signal:[signal take:1] subscribeNext:^(id next) {
+    [self rcl_expectation:expectation signal:[signal take:1] initially:initialBlock subscribeNext:^(id next) {
         nextHandler(next);
         [expectation fulfill];
     } timeout:timeout];
 }
 
-- (void)rcl_expectNexts:(NSArray *)nextHandlers signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
+- (void)rcl_expectNext:(void (^)(id next))nextHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
+    [self rcl_expectNext:nextHandler signal:signal initially:^{;} timeout:timeout description:description];
+}
+
+- (void)rcl_expectNexts:(NSArray *)nextHandlers signal:(RACSignal *)signal initially:(void (^)(void))initialBlock timeout:(NSTimeInterval)timeout description:(NSString *)description {
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     XCTestExpectation *expectation2 = [self expectationWithDescription:@"all next handlers executed"];
     __block NSUInteger step = 0;
@@ -113,6 +122,7 @@
         [expectation fulfill];
         [expectation2 fulfill];
     }];
+    initialBlock();
     [self waitForExpectationsWithTimeout:timeout handler:^(NSError *error) {
         if (error) {
             XCTFail(@"Expectation '%@' for signal '%@' failed with error: %@", expectation.description, signal, error);
@@ -121,12 +131,21 @@
     }];
 }
 
-- (void)rcl_expectError:(void (^)(NSError *error))errorHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
+- (void)rcl_expectNexts:(NSArray *)nextHandlers signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
+    [self rcl_expectNexts:nextHandlers signal:signal initially:^{;} timeout:timeout description:description];
+}
+
+
+- (void)rcl_expectError:(void (^)(NSError *error))errorHandler signal:(RACSignal *)signal initially:(void (^)(void))initialBlock timeout:(NSTimeInterval)timeout description:(NSString *)description {
     XCTestExpectation *expectation = [self expectationWithDescription:description];
-    [self rcl_expectation:expectation signal:[signal take:1] subscribeError:^(NSError *error) {
+    [self rcl_expectation:expectation signal:[signal take:1] initially:initialBlock subscribeError:^(NSError *error) {
         errorHandler(error);
         [expectation fulfill];
     } timeout:timeout];
+}
+
+- (void)rcl_expectError:(void (^)(NSError *error))errorHandler signal:(RACSignal *)signal timeout:(NSTimeInterval)timeout description:(NSString *)description {
+    [self rcl_expectError:errorHandler signal:signal initially:^{;} timeout:timeout description:description];
 }
 
 - (void)rcl_updateDocument:(CBLDocument *)document withBlock:(BOOL (^)(CBLUnsavedRevision *newRevision))updater completionHandler:(void (^)(BOOL success, NSError *error))block {
@@ -237,7 +256,6 @@
 }
 
 - (void)rcl_tearDown {
-    NSError *error = nil;
     if (self.pushReplication) {
         [self.pushReplication stop];
         self.pushReplication = nil;
