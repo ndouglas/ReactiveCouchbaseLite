@@ -8,6 +8,7 @@
 //
 
 #import <CouchbaseLite/CouchbaseLite.h>
+#import <CouchbaseLiteListener/CouchbaseLiteListener.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
 extern NSString * const RCLErrorDomain;
