@@ -12,7 +12,8 @@
 
 typedef NSDictionary *(^CBLPropertiesTransformationBlock)(NSDictionary *document);
 
-@interface CBLReplication (Transformation)
+@interface CBLReplication ()
+@property (readonly) NSSet* pendingDocumentIDs;
 @property (strong, nonatomic, readwrite) CBLPropertiesTransformationBlock propertiesTransformationBlock;
 @end
 
@@ -46,7 +47,7 @@ typedef NSDictionary *(^CBLPropertiesTransformationBlock)(NSDictionary *document
     RACSignal *result = [[[[RACObserve(self, changesCount)
     map:^NSSet *(NSNumber *changesCount) {
         (void)changesCount;
-        return self.pendingDocumentIDs;
+        return [self pendingDocumentIDs];
     }]
     ignore:nil]
     combinePreviousWithStart:[NSSet set] reduce:^NSSet *(NSSet *previous, NSSet *current) {
