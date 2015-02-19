@@ -13,7 +13,6 @@
 typedef NSDictionary *(^CBLPropertiesTransformationBlock)(NSDictionary *document);
 
 @interface CBLReplication ()
-@property (readonly) NSSet* pendingDocumentIDs;
 @property (strong, nonatomic, readwrite) CBLPropertiesTransformationBlock propertiesTransformationBlock;
 @end
 
