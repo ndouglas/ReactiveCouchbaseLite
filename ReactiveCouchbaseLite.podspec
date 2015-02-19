@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         		= "ReactiveCouchbaseLite"
-  s.version      		= "1.0.1"
+  s.version      		= "1.0.2"
   s.summary      		= "A merger of Reactive Cocoa and Couchbase-Lite."
   s.description  		= <<-DESC
 				A merger of Reactive Cocoa and Couchbase-Lite.
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   s.author             		= { "Nathan Douglas" => "ndouglas@devontechnologies.com" }
   s.ios.deployment_target 	= "7.0"
   s.osx.deployment_target 	= "10.8"
-  s.source       		= { :git => "https://github.com/ndouglas/ReactiveCouchbaseLite.git", :tag => "1.0.1" }
+  s.source       		= { :git => "https://github.com/ndouglas/ReactiveCouchbaseLite.git", :tag => "1.0.2" }
   s.source_files  		= "*.{h,m}"
   s.exclude_files 		= "*.Tests.m", "RCLTestDefinitions.{h,m}"
   s.frameworks			= "Foundation"
