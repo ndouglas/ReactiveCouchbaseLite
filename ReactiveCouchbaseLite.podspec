@@ -31,5 +31,5 @@ Pod::Spec.new do |s|
   s.source_files  		= "*.{h,m}"
   s.exclude_files 		= "*.Tests.m", "RCLTestDefinitions.{h,m}"
   s.dependency 			"ReactiveCocoa"
-  s.dependency			"CouchbaseLite"
+  s.osx.vendored_frameworks	= "vendor/CouchbaseLite.framework", "vendor/CouchbaseLiteListener.framework"
 end
