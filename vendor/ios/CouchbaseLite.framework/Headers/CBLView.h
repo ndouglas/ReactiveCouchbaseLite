@@ -10,6 +10,13 @@
 @class CBLDatabase, CBLQuery;
 
 
+typedef enum {
+    kCBLMapReduceIndex = 1, /**< Regular map/reduce index with JSON keys. */
+    kCBLFullTextIndex,  /**< Keys must be strings and will be indexed by the words they contain. */
+    kCBLGeoIndex        /**< Geo-query index; not supported yet. */
+} CBLViewIndexType;
+
+
 typedef void (^CBLMapEmitBlock)(id key, id value);
 
 

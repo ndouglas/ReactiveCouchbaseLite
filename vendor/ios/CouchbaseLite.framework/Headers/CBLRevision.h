@@ -46,7 +46,7 @@
     Keys beginning with "_" are defined and reserved by CouchbaseLite; others are app-specific.
     The first call to this method may need to fetch the properties from disk, but subsequent calls
     are very cheap. */
-@property (readonly, copy) NSDictionary* properties;
+@property (readonly) NSDictionary* properties;
 
 /** The user-defined properties, without the ones reserved by CouchbaseLite.
     This is based on -properties, with every key whose name starts with "_" removed. */
