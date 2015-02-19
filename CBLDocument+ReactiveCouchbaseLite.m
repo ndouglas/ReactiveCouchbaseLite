@@ -218,7 +218,7 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
                     for (CBLSavedRevision *savedRevision in revisions) {
                         if (result) {
                             CBLUnsavedRevision *newRevision = [savedRevision createRevision];
-                            if ([savedRevision isEqualTo:currentRevision]) {
+                            if ([savedRevision isEqual:currentRevision]) {
                                 newRevision.properties = mergedProperties.mutableCopy;
                             } else {
                                 newRevision.isDeletion = YES;
