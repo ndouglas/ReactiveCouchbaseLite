@@ -30,6 +30,7 @@ Pod::Spec.new do |s|
   s.source       		= { :git => "https://github.com/ndouglas/ReactiveCouchbaseLite.git", :branch => "master" }
   s.source_files  		= "*.{h,m}"
   s.exclude_files 		= "*.Tests.m", "RCLTestDefinitions.{h,m}"
+  s.osx.vendored_frameworks	= "vendor/osx/CouchbaseLite.framework", "vendor/osx/CouchbaseLiteListener.framework"
+  s.ios.vendored_frameworks	= "vendor/ios/CouchbaseLite.framework", "vendor/ios/CouchbaseLiteListener.framework"
   s.dependency 			"ReactiveCocoa"
-  s.osx.vendored_frameworks	= "vendor/CouchbaseLite.framework", "vendor/CouchbaseLiteListener.framework"
 end
