@@ -41,7 +41,8 @@
             return [database rcl_documentWithID:ID];
         }]
         flattenMap:^RACSignal *(CBLDocument *document) {
-            return [document rcl_delete];
+            return [[document rcl_delete]
+                ignoreValues];
         }];
     }]
     timeout:5.0 description:@"document updated and then deleted successfully"];

@@ -30,6 +30,8 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
             NSError *error = nil;
             if (![document deleteDocument:&error]) {
                 [subscriber sendError:error];
+            } else {
+                [subscriber sendNext:document.properties];
             }
             [subscriber sendCompleted];
         }];
@@ -50,6 +52,8 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
             } error:&error];
             if (savedDeletionRevision == nil) {
                 [subscriber sendError:error];
+            } else {
+                [subscriber sendNext:savedDeletionRevision.properties];
             }
             [subscriber sendCompleted];
         }];
@@ -71,6 +75,8 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
             } error:&error];
             if (savedDeletionRevision == nil) {
                 [subscriber sendError:error];
+            } else {
+                [subscriber sendNext:savedDeletionRevision.properties];
             }
             [subscriber sendCompleted];
         }];
