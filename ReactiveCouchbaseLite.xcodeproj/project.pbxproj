@@ -1,0 +1,630 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3F73D6AC7EB91816F3669653 /* libPods-ReactiveCouchbaseLite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB906D12016E8B918413903A /* libPods-ReactiveCouchbaseLite.a */; };
+		D8D6CC5A1A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC591A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8D6CC601A9E135000C8D5F5 /* ReactiveCouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CC541A9E134F00C8D5F5 /* ReactiveCouchbaseLite.framework */; };
+		D8D6CC901A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC711A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.m */; };
+		D8D6CC921A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC731A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8D6CC931A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC741A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.m */; };
+		D8D6CC951A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC761A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8D6CC961A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC771A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.m */; };
+		D8D6CC981A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC791A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8D6CC991A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC7A1A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.m */; };
+		D8D6CC9B1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC7C1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8D6CC9C1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC7D1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.m */; };
+		D8D6CC9E1A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC7F1A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8D6CC9F1A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC801A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.m */; };
+		D8D6CCA11A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC821A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8D6CCA21A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC831A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.m */; };
+		D8D6CCA51A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC861A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8D6CCA61A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC871A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.m */; };
+		D8D6CCA81A9E13BB00C8D5F5 /* RCLDefinitions.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC891A9E13BB00C8D5F5 /* RCLDefinitions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8D6CCA91A9E13BB00C8D5F5 /* RCLDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC8A1A9E13BB00C8D5F5 /* RCLDefinitions.m */; };
+		D8D6CCBB1A9E140000C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC721A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m */; };
+		D8D6CCBC1A9E140000C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC751A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.Tests.m */; };
+		D8D6CCBD1A9E140000C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC781A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.Tests.m */; };
+		D8D6CCBE1A9E140000C8D5F5 /* CBLManager+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC7B1A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.Tests.m */; };
+		D8D6CCBF1A9E140000C8D5F5 /* CBLModel+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC7E1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.Tests.m */; };
+		D8D6CCC01A9E140000C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC811A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.Tests.m */; };
+		D8D6CCC11A9E140000C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC841A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.Tests.m */; };
+		D8D6CCC21A9E140000C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC881A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.Tests.m */; };
+		D8D6CCC41A9E143900C8D5F5 /* Tests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8D6CCC31A9E143900C8D5F5 /* Tests-Info.plist */; };
+		D8D6CCC51A9E155100C8D5F5 /* RCLTestDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC8C1A9E13BB00C8D5F5 /* RCLTestDefinitions.m */; };
+		D8D6CCC71A9E156C00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC701A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8D6CCCD1A9E172100C8D5F5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCCC1A9E172100C8D5F5 /* Foundation.framework */; };
+		D8D6CCD21A9E1E4200C8D5F5 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; };
+		D8D6CCD31A9E1E4200C8D5F5 /* CouchbaseLiteListener.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; };
+		D8D6CCD41A9E1E7400C8D5F5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCCF1A9E1C9C00C8D5F5 /* QuartzCore.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D8D6CC611A9E135000C8D5F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D8D6CC4B1A9E134F00C8D5F5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D8D6CC531A9E134F00C8D5F5;
+			remoteInfo = ReactiveCouchbaseLite;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3B5D11C9ADA1BD4C56B09DCC /* Pods-ReactiveCouchbaseLite.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactiveCouchbaseLite.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ReactiveCouchbaseLite/Pods-ReactiveCouchbaseLite.debug.xcconfig"; sourceTree = "<group>"; };
+		68C739D732D24B3EAAF49E1C /* Pods-ReactiveCouchbaseLite.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactiveCouchbaseLite.release.xcconfig"; path = "Pods/Target Support Files/Pods-ReactiveCouchbaseLite/Pods-ReactiveCouchbaseLite.release.xcconfig"; sourceTree = "<group>"; };
+		AB906D12016E8B918413903A /* libPods-ReactiveCouchbaseLite.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactiveCouchbaseLite.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8D6CC541A9E134F00C8D5F5 /* ReactiveCouchbaseLite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReactiveCouchbaseLite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8D6CC581A9E134F00C8D5F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D8D6CC591A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReactiveCouchbaseLite.h; sourceTree = "<group>"; };
+		D8D6CC5F1A9E135000C8D5F5 /* ReactiveCouchbaseLiteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReactiveCouchbaseLiteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8D6CC701A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CBLDatabase+ReactiveCouchbaseLite.h"; sourceTree = SOURCE_ROOT; };
+		D8D6CC711A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLDatabase+ReactiveCouchbaseLite.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC721A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLDatabase+ReactiveCouchbaseLite.Tests.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC731A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CBLDocument+ReactiveCouchbaseLite.h"; sourceTree = SOURCE_ROOT; };
+		D8D6CC741A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLDocument+ReactiveCouchbaseLite.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC751A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLDocument+ReactiveCouchbaseLite.Tests.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC761A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CBLLiveQuery+ReactiveCouchbaseLite.h"; sourceTree = SOURCE_ROOT; };
+		D8D6CC771A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLLiveQuery+ReactiveCouchbaseLite.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC781A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLLiveQuery+ReactiveCouchbaseLite.Tests.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC791A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CBLManager+ReactiveCouchbaseLite.h"; sourceTree = SOURCE_ROOT; };
+		D8D6CC7A1A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLManager+ReactiveCouchbaseLite.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC7B1A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLManager+ReactiveCouchbaseLite.Tests.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC7C1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CBLModel+ReactiveCouchbaseLite.h"; sourceTree = SOURCE_ROOT; };
+		D8D6CC7D1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLModel+ReactiveCouchbaseLite.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC7E1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLModel+ReactiveCouchbaseLite.Tests.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC7F1A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CBLQuery+ReactiveCouchbaseLite.h"; sourceTree = SOURCE_ROOT; };
+		D8D6CC801A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLQuery+ReactiveCouchbaseLite.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC811A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLQuery+ReactiveCouchbaseLite.Tests.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC821A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CBLReplication+ReactiveCouchbaseLite.h"; sourceTree = SOURCE_ROOT; };
+		D8D6CC831A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLReplication+ReactiveCouchbaseLite.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC841A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLReplication+ReactiveCouchbaseLite.Tests.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC851A9E13BB00C8D5F5 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
+		D8D6CC861A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RACScheduler+ReactiveCouchbaseLite.h"; sourceTree = SOURCE_ROOT; };
+		D8D6CC871A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RACScheduler+ReactiveCouchbaseLite.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC881A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RACScheduler+ReactiveCouchbaseLite.Tests.m"; sourceTree = SOURCE_ROOT; };
+		D8D6CC891A9E13BB00C8D5F5 /* RCLDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCLDefinitions.h; sourceTree = SOURCE_ROOT; };
+		D8D6CC8A1A9E13BB00C8D5F5 /* RCLDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCLDefinitions.m; sourceTree = SOURCE_ROOT; };
+		D8D6CC8B1A9E13BB00C8D5F5 /* RCLTestDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCLTestDefinitions.h; sourceTree = SOURCE_ROOT; };
+		D8D6CC8C1A9E13BB00C8D5F5 /* RCLTestDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCLTestDefinitions.m; sourceTree = SOURCE_ROOT; };
+		D8D6CC8D1A9E13BB00C8D5F5 /* ReactiveCouchbaseLite.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReactiveCouchbaseLite.podspec; sourceTree = SOURCE_ROOT; };
+		D8D6CC8E1A9E13BB00C8D5F5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		D8D6CCB01A9E13E400C8D5F5 /* CouchbaseLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CouchbaseLite.framework; sourceTree = "<group>"; };
+		D8D6CCB11A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CouchbaseLiteListener.framework; sourceTree = "<group>"; };
+		D8D6CCB21A9E13E400C8D5F5 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CouchbaseLite.framework; sourceTree = "<group>"; };
+		D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CouchbaseLiteListener.framework; sourceTree = "<group>"; };
+		D8D6CCC31A9E143900C8D5F5 /* Tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = SOURCE_ROOT; };
+		D8D6CCCC1A9E172100C8D5F5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		D8D6CCCE1A9E1C9C00C8D5F5 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		D8D6CCCF1A9E1C9C00C8D5F5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D8D6CC501A9E134F00C8D5F5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8D6CCD41A9E1E7400C8D5F5 /* QuartzCore.framework in Frameworks */,
+				D8D6CCCD1A9E172100C8D5F5 /* Foundation.framework in Frameworks */,
+				3F73D6AC7EB91816F3669653 /* libPods-ReactiveCouchbaseLite.a in Frameworks */,
+				D8D6CCD21A9E1E4200C8D5F5 /* CouchbaseLite.framework in Frameworks */,
+				D8D6CCD31A9E1E4200C8D5F5 /* CouchbaseLiteListener.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8D6CC5C1A9E135000C8D5F5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8D6CC601A9E135000C8D5F5 /* ReactiveCouchbaseLite.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		362469B01976D6AAE11796C2 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3B5D11C9ADA1BD4C56B09DCC /* Pods-ReactiveCouchbaseLite.debug.xcconfig */,
+				68C739D732D24B3EAAF49E1C /* Pods-ReactiveCouchbaseLite.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		626D5574DEB6F57D9F45C126 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D8D6CCCE1A9E1C9C00C8D5F5 /* Quartz.framework */,
+				D8D6CCCF1A9E1C9C00C8D5F5 /* QuartzCore.framework */,
+				D8D6CCCC1A9E172100C8D5F5 /* Foundation.framework */,
+				AB906D12016E8B918413903A /* libPods-ReactiveCouchbaseLite.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D8D6CC4A1A9E134F00C8D5F5 = {
+			isa = PBXGroup;
+			children = (
+				D8D6CC561A9E134F00C8D5F5 /* ReactiveCouchbaseLite */,
+				D8D6CCAE1A9E13E400C8D5F5 /* vendor */,
+				D8D6CC551A9E134F00C8D5F5 /* Products */,
+				362469B01976D6AAE11796C2 /* Pods */,
+				626D5574DEB6F57D9F45C126 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		D8D6CC551A9E134F00C8D5F5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D8D6CC541A9E134F00C8D5F5 /* ReactiveCouchbaseLite.framework */,
+				D8D6CC5F1A9E135000C8D5F5 /* ReactiveCouchbaseLiteTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D8D6CC561A9E134F00C8D5F5 /* ReactiveCouchbaseLite */ = {
+			isa = PBXGroup;
+			children = (
+				D8D6CC891A9E13BB00C8D5F5 /* RCLDefinitions.h */,
+				D8D6CC8A1A9E13BB00C8D5F5 /* RCLDefinitions.m */,
+				D8D6CC8B1A9E13BB00C8D5F5 /* RCLTestDefinitions.h */,
+				D8D6CC8C1A9E13BB00C8D5F5 /* RCLTestDefinitions.m */,
+				D8D6CC701A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.h */,
+				D8D6CC711A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.m */,
+				D8D6CC721A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m */,
+				D8D6CC731A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.h */,
+				D8D6CC741A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.m */,
+				D8D6CC751A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.Tests.m */,
+				D8D6CC761A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.h */,
+				D8D6CC771A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.m */,
+				D8D6CC781A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.Tests.m */,
+				D8D6CC791A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.h */,
+				D8D6CC7A1A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.m */,
+				D8D6CC7B1A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.Tests.m */,
+				D8D6CC7C1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.h */,
+				D8D6CC7D1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.m */,
+				D8D6CC7E1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.Tests.m */,
+				D8D6CC7F1A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.h */,
+				D8D6CC801A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.m */,
+				D8D6CC811A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.Tests.m */,
+				D8D6CC821A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.h */,
+				D8D6CC831A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.m */,
+				D8D6CC841A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.Tests.m */,
+				D8D6CC861A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.h */,
+				D8D6CC871A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.m */,
+				D8D6CC881A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.Tests.m */,
+				D8D6CC591A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h */,
+				D8D6CC8D1A9E13BB00C8D5F5 /* ReactiveCouchbaseLite.podspec */,
+				D8D6CC851A9E13BB00C8D5F5 /* LICENSE */,
+				D8D6CC8E1A9E13BB00C8D5F5 /* README.md */,
+				D8D6CC571A9E134F00C8D5F5 /* Supporting Files */,
+			);
+			name = ReactiveCouchbaseLite;
+			sourceTree = SOURCE_ROOT;
+		};
+		D8D6CC571A9E134F00C8D5F5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D8D6CCC31A9E143900C8D5F5 /* Tests-Info.plist */,
+				D8D6CC581A9E134F00C8D5F5 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D8D6CCAE1A9E13E400C8D5F5 /* vendor */ = {
+			isa = PBXGroup;
+			children = (
+				D8D6CCAF1A9E13E400C8D5F5 /* ios */,
+				D8D6CCB21A9E13E400C8D5F5 /* LICENSE.txt */,
+				D8D6CCB31A9E13E400C8D5F5 /* osx */,
+			);
+			path = vendor;
+			sourceTree = "<group>";
+		};
+		D8D6CCAF1A9E13E400C8D5F5 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				D8D6CCB01A9E13E400C8D5F5 /* CouchbaseLite.framework */,
+				D8D6CCB11A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */,
+			);
+			path = ios;
+			sourceTree = "<group>";
+		};
+		D8D6CCB31A9E13E400C8D5F5 /* osx */ = {
+			isa = PBXGroup;
+			children = (
+				D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */,
+				D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */,
+			);
+			path = osx;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D8D6CC511A9E134F00C8D5F5 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8D6CCC71A9E156C00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.h in Headers */,
+				D8D6CCA11A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.h in Headers */,
+				D8D6CCA81A9E13BB00C8D5F5 /* RCLDefinitions.h in Headers */,
+				D8D6CC9E1A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.h in Headers */,
+				D8D6CC5A1A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h in Headers */,
+				D8D6CC981A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.h in Headers */,
+				D8D6CC951A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.h in Headers */,
+				D8D6CC9B1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.h in Headers */,
+				D8D6CC921A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.h in Headers */,
+				D8D6CCA51A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D8D6CC531A9E134F00C8D5F5 /* ReactiveCouchbaseLite */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D8D6CC6A1A9E135000C8D5F5 /* Build configuration list for PBXNativeTarget "ReactiveCouchbaseLite" */;
+			buildPhases = (
+				6C6A18EC8137749C8636E860 /* Check Pods Manifest.lock */,
+				D8D6CC4F1A9E134F00C8D5F5 /* Sources */,
+				D8D6CC501A9E134F00C8D5F5 /* Frameworks */,
+				D8D6CC511A9E134F00C8D5F5 /* Headers */,
+				D8D6CC521A9E134F00C8D5F5 /* Resources */,
+				025094CA88CFECF88136E1A1 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ReactiveCouchbaseLite;
+			productName = ReactiveCouchbaseLite;
+			productReference = D8D6CC541A9E134F00C8D5F5 /* ReactiveCouchbaseLite.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D8D6CC5E1A9E135000C8D5F5 /* ReactiveCouchbaseLiteTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D8D6CC6D1A9E135000C8D5F5 /* Build configuration list for PBXNativeTarget "ReactiveCouchbaseLiteTests" */;
+			buildPhases = (
+				D8D6CC5B1A9E135000C8D5F5 /* Sources */,
+				D8D6CC5C1A9E135000C8D5F5 /* Frameworks */,
+				D8D6CC5D1A9E135000C8D5F5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D8D6CC621A9E135000C8D5F5 /* PBXTargetDependency */,
+			);
+			name = ReactiveCouchbaseLiteTests;
+			productName = ReactiveCouchbaseLiteTests;
+			productReference = D8D6CC5F1A9E135000C8D5F5 /* ReactiveCouchbaseLiteTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D8D6CC4B1A9E134F00C8D5F5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Nathan Douglas";
+				TargetAttributes = {
+					D8D6CC531A9E134F00C8D5F5 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					D8D6CC5E1A9E135000C8D5F5 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = D8D6CC4E1A9E134F00C8D5F5 /* Build configuration list for PBXProject "ReactiveCouchbaseLite" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = D8D6CC4A1A9E134F00C8D5F5;
+			productRefGroup = D8D6CC551A9E134F00C8D5F5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D8D6CC531A9E134F00C8D5F5 /* ReactiveCouchbaseLite */,
+				D8D6CC5E1A9E135000C8D5F5 /* ReactiveCouchbaseLiteTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D8D6CC521A9E134F00C8D5F5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8D6CC5D1A9E135000C8D5F5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8D6CCC41A9E143900C8D5F5 /* Tests-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		025094CA88CFECF88136E1A1 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ReactiveCouchbaseLite/Pods-ReactiveCouchbaseLite-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6C6A18EC8137749C8636E860 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D8D6CC4F1A9E134F00C8D5F5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8D6CC961A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.m in Sources */,
+				D8D6CCA91A9E13BB00C8D5F5 /* RCLDefinitions.m in Sources */,
+				D8D6CCA61A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.m in Sources */,
+				D8D6CC9F1A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.m in Sources */,
+				D8D6CC901A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.m in Sources */,
+				D8D6CCA21A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.m in Sources */,
+				D8D6CC991A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.m in Sources */,
+				D8D6CC931A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.m in Sources */,
+				D8D6CC9C1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8D6CC5B1A9E135000C8D5F5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8D6CCC01A9E140000C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.Tests.m in Sources */,
+				D8D6CCBC1A9E140000C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.Tests.m in Sources */,
+				D8D6CCBF1A9E140000C8D5F5 /* CBLModel+ReactiveCouchbaseLite.Tests.m in Sources */,
+				D8D6CCBB1A9E140000C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m in Sources */,
+				D8D6CCC51A9E155100C8D5F5 /* RCLTestDefinitions.m in Sources */,
+				D8D6CCC11A9E140000C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.Tests.m in Sources */,
+				D8D6CCBD1A9E140000C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.Tests.m in Sources */,
+				D8D6CCBE1A9E140000C8D5F5 /* CBLManager+ReactiveCouchbaseLite.Tests.m in Sources */,
+				D8D6CCC21A9E140000C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.Tests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D8D6CC621A9E135000C8D5F5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D8D6CC531A9E134F00C8D5F5 /* ReactiveCouchbaseLite */;
+			targetProxy = D8D6CC611A9E135000C8D5F5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		D8D6CC681A9E135000C8D5F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		D8D6CC691A9E135000C8D5F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		D8D6CC6B1A9E135000C8D5F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3B5D11C9ADA1BD4C56B09DCC /* Pods-ReactiveCouchbaseLite.debug.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/vendor/ios",
+					"$(PROJECT_DIR)/vendor/osx",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		D8D6CC6C1A9E135000C8D5F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 68C739D732D24B3EAAF49E1C /* Pods-ReactiveCouchbaseLite.release.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/vendor/ios",
+					"$(PROJECT_DIR)/vendor/osx",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		D8D6CC6E1A9E135000C8D5F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Tests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		D8D6CC6F1A9E135000C8D5F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Tests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D8D6CC4E1A9E134F00C8D5F5 /* Build configuration list for PBXProject "ReactiveCouchbaseLite" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D8D6CC681A9E135000C8D5F5 /* Debug */,
+				D8D6CC691A9E135000C8D5F5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D8D6CC6A1A9E135000C8D5F5 /* Build configuration list for PBXNativeTarget "ReactiveCouchbaseLite" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D8D6CC6B1A9E135000C8D5F5 /* Debug */,
+				D8D6CC6C1A9E135000C8D5F5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D8D6CC6D1A9E135000C8D5F5 /* Build configuration list for PBXNativeTarget "ReactiveCouchbaseLiteTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D8D6CC6E1A9E135000C8D5F5 /* Debug */,
+				D8D6CC6F1A9E135000C8D5F5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D8D6CC4B1A9E134F00C8D5F5 /* Project object */;
+}

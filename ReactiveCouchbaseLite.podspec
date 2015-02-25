@@ -31,7 +31,6 @@ Pod::Spec.new do |s|
   s.source_files  		= "*.{h,m}"
   s.exclude_files 		= "*.Tests.m", "RCLTestDefinitions.{h,m}"
   s.frameworks			= "Foundation"
-  s.ios.frameworks		= "UIKit"
   s.osx.preserve_paths 		= "vendor/osx/CouchbaseLite.framework", "vendor/osx/CouchbaseLiteListener.framework"
   s.ios.preserve_paths 		= "vendor/ios/CouchbaseLite.framework", "vendor/ios/CouchbaseLiteListener.framework"
   s.osx.vendored_frameworks	= "vendor/osx/CouchbaseLite.framework", "vendor/osx/CouchbaseLiteListener.framework"
