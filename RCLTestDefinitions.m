@@ -188,7 +188,6 @@
 @synthesize pushReplication;
 
 - (void)rcl_setupManager {
-    [CBLManager rcl_enableUsefulLogs];
     self.manager = [CBLManager sharedInstance];
 }
 
