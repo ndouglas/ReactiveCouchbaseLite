@@ -74,4 +74,9 @@
     } signal:[CBLManager rcl_manager] timeout:5.0 description:@"sharedInstance was delivered on a correct thread"];
 }
 
+- (void)testFirst {
+    CBLDatabase *database = [[CBLManager rcl_databaseNamed:self.testName] first];
+    XCTAssertNotNil(database);
+}
+
 @end

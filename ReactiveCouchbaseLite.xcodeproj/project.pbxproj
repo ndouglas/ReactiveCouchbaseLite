@@ -45,6 +45,8 @@
 		D8EE9C921AB7415300CB15B1 /* CouchbaseLiteListener.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8EE9C931AB7448A00CB15B1 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; };
 		D8EE9C941AB7448D00CB15B1 /* CouchbaseLiteListener.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; };
+		D8EE9C961AB7452800CB15B1 /* CouchbaseLite.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D8EE9C971AB7452800CB15B1 /* CouchbaseLiteListener.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +68,17 @@
 			files = (
 				D8EE9C911AB7415300CB15B1 /* CouchbaseLite.framework in CopyFiles */,
 				D8EE9C921AB7415300CB15B1 /* CouchbaseLiteListener.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8EE9C951AB7451C00CB15B1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D8EE9C961AB7452800CB15B1 /* CouchbaseLite.framework in CopyFiles */,
+				D8EE9C971AB7452800CB15B1 /* CouchbaseLiteListener.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +336,7 @@
 				D8D6CC5C1A9E135000C8D5F5 /* Frameworks */,
 				D8D6CC5D1A9E135000C8D5F5 /* Resources */,
 				2991B5D2095C9E6E8CE7594F /* Copy Pods Resources */,
+				D8EE9C951AB7451C00CB15B1 /* CopyFiles */,
 			);
 			buildRules = (
 			);

@@ -41,9 +41,14 @@ CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
 
 + (RACSignal *)rcl_manager {
     __block CBLManager *manager = RCLSharedInstanceCurrentOrNewManager(nil);
-    return [[[RACSignal return:manager]
-    deliverOn:manager.rcl_scheduler]
-    setNameWithFormat:@"[%@ +rcl_sharedInstance]", self];
+    return [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [manager.rcl_scheduler rcl_runOrScheduleBlock:^{
+                [subscriber sendNext:manager];
+                [subscriber sendCompleted];
+            }];
+            return nil;
+        }]
+        setNameWithFormat:@"[%@ +rcl_sharedInstance]", self];
 }
 
 + (RACSignal *)rcl_log {
