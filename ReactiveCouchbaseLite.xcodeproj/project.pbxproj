@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		23B329422C64C0FD5B7DDA97 /* libPods-ReactiveCouchbaseLiteTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6656A74090E1EE3F08FE46 /* libPods-ReactiveCouchbaseLiteTests.a */; };
+		2B02CAB1FDBD3C577E63D923 /* libPods-ReactiveCouchbaseLiteTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6656A74090E1EE3F08FE46 /* libPods-ReactiveCouchbaseLiteTests.a */; };
 		3F73D6AC7EB91816F3669653 /* libPods-ReactiveCouchbaseLite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB906D12016E8B918413903A /* libPods-ReactiveCouchbaseLite.a */; };
 		D8D6CC5A1A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC591A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8D6CC601A9E135000C8D5F5 /* ReactiveCouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CC541A9E134F00C8D5F5 /* ReactiveCouchbaseLite.framework */; };
@@ -156,7 +156,7 @@
 				D8D6CC601A9E135000C8D5F5 /* ReactiveCouchbaseLite.framework in Frameworks */,
 				D8EE9C931AB7448A00CB15B1 /* CouchbaseLite.framework in Frameworks */,
 				D8EE9C941AB7448D00CB15B1 /* CouchbaseLiteListener.framework in Frameworks */,
-				23B329422C64C0FD5B7DDA97 /* libPods-ReactiveCouchbaseLiteTests.a in Frameworks */,
+				2B02CAB1FDBD3C577E63D923 /* libPods-ReactiveCouchbaseLiteTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,12 +331,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8D6CC6D1A9E135000C8D5F5 /* Build configuration list for PBXNativeTarget "ReactiveCouchbaseLiteTests" */;
 			buildPhases = (
-				494986CB26A8C3B1C49AB7CC /* Check Pods Manifest.lock */,
+				04CF9C7E44E6BC5DB59FD5F4 /* Check Pods Manifest.lock */,
 				D8D6CC5B1A9E135000C8D5F5 /* Sources */,
 				D8D6CC5C1A9E135000C8D5F5 /* Frameworks */,
 				D8D6CC5D1A9E135000C8D5F5 /* Resources */,
-				2991B5D2095C9E6E8CE7594F /* Copy Pods Resources */,
 				D8EE9C951AB7451C00CB15B1 /* CopyFiles */,
+				71E7824A6D78B8AF4BA2879A /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -416,22 +416,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ReactiveCouchbaseLite/Pods-ReactiveCouchbaseLite-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2991B5D2095C9E6E8CE7594F /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ReactiveCouchbaseLiteTests/Pods-ReactiveCouchbaseLiteTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		494986CB26A8C3B1C49AB7CC /* Check Pods Manifest.lock */ = {
+		04CF9C7E44E6BC5DB59FD5F4 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -459,6 +444,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		71E7824A6D78B8AF4BA2879A /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ReactiveCouchbaseLiteTests/Pods-ReactiveCouchbaseLiteTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -608,6 +608,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vendor/osx/CouchbaseLite.framework/Headers";
@@ -635,6 +636,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vendor/osx/CouchbaseLite.framework/Headers";
@@ -657,6 +659,7 @@
 				);
 				INFOPLIST_FILE = "Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -673,6 +676,7 @@
 				);
 				INFOPLIST_FILE = "Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

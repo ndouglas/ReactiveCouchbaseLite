@@ -1,13 +1,14 @@
 
 xcodeproj 'ReactiveCouchbaseLite'
 
-target 'ReactiveCouchbaseLite', :exclusive => true do
+target 'ReactiveCouchbaseLite' do
 	platform :osx, '10.10'
 	pod 'ReactiveCocoa'
 end
 
 target 'ReactiveCouchbaseLiteTests', :exclusive => true do
-	pod 'ReactiveCocoa'
+	platform :osx, '10.10'
+	pod 'OCMockito'
 end
 
 

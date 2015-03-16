@@ -543,10 +543,12 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
         rcl_changes];
     }]
     flattenMap:^RACSignal *(CBLQueryRow *row) {
-        return [database rcl_documentWithID:row.documentID];
+        RACSignal *result =[database rcl_documentWithID:row.documentID];
+        return result;
     }]
     flattenMap:^RACSignal *(CBLDocument *document) {
-        return [document rcl_resolveConflictsWithBlock:block];
+        RACSignal *result = [document rcl_resolveConflictsWithBlock:block];
+        return result;
     }];
     return [result setNameWithFormat:@"[%@ -rcl_resolveConflictsWithBlock: %@]", self, block];
 }

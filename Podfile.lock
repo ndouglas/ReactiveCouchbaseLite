@@ -1,4 +1,7 @@
 PODS:
+  - OCHamcrest (4.1.1)
+  - OCMockito (1.4.0):
+    - OCHamcrest (~> 4.0)
   - ReactiveCocoa (2.4.7):
     - ReactiveCocoa/UI (= 2.4.7)
   - ReactiveCocoa/Core (2.4.7):
@@ -8,9 +11,12 @@ PODS:
     - ReactiveCocoa/Core
 
 DEPENDENCIES:
+  - OCMockito
   - ReactiveCocoa
 
 SPEC CHECKSUMS:
+  OCHamcrest: af1c7c5ea345de69ea6c9c2958f65f3044e5c420
+  OCMockito: 991936bb775cc4c27f063d38f5e17b9161fbd21c
   ReactiveCocoa: 313fc53cc9aeb2bbbc3f5f13c7eac16478d9af8f
 
-COCOAPODS: 0.35.0
+COCOAPODS: 0.36.0

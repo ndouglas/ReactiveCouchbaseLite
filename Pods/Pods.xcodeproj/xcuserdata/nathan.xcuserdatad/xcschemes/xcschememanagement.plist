@@ -14,7 +14,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-ReactiveCouchbaseLiteTests-ReactiveCocoa.xcscheme</key>
+		<key>Pods-ReactiveCouchbaseLiteTests-OCHamcrest.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-ReactiveCouchbaseLiteTests-OCMockito.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -27,22 +32,27 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>25026C8A4C751756914436A6</key>
+		<key>07305186B48C6CE63F8A9C72</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8B96BC6F8F2B26A21B86EE84</key>
+		<key>433B6BE5883DE93E36AACFC2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D49BCF4B7901548FBB6F1BDC</key>
+		<key>5DE1663A859A866BAA6EE02A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F7710C1F7883DD9DC42EC650</key>
+		<key>7B9116CD243DB517395F8084</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>AAD29D9AA5FBB6DEDC309E29</key>
 		<dict>
 			<key>primary</key>
 			<true/>

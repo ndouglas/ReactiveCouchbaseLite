@@ -6,27 +6,15 @@
 // project.
 
 
-// ReactiveCocoa
-#define COCOAPODS_POD_AVAILABLE_ReactiveCocoa
-#define COCOAPODS_VERSION_MAJOR_ReactiveCocoa 2
-#define COCOAPODS_VERSION_MINOR_ReactiveCocoa 4
-#define COCOAPODS_VERSION_PATCH_ReactiveCocoa 7
+// OCHamcrest
+#define COCOAPODS_POD_AVAILABLE_OCHamcrest
+#define COCOAPODS_VERSION_MAJOR_OCHamcrest 4
+#define COCOAPODS_VERSION_MINOR_OCHamcrest 1
+#define COCOAPODS_VERSION_PATCH_OCHamcrest 1
 
-// ReactiveCocoa/Core
-#define COCOAPODS_POD_AVAILABLE_ReactiveCocoa_Core
-#define COCOAPODS_VERSION_MAJOR_ReactiveCocoa_Core 2
-#define COCOAPODS_VERSION_MINOR_ReactiveCocoa_Core 4
-#define COCOAPODS_VERSION_PATCH_ReactiveCocoa_Core 7
-
-// ReactiveCocoa/UI
-#define COCOAPODS_POD_AVAILABLE_ReactiveCocoa_UI
-#define COCOAPODS_VERSION_MAJOR_ReactiveCocoa_UI 2
-#define COCOAPODS_VERSION_MINOR_ReactiveCocoa_UI 4
-#define COCOAPODS_VERSION_PATCH_ReactiveCocoa_UI 7
-
-// ReactiveCocoa/no-arc
-#define COCOAPODS_POD_AVAILABLE_ReactiveCocoa_no_arc
-#define COCOAPODS_VERSION_MAJOR_ReactiveCocoa_no_arc 2
-#define COCOAPODS_VERSION_MINOR_ReactiveCocoa_no_arc 4
-#define COCOAPODS_VERSION_PATCH_ReactiveCocoa_no_arc 7
+// OCMockito
+#define COCOAPODS_POD_AVAILABLE_OCMockito
+#define COCOAPODS_VERSION_MAJOR_OCMockito 1
+#define COCOAPODS_VERSION_MINOR_OCMockito 4
+#define COCOAPODS_VERSION_PATCH_OCMockito 0
 

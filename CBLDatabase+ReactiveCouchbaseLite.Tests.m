@@ -10,6 +10,7 @@
 #import <XCTest/XCTest.h>
 #import "RCLTestDefinitions.h"
 #import "ReactiveCouchbaseLite.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 typedef void (^RCLObjectTesterBlock)(id);
 typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
@@ -148,13 +149,10 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 
 - (void)testExistingDocumentWithIDDefaultProperties {
     NSString *ID = [[NSUUID UUID] UUIDString];
-    [self rcl_expectCompletionFromSignal:[[[[[RACSignal empty]
-    then:^RACSignal *{
-        return [[CBLManager rcl_databaseNamed:self.testName]
-        flattenMap:^RACSignal *(CBLDatabase *database) {
-            return [database rcl_existingDocumentWithID:ID defaultProperties:@{
-                @"UUID" : ID,
-            }];
+    [self rcl_expectCompletionFromSignal:[[[[[CBLManager rcl_databaseNamed:self.testName]
+    flattenMap:^RACSignal *(CBLDatabase *database) {
+        return [database rcl_existingDocumentWithID:ID defaultProperties:@{
+            @"UUID" : ID,
         }];
     }]
     flattenMap:^RACSignal *(CBLDocument *document) {
@@ -175,49 +173,51 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 - (void)testExistingLocalDocumentWithID {
     NSString *ID = [[NSUUID UUID] UUIDString];
     [self rcl_expectCompletionFromSignal:[[[[[[self.testDatabase rcl_existingLocalDocumentWithID:ID]
-    doNext:^(NSDictionary *localDocument){
-        XCTFail(@"Should not have found a local document: %@ !", localDocument);
-    }]
-    doCompleted:^{
-        XCTFail(@"Should not have completed!");
-    }]
-    catchTo:[RACSignal empty]]
-    then:^RACSignal *{
-        return [self.testDatabase rcl_putLocalDocumentWithProperties:@{} ID:ID];
-    }]
-    then:^RACSignal *{
-        return [[self.testDatabase rcl_existingLocalDocumentWithID:ID]
-        flattenMap:^RACSignal *(NSDictionary *localDocument) {
-            return [RACSignal empty];
-        }];
-    }] timeout:5.0 description:@"local document created"];
+        doNext:^(NSDictionary *localDocument){
+            XCTFail(@"Should not have found a local document: %@ !", localDocument);
+        }]
+        doCompleted:^{
+            XCTFail(@"Should not have completed!");
+        }]
+        catchTo:[RACSignal empty]]
+        then:^RACSignal *{
+            return [self.testDatabase rcl_putLocalDocumentWithProperties:@{} ID:ID];
+        }]
+        then:^RACSignal *{
+            return [[self.testDatabase rcl_existingLocalDocumentWithID:ID]
+            flattenMap:^RACSignal *(NSDictionary *localDocument) {
+                return [RACSignal empty];
+            }];
+        }]
+        timeout:5.0 description:@"local document created"];
     ID = [[NSUUID UUID] UUIDString];
     [self rcl_expectCompletionFromSignal:[[[[[[[CBLManager rcl_databaseNamed:self.testName]
-    flattenMap:^RACSignal *(CBLDatabase *database) {
-        return [database rcl_existingLocalDocumentWithID:ID];
-    }]
-    doNext:^(NSDictionary *localDocument){
-        XCTFail(@"Should not have found a local document: %@ !", localDocument);
-    }]
-    doCompleted:^{
-        XCTFail(@"Should not have completed!");
-    }]
-    catchTo:[RACSignal empty]]
-    then:^RACSignal *{
-        return [[CBLManager rcl_databaseNamed:self.testName]
-        flattenMap:^RACSignal *(CBLDatabase *database) {
-            return [database rcl_putLocalDocumentWithProperties:@{} ID:ID];
-        }];
-    }]
-    then:^RACSignal *{
-        return [[[CBLManager rcl_databaseNamed:self.testName]
         flattenMap:^RACSignal *(CBLDatabase *database) {
             return [database rcl_existingLocalDocumentWithID:ID];
         }]
-        flattenMap:^RACSignal *(NSDictionary *localDocument) {
-            return [RACSignal empty];
-        }];
-    }] timeout:5.0 description:@"local document created"];
+        doNext:^(NSDictionary *localDocument){
+            XCTFail(@"Should not have found a local document: %@ !", localDocument);
+        }]
+        doCompleted:^{
+            XCTFail(@"Should not have completed!");
+        }]
+        catchTo:[RACSignal empty]]
+        then:^RACSignal *{
+            return [[CBLManager rcl_databaseNamed:self.testName]
+            flattenMap:^RACSignal *(CBLDatabase *database) {
+                return [database rcl_putLocalDocumentWithProperties:@{} ID:ID];
+            }];
+        }]
+        then:^RACSignal *{
+            return [[[CBLManager rcl_databaseNamed:self.testName]
+            flattenMap:^RACSignal *(CBLDatabase *database) {
+                return [database rcl_existingLocalDocumentWithID:ID];
+            }]
+            flattenMap:^RACSignal *(NSDictionary *localDocument) {
+                return [RACSignal empty];
+            }];
+        }]
+        timeout:5.0 description:@"local document created"];
 }
 
 - (void)testDeleteLocalDocumentWithID {
