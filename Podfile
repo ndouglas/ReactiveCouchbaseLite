@@ -7,6 +7,7 @@ target 'ReactiveCouchbaseLite', :exclusive => true do
 end
 
 target 'ReactiveCouchbaseLiteTests', :exclusive => true do
+	pod 'ReactiveCocoa'
 end
 
 

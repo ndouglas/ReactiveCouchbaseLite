@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23B329422C64C0FD5B7DDA97 /* libPods-ReactiveCouchbaseLiteTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6656A74090E1EE3F08FE46 /* libPods-ReactiveCouchbaseLiteTests.a */; };
 		3F73D6AC7EB91816F3669653 /* libPods-ReactiveCouchbaseLite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB906D12016E8B918413903A /* libPods-ReactiveCouchbaseLite.a */; };
 		D8D6CC5A1A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC591A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8D6CC601A9E135000C8D5F5 /* ReactiveCouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CC541A9E134F00C8D5F5 /* ReactiveCouchbaseLite.framework */; };
@@ -35,13 +36,15 @@
 		D8D6CCC01A9E140000C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC811A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.Tests.m */; };
 		D8D6CCC11A9E140000C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC841A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.Tests.m */; };
 		D8D6CCC21A9E140000C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC881A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.Tests.m */; };
-		D8D6CCC41A9E143900C8D5F5 /* Tests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8D6CCC31A9E143900C8D5F5 /* Tests-Info.plist */; };
 		D8D6CCC51A9E155100C8D5F5 /* RCLTestDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC8C1A9E13BB00C8D5F5 /* RCLTestDefinitions.m */; };
 		D8D6CCC71A9E156C00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC701A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8D6CCCD1A9E172100C8D5F5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCCC1A9E172100C8D5F5 /* Foundation.framework */; };
 		D8D6CCD21A9E1E4200C8D5F5 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; };
 		D8D6CCD31A9E1E4200C8D5F5 /* CouchbaseLiteListener.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; };
-		D8D6CCD41A9E1E7400C8D5F5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCCF1A9E1C9C00C8D5F5 /* QuartzCore.framework */; };
+		D8EE9C911AB7415300CB15B1 /* CouchbaseLite.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D8EE9C921AB7415300CB15B1 /* CouchbaseLiteListener.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D8EE9C931AB7448A00CB15B1 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; };
+		D8EE9C941AB7448D00CB15B1 /* CouchbaseLiteListener.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,8 +57,23 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D8EE9C901AB7413600CB15B1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D8EE9C911AB7415300CB15B1 /* CouchbaseLite.framework in CopyFiles */,
+				D8EE9C921AB7415300CB15B1 /* CouchbaseLiteListener.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		3B5D11C9ADA1BD4C56B09DCC /* Pods-ReactiveCouchbaseLite.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactiveCouchbaseLite.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ReactiveCouchbaseLite/Pods-ReactiveCouchbaseLite.debug.xcconfig"; sourceTree = "<group>"; };
+		50677A480C7DC7F2807922A5 /* Pods-ReactiveCouchbaseLiteTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactiveCouchbaseLiteTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ReactiveCouchbaseLiteTests/Pods-ReactiveCouchbaseLiteTests.debug.xcconfig"; sourceTree = "<group>"; };
 		68C739D732D24B3EAAF49E1C /* Pods-ReactiveCouchbaseLite.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactiveCouchbaseLite.release.xcconfig"; path = "Pods/Target Support Files/Pods-ReactiveCouchbaseLite/Pods-ReactiveCouchbaseLite.release.xcconfig"; sourceTree = "<group>"; };
 		AB906D12016E8B918413903A /* libPods-ReactiveCouchbaseLite.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactiveCouchbaseLite.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D6CC541A9E134F00C8D5F5 /* ReactiveCouchbaseLite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReactiveCouchbaseLite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,6 +120,8 @@
 		D8D6CCCC1A9E172100C8D5F5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8D6CCCE1A9E1C9C00C8D5F5 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		D8D6CCCF1A9E1C9C00C8D5F5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F3920EA2D6F07FFB54773B63 /* Pods-ReactiveCouchbaseLiteTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactiveCouchbaseLiteTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ReactiveCouchbaseLiteTests/Pods-ReactiveCouchbaseLiteTests.release.xcconfig"; sourceTree = "<group>"; };
+		FA6656A74090E1EE3F08FE46 /* libPods-ReactiveCouchbaseLiteTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactiveCouchbaseLiteTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,7 +129,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8D6CCD41A9E1E7400C8D5F5 /* QuartzCore.framework in Frameworks */,
 				D8D6CCCD1A9E172100C8D5F5 /* Foundation.framework in Frameworks */,
 				3F73D6AC7EB91816F3669653 /* libPods-ReactiveCouchbaseLite.a in Frameworks */,
 				D8D6CCD21A9E1E4200C8D5F5 /* CouchbaseLite.framework in Frameworks */,
@@ -122,6 +141,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8D6CC601A9E135000C8D5F5 /* ReactiveCouchbaseLite.framework in Frameworks */,
+				D8EE9C931AB7448A00CB15B1 /* CouchbaseLite.framework in Frameworks */,
+				D8EE9C941AB7448D00CB15B1 /* CouchbaseLiteListener.framework in Frameworks */,
+				23B329422C64C0FD5B7DDA97 /* libPods-ReactiveCouchbaseLiteTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +155,8 @@
 			children = (
 				3B5D11C9ADA1BD4C56B09DCC /* Pods-ReactiveCouchbaseLite.debug.xcconfig */,
 				68C739D732D24B3EAAF49E1C /* Pods-ReactiveCouchbaseLite.release.xcconfig */,
+				50677A480C7DC7F2807922A5 /* Pods-ReactiveCouchbaseLiteTests.debug.xcconfig */,
+				F3920EA2D6F07FFB54773B63 /* Pods-ReactiveCouchbaseLiteTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -144,6 +168,7 @@
 				D8D6CCCF1A9E1C9C00C8D5F5 /* QuartzCore.framework */,
 				D8D6CCCC1A9E172100C8D5F5 /* Foundation.framework */,
 				AB906D12016E8B918413903A /* libPods-ReactiveCouchbaseLite.a */,
+				FA6656A74090E1EE3F08FE46 /* libPods-ReactiveCouchbaseLiteTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -277,6 +302,7 @@
 				D8D6CC501A9E134F00C8D5F5 /* Frameworks */,
 				D8D6CC511A9E134F00C8D5F5 /* Headers */,
 				D8D6CC521A9E134F00C8D5F5 /* Resources */,
+				D8EE9C901AB7413600CB15B1 /* CopyFiles */,
 				025094CA88CFECF88136E1A1 /* Copy Pods Resources */,
 			);
 			buildRules = (
@@ -292,9 +318,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8D6CC6D1A9E135000C8D5F5 /* Build configuration list for PBXNativeTarget "ReactiveCouchbaseLiteTests" */;
 			buildPhases = (
+				494986CB26A8C3B1C49AB7CC /* Check Pods Manifest.lock */,
 				D8D6CC5B1A9E135000C8D5F5 /* Sources */,
 				D8D6CC5C1A9E135000C8D5F5 /* Frameworks */,
 				D8D6CC5D1A9E135000C8D5F5 /* Resources */,
+				2991B5D2095C9E6E8CE7594F /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -353,7 +381,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8D6CCC41A9E143900C8D5F5 /* Tests-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,6 +400,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ReactiveCouchbaseLite/Pods-ReactiveCouchbaseLite-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2991B5D2095C9E6E8CE7594F /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ReactiveCouchbaseLiteTests/Pods-ReactiveCouchbaseLiteTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		494986CB26A8C3B1C49AB7CC /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		6C6A18EC8137749C8636E860 /* Check Pods Manifest.lock */ = {
@@ -527,15 +584,19 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/vendor/ios",
-					"$(PROJECT_DIR)/vendor/osx",
+					"$(PROJECT_DIR)/vendor/osx/**",
 				);
 				FRAMEWORK_VERSION = A;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/vendor/osx/**",
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vendor/osx/CouchbaseLite.framework/Headers";
 			};
 			name = Debug;
 		};
@@ -550,25 +611,31 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/vendor/ios",
-					"$(PROJECT_DIR)/vendor/osx",
+					"$(PROJECT_DIR)/vendor/osx/**",
 				);
 				FRAMEWORK_VERSION = A;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/vendor/osx/**",
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vendor/osx/CouchbaseLite.framework/Headers";
 			};
 			name = Release;
 		};
 		D8D6CC6E1A9E135000C8D5F5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 50677A480C7DC7F2807922A5 /* Pods-ReactiveCouchbaseLiteTests.debug.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
+					"$(PROJECT_DIR)/vendor/osx",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -582,11 +649,13 @@
 		};
 		D8D6CC6F1A9E135000C8D5F5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F3920EA2D6F07FFB54773B63 /* Pods-ReactiveCouchbaseLiteTests.release.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
+					"$(PROJECT_DIR)/vendor/osx",
 				);
 				INFOPLIST_FILE = "Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
