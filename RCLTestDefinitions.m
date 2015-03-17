@@ -280,10 +280,11 @@
     }
 }
 
+
 - (void)testThings {
     [self rcl_setupEverything];
     [CBLManager rcl_enableUsefulLogs];
-    for (int i = 0; i < 400; i++) {
+    for (int i = 0; i < 100; i++) {
         [[self.testDatabase createDocument]
             update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
                 unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
