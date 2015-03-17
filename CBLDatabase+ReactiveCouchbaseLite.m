@@ -537,19 +537,18 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
 
 - (RACSignal *)rcl_resolveConflictsWithBlock:(NSDictionary *(^)(NSArray *conflictingRevisions))block {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
-    RACSignal *result = [[[[database rcl_allConflictingDocumentsQuery]
-    flattenMap:^RACSignal *(CBLQuery *allConflictingDocumentsQuery) {
-        return [[allConflictingDocumentsQuery asLiveQuery]
-        rcl_changes];
-    }]
-    flattenMap:^RACSignal *(CBLQueryRow *row) {
-        RACSignal *result =[database rcl_documentWithID:row.documentID];
-        return result;
-    }]
-    flattenMap:^RACSignal *(CBLDocument *document) {
-        RACSignal *result = [document rcl_resolveConflictsWithBlock:block];
-        return result;
-    }];
+    RACSignal *result = [[[[[database rcl_allConflictingDocumentsQuery]
+        flattenMap:^RACSignal *(CBLQuery *allConflictingDocumentsQuery) {
+            return [[allConflictingDocumentsQuery asLiveQuery]
+            rcl_changes];
+        }]
+        deliverOnMainThread]
+        flattenMap:^RACSignal *(CBLQueryRow *row) {
+            return [RCLCurrentOrNewDatabase(database) rcl_documentWithID:row.documentID];
+        }]
+        flattenMap:^RACSignal *(CBLDocument *document) {
+            return [document rcl_resolveConflictsWithBlock:block];
+        }];
     return [result setNameWithFormat:@"[%@ -rcl_resolveConflictsWithBlock: %@]", self, block];
 }
 
