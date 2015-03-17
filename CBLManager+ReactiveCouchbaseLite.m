@@ -21,15 +21,18 @@ CBLManager *RCLSharedInstanceCurrentOrNewManager(CBLManager *current) {
             [result rcl_setScheduler:[RACScheduler mainThreadScheduler]];
         }
     } else {
-        if (!current || !current.rcl_isOnScheduler) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                result = [[CBLManager sharedInstance] copy];
-            });
+        static CBLManager *backgroundManager = nil;
+        static dispatch_once_t predicate = 0;
+        dispatch_once(&predicate, ^{
+            backgroundManager = [[CBLManager sharedInstance] copy];
             NSString *description = result.description;
             dispatch_queue_t queue = dispatch_queue_create(description.UTF8String, DISPATCH_QUEUE_SERIAL);
-            result.dispatchQueue = queue;
+            backgroundManager.dispatchQueue = queue;
             RACScheduler *scheduler = [[RACQueueScheduler alloc] initWithName:description queue:queue];
-            [result rcl_setScheduler:scheduler];
+            [backgroundManager rcl_setScheduler:scheduler];
+        });
+        if (!current || !current.rcl_isOnScheduler) {
+            result = backgroundManager;
         } else {
             result = current;
         }
