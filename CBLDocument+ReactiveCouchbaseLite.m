@@ -28,10 +28,11 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
         [document.rcl_scheduler rcl_runOrScheduleBlock:^{
             NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
             NSError *error = nil;
+            NSDictionary *properties = document.properties;
             if (![document deleteDocument:&error]) {
                 [subscriber sendError:error];
             } else {
-                [subscriber sendNext:document.properties];
+                [subscriber sendNext:properties];
             }
             [subscriber sendCompleted];
         }];
@@ -213,14 +214,15 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
     RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [document.rcl_scheduler rcl_runOrScheduleBlock:^{
             NSCAssert(document.rcl_isOnScheduler, @"not on correct scheduler");
-            NSError *error = nil;
-            NSArray *revisions = [document getConflictingRevisions:&error];
-            if (revisions.count > 1) {
-                [document.database inTransaction:^BOOL {
+            __block NSError *error = nil;
+            __block NSDictionary *next = nil;
+            BOOL success = [document.database inTransaction:^BOOL{
+                NSArray *revisions = [document getConflictingRevisions:&error];
+                BOOL result = YES;
+                if (revisions.count > 1) {
                     NSDictionary *mergedProperties = block(revisions);
                     NSCAssert(mergedProperties, @"invalid merged properties");
                     CBLSavedRevision *currentRevision = document.currentRevision;
-                    BOOL result = YES;
                     for (CBLSavedRevision *savedRevision in revisions) {
                         if (result) {
                             CBLUnsavedRevision *newRevision = [savedRevision createRevision];
@@ -229,15 +231,20 @@ CBLDocument *RCLCurrentOrNewDocument(CBLDocument *current) {
                             } else {
                                 newRevision.isDeletion = YES;
                             }
-                            NSError *error = nil;
-                            result = [newRevision saveAllowingConflict:&error] != nil;
-                            if (!result) {
-                                [subscriber sendError:error];
+                            CBLSavedRevision *savedRevision = [newRevision saveAllowingConflict:&error];
+                            result = savedRevision != nil;
+                            if (result) {
+                                next = savedRevision.properties;
                             }
                         }
                     }
-                    return result;
-                }];
+                }
+                return result;
+            }];
+            if (!success) {
+                [subscriber sendError:error];
+            } else {
+                [subscriber sendNext:next];
             }
             [subscriber sendCompleted];
         }];
