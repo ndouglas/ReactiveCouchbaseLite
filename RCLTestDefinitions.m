@@ -280,6 +280,37 @@
     }
 }
 
+- (void)testThings {
+    [self rcl_setupEverything];
+    [CBLManager rcl_enableUsefulLogs];
+    for (int i = 0; i < 400; i++) {
+        [[self.testDatabase createDocument]
+            update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+                unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+                return YES;
+            } error:NULL];
+        [[self.peerDatabase createDocument]
+            update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+                unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+                return YES;
+            } error:NULL];
+        NSString *UUID = [[NSUUID UUID] UUIDString];
+        [[self.testDatabase documentWithID:UUID]
+            update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+                unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+                return YES;
+            } error:NULL];
+        [[self.peerDatabase documentWithID:UUID]
+            update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+                unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+                return YES;
+            } error:NULL];
+        
+    }
+    XCTestExpectation *expectation = [self expectationWithDescription:@"just spinning"];
+    [self waitForExpectationsWithTimeout:5000.00 handler:nil];
+}
+
 @end
 
 
