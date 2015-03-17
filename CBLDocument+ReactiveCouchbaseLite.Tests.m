@@ -201,11 +201,11 @@
     XCTestExpectation *expectation = [self expectationWithDescription:@"conflict resolved"];
     RACDisposable *disposable = [[self.testDatabase rcl_resolveConflictsWithBlock:^NSDictionary *(NSArray *conflictingRevisions) {
         NSLog(@"conflicting revisions: %@", conflictingRevisions);
-        [expectation fulfill];
         return [[[conflictingRevisions[0] document] currentRevision] properties];
     }]
     subscribeNext:^(id x) {
-        XCTFail(@"signal not supposed to next: %@", x);
+        NSLog(@"signal received next: %@", x);
+        [expectation fulfill];
     } error:^(NSError *error) {
         XCTFail(@"signal not supposed to error: %@", error);
     } completed:^{
