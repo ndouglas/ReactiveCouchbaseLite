@@ -109,6 +109,37 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     timeout:5.0 description:@"document created/opened successfully"];
 }
 
+typedef void (^RCLDocumentCreatorType)(void);
+
+- (void)testCreateDocuments {
+    __block volatile int32_t count = 0;
+    NSUInteger limit = 1000;
+    NSUInteger multiplier = 5;
+    XCTestExpectation *expectation = [self expectationWithDescription:@"documents added"];
+    RCLDocumentCreatorType (^RCLDocumentCreatorGenerator)(NSString *) = ^(NSString *queueIdentifier) {
+        return ^{
+            [[self.testDatabase rcl_createDocument]
+                subscribeNext:^(NSDictionary *document) {
+                    NSUInteger thisItem = OSAtomicAdd32(1, &count);
+                    NSLog(@"[%@] Document (%@): %@", queueIdentifier, @(thisItem), document);
+                    if (thisItem == (multiplier * limit)) {
+                        [expectation fulfill];
+                    }
+                } error:^(NSError *error) {
+                    XCTFail(@"Error: %@", error);
+                }];
+        };
+    };
+    for (int i = 0; i < limit; i++) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), RCLDocumentCreatorGenerator(@"Background"));
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), RCLDocumentCreatorGenerator(@"   Low    "));
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), RCLDocumentCreatorGenerator(@"  Default "));
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), RCLDocumentCreatorGenerator(@"   High   "));
+        dispatch_async(dispatch_get_main_queue(), RCLDocumentCreatorGenerator(@"   Main   "));
+    }
+    [self waitForExpectationsWithTimeout:10.0 handler:nil];
+}
+
 - (void)testExistingDocumentWithID {
     NSString *ID = [[NSUUID UUID] UUIDString];
     NSError *error = nil;
@@ -485,7 +516,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
         return YES;
     } error:NULL];
-    [self rcl_expectCompletionFromSignal:[self.testDatabase rcl_deleteDocumentWithID:documentID] timeout:5.0 description:@"document deleted"];
+    [self rcl_expectCompletionFromSignal:[[self.testDatabase rcl_deleteDocumentWithID:documentID] ignoreValues] timeout:5.0 description:@"document deleted"];
 }
 
 - (void)testDeletePreservingPropertiesDocumentWithID {
@@ -494,7 +525,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
         return YES;
     } error:NULL];
-    [self rcl_expectCompletionFromSignal:[self.testDatabase rcl_deletePreservingPropertiesDocumentWithID:documentID] timeout:5.0 description:@"document deleted"];
+    [self rcl_expectCompletionFromSignal:[[self.testDatabase rcl_deletePreservingPropertiesDocumentWithID:documentID] ignoreValues] timeout:5.0 description:@"document deleted"];
 }
 
 - (void)testDeleteDocumentWithIDModifyingPropertiesWithBlock {
@@ -503,9 +534,9 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
         unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
         return YES;
     } error:NULL];
-    [self rcl_expectCompletionFromSignal:[self.testDatabase rcl_deleteDocumentWithID:documentID modifyingPropertiesWithBlock:^(CBLUnsavedRevision *proposedRevision) {
+    [self rcl_expectCompletionFromSignal:[[self.testDatabase rcl_deleteDocumentWithID:documentID modifyingPropertiesWithBlock:^(CBLUnsavedRevision *proposedRevision) {
         proposedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
-    }] timeout:5.0 description:@"document deleted"];
+    }] ignoreValues] timeout:5.0 description:@"document deleted"];
 }
 
 - (void)testOnDocumentWithIDPerformBlock {
@@ -580,11 +611,11 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
     XCTestExpectation *expectation = [self expectationWithDescription:@"conflict resolved"];
     RACDisposable *disposable = [[self.testDatabase rcl_resolveConflictsWithBlock:^NSDictionary *(NSArray *conflictingRevisions) {
         NSLog(@"conflicting revisions: %@", conflictingRevisions);
-        [expectation fulfill];
         return [[[conflictingRevisions[0] document] currentRevision] properties];
     }]
     subscribeNext:^(id x) {
-        XCTFail(@"signal not supposed to next: %@", x);
+        NSLog(@"signal received next: %@", x);
+        [expectation fulfill];
     } error:^(NSError *error) {
         XCTFail(@"signal not supposed to error: %@", error);
     } completed:^{
