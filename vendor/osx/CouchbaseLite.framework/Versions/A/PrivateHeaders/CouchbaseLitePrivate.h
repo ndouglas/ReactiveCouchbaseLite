@@ -17,9 +17,6 @@
 
 
 @interface CBLManager ()
-#if TARGET_OS_IPHONE
-@property (readonly) NSDataWritingOptions fileProtection;
-#endif
 @property (readonly) CBL_Server* backgroundServer;
 #if DEBUG // for unit tests only
 - (CBLDatabase*) createEmptyDatabaseNamed: (NSString*)name error: (NSError**)outError;
@@ -40,9 +37,7 @@
 - (void) addReplication: (CBLReplication*)repl;
 - (void) forgetReplication: (CBLReplication*)repl;
 - (void) _clearDocumentCache;
-#if DEBUG // for testing
 - (CBLDocument*) _cachedDocumentWithID: (NSString*)docID;
-#endif
 @end
 
 @interface CBLDatabase (Private)
@@ -70,7 +65,9 @@
 - (instancetype) initWithDatabase: (CBLDatabase*)database
                        documentID: (NSString*)docID                 __attribute__((nonnull));
 - (CBLSavedRevision*) revisionFromRev: (CBL_Revision*)rev;
-- (void) revisionAdded: (CBLDatabaseChange*)change                 __attribute__((nonnull));
+- (void) revisionAdded: (CBLDatabaseChange*)change
+                notify: (BOOL)notify                                __attribute__((nonnull));
+- (void) forgetCurrentRevision;
 - (void) loadCurrentRevisionFrom: (CBLQueryRow*)row                 __attribute__((nonnull));
 - (CBLSavedRevision*) putProperties: (NSDictionary*)properties
                      prevRevID: (NSString*)prevID
@@ -130,27 +127,36 @@
                          mapBlock: (CBLMapBlock)mapBlock            __attribute__((nonnull));
 @end
 
+
 @interface CBLQueryEnumerator ()
 + (NSSortDescriptor*) asNSSortDescriptor: (id)descOrStr; // Converts NSString to NSSortDescriptor
 @end
+
+
+@protocol CBL_QueryRowStorage;
 
 @interface CBLQueryRow ()
 - (instancetype) initWithDocID: (NSString*)docID
                       sequence: (SequenceNumber)sequence
                            key: (id)key
                          value: (id)value
-                 docProperties: (NSDictionary*)docProperties;
+                 docProperties: (NSDictionary*)docProperties
+                       storage: (id<CBL_QueryRowStorage>)storage;
 @property (readwrite, nonatomic) CBLDatabase* database;
+@property (readonly, nonatomic) id<CBL_QueryRowStorage> storage;
 @property (readonly, nonatomic) NSDictionary* asJSONDictionary;
 @end
 
+
 @interface CBLFullTextQueryRow ()
-- (instancetype) initWithView: (CBLView*)view
-                        docID: (NSString*)docID
-                     sequence: (SequenceNumber)sequence
-                   fullTextID: (unsigned)fullTextID;
+- (instancetype) initWithDocID: (NSString*)docID
+                      sequence: (SequenceNumber)sequence
+                    fullTextID: (UInt64)fullTextID
+                         value: (id)value
+                       storage: (id<CBL_QueryRowStorage>)storage;
 - (void) addTerm: (NSUInteger)term atRange: (NSRange)range;
 @end
+
 
 @interface CBLGeoQueryRow ()
 - (instancetype) initWithDocID: (NSString*)docID
@@ -158,7 +164,8 @@
                    boundingBox: (CBLGeoRect)bbox
                    geoJSONData: (NSData*)geoJSONData
                          value: (NSData*)valueData
-                 docProperties: (NSDictionary*)docProperties;
+                 docProperties: (NSDictionary*)docProperties
+                       storage: (id<CBL_QueryRowStorage>)storage;
 @end
 
 NSString* CBLKeyPathForQueryRow(NSString* keyPath); // for testing
@@ -172,4 +179,13 @@ NSString* CBLKeyPathForQueryRow(NSString* keyPath); // for testing
                            remote: (NSURL*)remote
                              pull: (BOOL)pull                       __attribute__((nonnull));
 @property (nonatomic, readonly) NSDictionary* properties;
+@end
+
+
+@interface CBLModelFactory ()
+- (CBLQueryBuilder*) queryBuilderForClass: (Class)klass
+                                 property: (NSString*)property;
+- (void) setQueryBuilder: (CBLQueryBuilder*)builder
+                forClass: (Class)klass
+                property: (NSString*)property;
 @end
