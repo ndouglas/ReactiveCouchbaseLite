@@ -36,11 +36,11 @@
 		D8D6CCC01A9E140000C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC811A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.Tests.m */; };
 		D8D6CCC11A9E140000C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC841A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.Tests.m */; };
 		D8D6CCC21A9E140000C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC881A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.Tests.m */; };
-		D8D6CCC51A9E155100C8D5F5 /* RCLTestDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC8C1A9E13BB00C8D5F5 /* RCLTestDefinitions.m */; };
 		D8D6CCC71A9E156C00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC701A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8D6CCCD1A9E172100C8D5F5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCCC1A9E172100C8D5F5 /* Foundation.framework */; };
 		D8D6CCD21A9E1E4200C8D5F5 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; };
 		D8D6CCD31A9E1E4200C8D5F5 /* CouchbaseLiteListener.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; };
+		D8DC8A821ABA090200B4AA70 /* RCLTestDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC8C1A9E13BB00C8D5F5 /* RCLTestDefinitions.m */; };
 		D8EE9C911AB7415300CB15B1 /* CouchbaseLite.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8EE9C921AB7415300CB15B1 /* CouchbaseLiteListener.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8EE9C931AB7448A00CB15B1 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; };
@@ -488,7 +488,7 @@
 				D8D6CCBC1A9E140000C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.Tests.m in Sources */,
 				D8D6CCBF1A9E140000C8D5F5 /* CBLModel+ReactiveCouchbaseLite.Tests.m in Sources */,
 				D8D6CCBB1A9E140000C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m in Sources */,
-				D8D6CCC51A9E155100C8D5F5 /* RCLTestDefinitions.m in Sources */,
+				D8DC8A821ABA090200B4AA70 /* RCLTestDefinitions.m in Sources */,
 				D8D6CCC11A9E140000C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.Tests.m in Sources */,
 				D8D6CCBD1A9E140000C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.Tests.m in Sources */,
 				D8D6CCBE1A9E140000C8D5F5 /* CBLManager+ReactiveCouchbaseLite.Tests.m in Sources */,
@@ -608,7 +608,10 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vendor/osx/CouchbaseLite.framework/Headers";
@@ -636,7 +639,10 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vendor/osx/CouchbaseLite.framework/Headers";

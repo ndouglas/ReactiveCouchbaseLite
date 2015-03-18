@@ -280,7 +280,7 @@
     }
 }
 
-
+/**
 - (void)testThings {
     [self rcl_setupEverything];
     [CBLManager rcl_enableUsefulLogs];
@@ -309,8 +309,9 @@
         
     }
     XCTestExpectation *expectation = [self expectationWithDescription:@"just spinning"];
-    [self waitForExpectationsWithTimeout:5000.00 handler:nil];
+    [self waitForExpectationsWithTimeout:5.00 handler:nil];
 }
+*/
 
 @end
 

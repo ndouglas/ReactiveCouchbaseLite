@@ -24,10 +24,12 @@
 	[super tearDown];
 }
 
-- (void)test {
-	/*
-		Run a test here.
-	*/
+- (void)testRunOrScheduleBlock {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"block performed"];
+    [[RACScheduler mainThreadScheduler] rcl_runOrScheduleBlock:^{
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 @end
