@@ -14,5 +14,6 @@
 #import "CBLManager+ReactiveCouchbaseLite.h"
 #import "CBLModel+ReactiveCouchbaseLite.h"
 #import "CBLQuery+ReactiveCouchbaseLite.h"
+#import "CBLQueryEnumerator+ReactiveCouchbaseLite.h"
 #import "CBLReplication+ReactiveCouchbaseLite.h"
 #import "RACScheduler+ReactiveCouchbaseLite.h"

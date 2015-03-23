@@ -41,6 +41,9 @@
 		D8D6CCD21A9E1E4200C8D5F5 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; };
 		D8D6CCD31A9E1E4200C8D5F5 /* CouchbaseLiteListener.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; };
 		D8DC8A821ABA090200B4AA70 /* RCLTestDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC8C1A9E13BB00C8D5F5 /* RCLTestDefinitions.m */; };
+		D8E394991AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8E394961AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8E3949A1AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8E394971AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.m */; };
+		D8E3949C1AC0604A0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8E394981AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.Tests.m */; };
 		D8EE9C911AB7415300CB15B1 /* CouchbaseLite.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8EE9C921AB7415300CB15B1 /* CouchbaseLiteListener.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8EE9C931AB7448A00CB15B1 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; };
@@ -133,6 +136,9 @@
 		D8D6CCCC1A9E172100C8D5F5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8D6CCCE1A9E1C9C00C8D5F5 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		D8D6CCCF1A9E1C9C00C8D5F5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		D8E394961AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CBLQueryEnumerator+ReactiveCouchbaseLite.h"; sourceTree = "<group>"; };
+		D8E394971AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLQueryEnumerator+ReactiveCouchbaseLite.m"; sourceTree = "<group>"; };
+		D8E394981AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBLQueryEnumerator+ReactiveCouchbaseLite.Tests.m"; sourceTree = "<group>"; };
 		F3920EA2D6F07FFB54773B63 /* Pods-ReactiveCouchbaseLiteTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactiveCouchbaseLiteTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ReactiveCouchbaseLiteTests/Pods-ReactiveCouchbaseLiteTests.release.xcconfig"; sourceTree = "<group>"; };
 		FA6656A74090E1EE3F08FE46 /* libPods-ReactiveCouchbaseLiteTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactiveCouchbaseLiteTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -231,6 +237,9 @@
 				D8D6CC7F1A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.h */,
 				D8D6CC801A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.m */,
 				D8D6CC811A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.Tests.m */,
+				D8E394961AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.h */,
+				D8E394971AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.m */,
+				D8E394981AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.Tests.m */,
 				D8D6CC821A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.h */,
 				D8D6CC831A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.m */,
 				D8D6CC841A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.Tests.m */,
@@ -295,6 +304,7 @@
 				D8D6CCA81A9E13BB00C8D5F5 /* RCLDefinitions.h in Headers */,
 				D8D6CC9E1A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.h in Headers */,
 				D8D6CC5A1A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h in Headers */,
+				D8E394991AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.h in Headers */,
 				D8D6CC981A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.h in Headers */,
 				D8D6CC951A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.h in Headers */,
 				D8D6CC9B1A9E13BB00C8D5F5 /* CBLModel+ReactiveCouchbaseLite.h in Headers */,
@@ -471,6 +481,7 @@
 				D8D6CC961A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.m in Sources */,
 				D8D6CCA91A9E13BB00C8D5F5 /* RCLDefinitions.m in Sources */,
 				D8D6CCA61A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.m in Sources */,
+				D8E3949A1AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.m in Sources */,
 				D8D6CC9F1A9E13BB00C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.m in Sources */,
 				D8D6CC901A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.m in Sources */,
 				D8D6CCA21A9E13BB00C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.m in Sources */,
@@ -484,6 +495,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8E3949C1AC0604A0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.Tests.m in Sources */,
 				D8D6CCC01A9E140000C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.Tests.m in Sources */,
 				D8D6CCBC1A9E140000C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.Tests.m in Sources */,
 				D8D6CCBF1A9E140000C8D5F5 /* CBLModel+ReactiveCouchbaseLite.Tests.m in Sources */,

@@ -68,60 +68,84 @@
     timeout:5.0 description:@"observed initial value for rows"];
 }
 
-- (void)testChanges {
-    RACSignal *liveQuerySignal = [[[self.manager rcl_databaseNamed:self.testName]
-    flattenMap:^RACSignal *(CBLDatabase *database) {
-        return [database rcl_allDocumentsQuery];
-    }]
-    flattenMap:^RACSignal *(CBLQuery *query) {
-        CBLLiveQuery *liveQuery = query.asLiveQuery;
-        return [liveQuery rcl_changes];
-    }];
+- (void)testChanges1 {
     NSString *UUID1 = [[NSUUID UUID] UUIDString];
     [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID1] times:1 interval:0.1];
-    [self rcl_expectCompletionFromSignal:[[liveQuerySignal
-    doCompleted:^{
-        XCTFail(@"This signal is not supposed to complete.");
-    }]
-    takeUntilBlock:^BOOL (CBLQueryRow *row) {
-        BOOL result = [row.key isEqualToString:UUID1];
-        return result;
-    }]
-    timeout:5.0 description:@"observed first added row"];
+    [self rcl_expectCompletionFromSignal:[[[[self.testDatabase rcl_allDocumentsQuery]
+        flattenMap:^RACSignal *(CBLQuery *query) {
+            CBLLiveQuery *liveQuery = query.asLiveQuery;
+            return [liveQuery rcl_changes];
+        }]
+        doCompleted:^{
+            XCTFail(@"This signal is not supposed to complete.");
+        }]
+        takeUntilBlock:^BOOL (CBLQueryRow *row) {
+            BOOL result = [row.key isEqualToString:UUID1];
+            return result;
+        }]
+        timeout:5.0 description:@"observed first added row"];
+}
+
+- (void)testChanges2 {
     NSString *UUID2 = [[NSUUID UUID] UUIDString];
     [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID2] times:1 interval:0.1];
-    [self rcl_expectCompletionFromSignal:[[[liveQuerySignal
-    doCompleted:^{
-        XCTFail(@"This signal is not supposed to complete.");
-    }]
-    takeUntilBlock:^BOOL (CBLQueryRow *row) {
-        BOOL result = [row.key isEqualToString:UUID2];
-        return result;
-    }]
-    ignoreValues]
-    timeout:5.0 description:@"observed second added row"];
+    [self rcl_expectCompletionFromSignal:[[[[[self.testDatabase rcl_allDocumentsQuery]
+        flattenMap:^RACSignal *(CBLQuery *query) {
+            CBLLiveQuery *liveQuery = query.asLiveQuery;
+            return [liveQuery rcl_changes];
+        }]
+        doCompleted:^{
+            XCTFail(@"This signal is not supposed to complete.");
+        }]
+        takeUntilBlock:^BOOL (CBLQueryRow *row) {
+            BOOL result = [row.key isEqualToString:UUID2];
+            return result;
+        }]
+        ignoreValues]
+        timeout:5.0 description:@"observed second added row"];
+}
+
+- (void)testChanges3 {
     NSString *UUID3 = [[NSUUID UUID] UUIDString];
-    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID3] times:6 interval:0.1];
     [self rcl_expectNexts:@[
         ^(CBLQueryRow *_row_) {
+            NSLog(@"Row: %@", _row_);
             XCTAssertNotNil(_row_);
+            [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID3] times:1 interval:0.1];
         },
         ^(CBLQueryRow *_row_) {
+            NSLog(@"Row: %@", _row_);
             XCTAssertNotNil(_row_);
+            [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID3] times:1 interval:0.1];
         },
         ^(CBLQueryRow *_row_) {
+            NSLog(@"Row: %@", _row_);
             XCTAssertNotNil(_row_);
+            [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID3] times:1 interval:0.1];
         },
         ^(CBLQueryRow *_row_) {
+            NSLog(@"Row: %@", _row_);
             XCTAssertNotNil(_row_);
+            [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID3] times:1 interval:0.1];
         },
         ^(CBLQueryRow *_row_) {
+            NSLog(@"Row: %@", _row_);
             XCTAssertNotNil(_row_);
+            [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID3] times:1 interval:0.1];
         },
         ^(CBLQueryRow *_row_) {
+            NSLog(@"Row: %@", _row_);
             XCTAssertNotNil(_row_);
         },
-    ] signal:[liveQuerySignal take:6] timeout:5.0 description:@"all updates received"];
+    ] signal:[[[self.testDatabase rcl_allDocumentsQuery]
+        flattenMap:^RACSignal *(CBLQuery *query) {
+            CBLLiveQuery *liveQuery = query.asLiveQuery;
+            return [liveQuery rcl_changes];
+        }]
+        take:6]
+    initially:^{
+        [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:UUID3] times:1 interval:0.1];
+    } timeout:5.0 description:@"all updates received"];
 }
 
 - (void)testMultipleChanges {
@@ -143,18 +167,18 @@
     __block BOOL result2 = NO;
     __block BOOL result3 = NO;
     [self rcl_expectCompletionFromSignal:[[[liveQuerySignal
-    doCompleted:^{
-        XCTFail(@"This signal is not supposed to complete.");
-    }]
-    takeUntilBlock:^BOOL (CBLQueryRow *row) {
-        result1 = result1 || [row.key isEqualToString:UUID1];
-        result2 = result2 || [row.key isEqualToString:UUID2];
-        result3 = result3 || [row.key isEqualToString:UUID3];
-        BOOL result = result1 && result2 && result3;
-        return result;
-    }]
-    ignoreValues]
-    timeout:5.0 description:@"observed first added row"];
+        doCompleted:^{
+            XCTFail(@"This signal is not supposed to complete.");
+        }]
+        takeUntilBlock:^BOOL (CBLQueryRow *row) {
+            result1 = result1 || [row.key isEqualToString:UUID1];
+            result2 = result2 || [row.key isEqualToString:UUID2];
+            result3 = result3 || [row.key isEqualToString:UUID3];
+            BOOL result = result1 && result2 && result3;
+            return result;
+        }]
+        ignoreValues]
+        timeout:5.0 description:@"observed first added row"];
 }
 
 @end

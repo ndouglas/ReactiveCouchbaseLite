@@ -150,8 +150,7 @@
 
 - (void)rcl_updateDocument:(CBLDocument *)document withBlock:(BOOL (^)(CBLUnsavedRevision *newRevision))updater completionHandler:(void (^)(BOOL success, NSError *error))block {
     NSError *error = nil;
-    BOOL success = [document update:updater error:&error] != nil;
-    block(success, error);
+    block([document update:updater error:&error] != nil, error);
 }
 
 - (void)rcl_triviallyUpdateDocument:(CBLDocument *)document times:(NSUInteger)times interval:(NSTimeInterval)interval {
