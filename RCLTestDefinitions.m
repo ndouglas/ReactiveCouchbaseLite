@@ -230,8 +230,7 @@
     if (!self.listener) {
         [self rcl_setupListener];
     }
-    NSError *error = nil;
-    XCTAssertTrue(self.pushReplication = [self.testDatabase createPushReplication:self.peerURL], @"Error: %@", error);
+    self.pushReplication = [self.testDatabase createPushReplication:self.peerURL];
     self.pushReplication.continuous = YES;
     [self.pushReplication start];
     NSLog(@"Push replication started.");
@@ -241,8 +240,7 @@
     if (!self.listener) {
         [self rcl_setupListener];
     }
-    NSError *error = nil;
-    XCTAssertTrue(self.pullReplication = [self.testDatabase createPullReplication:self.peerURL], @"Error: %@", error);
+    self.pullReplication = [self.testDatabase createPullReplication:self.peerURL];
     self.pullReplication.continuous = YES;
     [self.pullReplication start];
     NSLog(@"Pull replication started.");

@@ -48,22 +48,27 @@
 
 @interface CBLDatabaseChange ()
 - (instancetype) initWithAddedRevision: (CBL_Revision*)addedRevision
-                       winningRevision: (CBL_Revision*)winningRevision
+                     winningRevisionID: (NSString*)winningRevisionID
                             inConflict: (BOOL)maybeConflict
                                 source: (NSURL*)source;
 /** The revision just added. Guaranteed immutable. */
 @property (nonatomic, readonly) CBL_Revision* addedRevision;
-/** The revision that is now the default "winning" revision of the document.
- Guaranteed immutable.*/
-@property (nonatomic, readonly) CBL_Revision* winningRevision;
+/** The revID of the default "winning" revision, or nil if it did not change. */
+@property (nonatomic, readonly) NSString* winningRevisionID;
+/** The revision that is now the default "winning" revision of the document, or nil if not known
+    Guaranteed immutable.*/
+@property (nonatomic, readonly) CBL_Revision* winningRevisionIfKnown;
 /** Is this a relayed notification of one from another thread, not the original? */
 @property (nonatomic, readonly) bool echoed;
+/** Discards the body of the revision to save memory. */
+- (void) reduceMemoryUsage;
 @end
 
 
 @interface CBLDocument () <CBLCacheable>
 - (instancetype) initWithDatabase: (CBLDatabase*)database
-                       documentID: (NSString*)docID                 __attribute__((nonnull));
+                       documentID: (NSString*)docID
+                           exists: (BOOL)exists                     __attribute__((nonnull));
 - (CBLSavedRevision*) revisionFromRev: (CBL_Revision*)rev;
 - (void) revisionAdded: (CBLDatabaseChange*)change
                 notify: (BOOL)notify                                __attribute__((nonnull));
@@ -140,11 +145,12 @@
                       sequence: (SequenceNumber)sequence
                            key: (id)key
                          value: (id)value
-                 docProperties: (NSDictionary*)docProperties
+                   docRevision: (CBL_Revision*)docRevision
                        storage: (id<CBL_QueryRowStorage>)storage;
 @property (readwrite, nonatomic) CBLDatabase* database;
 @property (readonly, nonatomic) id<CBL_QueryRowStorage> storage;
 @property (readonly, nonatomic) NSDictionary* asJSONDictionary;
+@property (readonly, nonatomic) CBL_Revision* documentRevision;
 @end
 
 
@@ -164,7 +170,7 @@
                    boundingBox: (CBLGeoRect)bbox
                    geoJSONData: (NSData*)geoJSONData
                          value: (NSData*)valueData
-                 docProperties: (NSDictionary*)docProperties
+                   docRevision: (CBL_Revision*)docRevision
                        storage: (id<CBL_QueryRowStorage>)storage;
 @end
 

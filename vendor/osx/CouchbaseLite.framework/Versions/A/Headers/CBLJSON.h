@@ -39,13 +39,17 @@ typedef NSUInteger CBLJSONWritingOptions;
 /** Same as -dataWithJSONObject... but returns an NSString. */
 + (nullable NSString*) stringWithJSONObject:(id)obj
                            options:(CBLJSONWritingOptions)opt
-                             error:(__nullable NSError **)error;
+                             error:(NSError**)error;
 
 /** Given valid JSON data representing a dictionary, inserts the contents of the given NSDictionary into it and returns the resulting JSON data.
     This does not parse or regenerate the JSON, so it's quite fast.
     But it will generate invalid JSON if the input JSON begins or ends with whitespace, or if the dictionary contains any keys that are already in the original JSON. */
 + (NSData*) appendDictionary: (NSDictionary*)dict
         toJSONDictionaryData: (NSData*)json;
+
+/** Same as above but inserts a pre-encoded JSON dictionary instead of an NSDictionary. */
++ (NSData*) appendJSONDictionaryData: (NSData*)extraJson
+                toJSONDictionaryData: (NSData*)json;
 
 /** Encodes an NSDate as a string in ISO-8601 format. */
 + (NSString*) JSONObjectWithDate: (NSDate*)date;

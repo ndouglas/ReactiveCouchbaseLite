@@ -1,0 +1,6 @@
+framework module CouchbaseLiteListener {
+  umbrella header "CouchbaseLiteListener.h"
+
+  export *
+  module * { export * }
+}
