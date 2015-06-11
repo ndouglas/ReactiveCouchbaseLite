@@ -735,32 +735,56 @@ typedef void (^RCLDocumentCreatorType)(void);
     CBLReplication *pullReplication2 = [self.testDatabase createPullReplication:self.peerURL];
     pullReplication2.continuous = YES;
     
+    NSString *propertyKey1 = @"propertyKey1";
+    NSString *paramsCondition1 = @"paramsCondition1";
+    NSString *UUID1 = @"UUID1";
+    NSString *UUID2 = @"UUID2";
+    
     // Add a filter to the database.
     [self.testDatabase setFilterNamed:@"MyFilterName" asBlock:^BOOL(CBLSavedRevision* revision, NSDictionary* params) {
-        return YES;
+        NSDictionary *properties = revision.properties;
+        BOOL result = [params[paramsCondition1] isEqualToString:properties[propertyKey1]];
+        NSLog(@"Test filter (%@ == %@) %@ properties: %@", params[paramsCondition1], properties[propertyKey1], result ? @"accepted" : @"rejected", properties);
+        return result;
     }];
     [self.peerDatabase setFilterNamed:@"MyFilterName" asBlock:^BOOL(CBLSavedRevision* revision, NSDictionary* params) {
-        return YES;
+        NSDictionary *properties = revision.properties;
+        BOOL result = [params[paramsCondition1] isEqualToString:properties[propertyKey1]];
+        NSLog(@"Peer filter (%@ == %@) %@ properties: %@", params[paramsCondition1], properties[propertyKey1], result ? @"accepted" : @"rejected", properties);
+        return result;
     }];
     
     // Enable filters on the replications.
     pushReplication1.filter = @"MyFilterName";
-    pushReplication1.filterParams = @{};
+    pushReplication1.filterParams = @{
+        paramsCondition1 : UUID1,
+    };
     
     pullReplication1.filter = @"MyFilterName";
-    pullReplication1.filterParams = @{};
+    pullReplication1.filterParams =  @{
+        paramsCondition1 : UUID1,
+    };
 
     pushReplication2.filter = @"MyFilterName";
-    pushReplication2.filterParams = @{};
+    pushReplication2.filterParams =  @{
+        paramsCondition1 : UUID2,
+    };
 
     pullReplication2.filter = @"MyFilterName";
-    pullReplication2.filterParams = @{};
+    pullReplication2.filterParams =  @{
+        paramsCondition1 : UUID2,
+    };
     
     // Let's create some random documents.
     for (int i = 0; i < 50; i++) {
         [[self.testDatabase documentWithID:[[NSUUID UUID] UUIDString]] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
             unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
             unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+            if (i % 2 == 0) {
+                unsavedRevision.properties[propertyKey1] = UUID1;
+            } else if (i % 2 == 1) {
+                unsavedRevision.properties[propertyKey1] = UUID2;
+            }
             return YES;
         } error:NULL];
     }
@@ -794,7 +818,7 @@ typedef void (^RCLDocumentCreatorType)(void);
     });
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Just wait for a while"];
-    [self waitForExpectationsWithTimeout:50 handler:nil];
+    [self waitForExpectationsWithTimeout:500 handler:nil];
 }
 
 - (void)testSomeOtherStuff {
