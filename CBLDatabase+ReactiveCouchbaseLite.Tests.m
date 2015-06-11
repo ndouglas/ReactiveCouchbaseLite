@@ -23,7 +23,7 @@ typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
 
 - (void)setUp {
 	[super setUp];
-    [self rcl_setupEverything];
+    [self rcl_setupListener];
 }
 
 - (void)tearDown {
@@ -629,6 +629,178 @@ typedef void (^RCLDocumentCreatorType)(void);
         [self.pullReplication stop];
         [disposable dispose];
     }];
+}
+
+- (void)testMultipleSimultaneousReplications {
+    self.pushReplication = [self.testDatabase createPushReplication:self.peerURL];
+    self.pullReplication = [self.testDatabase createPullReplication:self.peerURL];
+    self.pushReplication.continuous = YES;
+    self.pullReplication.continuous = YES;
+    [self.pushReplication start];
+    [self.pullReplication start];
+    NSString *documentID = [[NSUUID UUID] UUIDString];
+    [[self.testDatabase documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+        unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+        return YES;
+    } error:NULL];
+    [[self.peerDatabase documentWithID:documentID] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+        unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+        unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+        return YES;
+    } error:NULL];
+    XCTAssertNotNil([self.testDatabase documentWithID:documentID]);
+    XCTAssertNotNil([self.peerDatabase documentWithID:documentID]);
+    [self.testDatabase setFilterNamed:@"MyFilterName" asBlock:^BOOL(CBLSavedRevision* revision, NSDictionary* params) {
+        return YES;
+    }];
+    [self.testDatabase setFilterNamed:@"MyFilterName2" asBlock:^BOOL(CBLSavedRevision* revision, NSDictionary* params) {
+        return YES;
+    }];
+    CBLReplication *pushReplicationDuplicate = [self.testDatabase createPushReplication:self.peerURL];
+    CBLReplication *pullReplicationDuplicate = [self.testDatabase createPullReplication:self.peerURL];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.pushReplication.continuous = self.pullReplication.continuous = YES;
+        [[[RACObserve(self.pushReplication, status)
+            setNameWithFormat:@"pushReplication"]
+            logAll]
+            subscribeCompleted:^{ }];
+        [[[RACObserve(self.pullReplication, status)
+            setNameWithFormat:@"pullReplication"]
+            logAll]
+            subscribeCompleted:^{ }];
+        self.pushReplication.filter = @"MyFilterName";
+        self.pushReplication.filterParams = @{
+            @"A" : @"B"
+        };
+        self.pullReplication.filter = @"MyFilterName";
+        self.pullReplication.filterParams = @{
+            @"A" : @"B"
+        };
+        [self.pushReplication start];
+        [self.pullReplication start];
+        [[[RACObserve(pushReplicationDuplicate, status)
+            setNameWithFormat:@"pushReplicationDuplicate"]
+            logAll]
+            subscribeCompleted:^{ }];
+        [[[RACObserve(pullReplicationDuplicate, status)
+            setNameWithFormat:@"pullReplicationDuplicate"]
+            logAll]
+            subscribeCompleted:^{ }];
+        pushReplicationDuplicate.filter = @"MyFilterName2";
+        pushReplicationDuplicate.filterParams = @{
+            @"A" : @"C"
+        };
+        pullReplicationDuplicate.filter = @"MyFilterName2";
+        pullReplicationDuplicate.filterParams = @{
+            @"A" : @"C"
+        };
+        [pushReplicationDuplicate start];
+        [pullReplicationDuplicate start];
+    });
+    XCTestExpectation *expectation = [self expectationWithDescription:@"conflict resolved"];
+    RACDisposable *disposable = [[self.testDatabase rcl_resolveConflictsWithBlock:^NSDictionary *(NSArray *conflictingRevisions) {
+        NSLog(@"conflicting revisions: %@", conflictingRevisions);
+        return [[[conflictingRevisions[0] document] currentRevision] properties];
+    }]
+    subscribeNext:^(id x) {
+        NSLog(@"signal received next: %@", x);
+        [expectation fulfill];
+    } error:^(NSError *error) {
+        XCTFail(@"signal not supposed to error: %@", error);
+    } completed:^{
+        XCTFail(@"signal not supposed to complete");
+    }];
+    [self waitForExpectationsWithTimeout:5.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Encountered error: %@", error);
+        }
+        //[self.pushReplication stop];
+        //[self.pullReplication stop];
+        [disposable dispose];
+    }];
+    //[pushReplicationDuplicate stop];
+    //[pullReplicationDuplicate stop];
+}
+
+- (void)testMultipleSimultaneousReplications2 {
+    // self.testDatabase is an open, valid database.
+    // self.peerURL is the URL of a listener with an appended database name (so: valid for replication).
+    CBLReplication *pushReplication1 = [self.testDatabase createPushReplication:self.peerURL];
+    pushReplication1.continuous = YES;
+    CBLReplication *pullReplication1 = [self.testDatabase createPullReplication:self.peerURL];
+    pullReplication1.continuous = YES;
+    CBLReplication *pushReplication2 = [self.testDatabase createPushReplication:self.peerURL];
+    pushReplication2.continuous = YES;
+    CBLReplication *pullReplication2 = [self.testDatabase createPullReplication:self.peerURL];
+    pullReplication2.continuous = YES;
+    
+    // Add a filter to the database.
+    [self.testDatabase setFilterNamed:@"MyFilterName" asBlock:^BOOL(CBLSavedRevision* revision, NSDictionary* params) {
+        return YES;
+    }];
+    [self.peerDatabase setFilterNamed:@"MyFilterName" asBlock:^BOOL(CBLSavedRevision* revision, NSDictionary* params) {
+        return YES;
+    }];
+    
+    // Enable filters on the replications.
+    pushReplication1.filter = @"MyFilterName";
+    pushReplication1.filterParams = @{};
+    
+    pullReplication1.filter = @"MyFilterName";
+    pullReplication1.filterParams = @{};
+
+    pushReplication2.filter = @"MyFilterName";
+    pushReplication2.filterParams = @{};
+
+    pullReplication2.filter = @"MyFilterName";
+    pullReplication2.filterParams = @{};
+    
+    // Let's create some random documents.
+    for (int i = 0; i < 50; i++) {
+        [[self.testDatabase documentWithID:[[NSUUID UUID] UUIDString]] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {
+            unsavedRevision.properties[@"name"] = [[NSUUID UUID] UUIDString];
+            unsavedRevision.properties[[[NSUUID UUID] UUIDString]] = [[NSUUID UUID] UUIDString];
+            return YES;
+        } error:NULL];
+    }
+    
+    // Let's log the statuses of the replications as they change.
+    [[[RACObserve(pushReplication1, status)
+        setNameWithFormat:@"pushReplication1"]
+        logAll]
+        subscribeCompleted:^{ }];
+    [[[RACObserve(pullReplication1, status)
+        setNameWithFormat:@"pullReplication1"]
+        logAll]
+        subscribeCompleted:^{ }];
+    [[[RACObserve(pushReplication2, status)
+        setNameWithFormat:@"pushReplication2"]
+        logAll]
+        subscribeCompleted:^{ }];
+    [[[RACObserve(pullReplication2, status)
+        setNameWithFormat:@"pullReplication2"]
+        logAll]
+        subscribeCompleted:^{ }];
+    
+    // Start some replications now.
+    [pushReplication1 start];
+    [pullReplication1 start];
+
+    // Simulate a delayed start for a couple of other replications.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [pushReplication2 start];
+        [pushReplication2 start];
+    });
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Just wait for a while"];
+    [self waitForExpectationsWithTimeout:50 handler:nil];
+}
+
+- (void)testSomeOtherStuff {
+    NSArray *array = @[@"A", @"B", @"C"];
+    RACSequence *sequence = array.rac_sequence;
+    RACSignal *signal = sequence.signal;
 }
 
 @end

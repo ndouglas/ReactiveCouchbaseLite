@@ -6,16 +6,10 @@
 //  Copyright (c) 2012-2013 Couchbase, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "CBLBase.h"
 @class CBLDatabase;
 
-#if __has_feature(nullability) // Xcode 6.3+
-#pragma clang assume_nonnull begin
-#else
-#define nullable
-#define __nullable
-#endif
-
+NS_ASSUME_NONNULL_BEGIN
 /** Option flags for CBLManager initialization. */
 typedef struct CBLManagerOptions {
     bool                 readOnly;          /**< No modifications to databases are allowed. */
@@ -93,10 +87,32 @@ typedef struct CBLManagerOptions {
 - (nullable CBLDatabase*) objectForKeyedSubscript: (NSString*)key;
 
 /** An array of the names of all existing databases. */
-@property (readonly) NSArray* allDatabaseNames;
+@property (readonly) CBLArrayOf(NSString*)* allDatabaseNames;
 
-/** Replaces or installs a database from a file.
-    This is primarily used to install a canned database on first launch of an app, in which case you should first check .exists to avoid replacing the database if it exists already. The canned database would have been copied into your app bundle at build time.
+
+#ifdef CBL_DEPRECATED
+/** Replaces or installs a database from a file. This is primarily used to install a canned database 
+    on first launch of an app, in which case you should first check .exists to avoid replacing the 
+    database if it exists already. The canned database would have been copied into your app bundle 
+    at build time. This property is deprecated for the new .cblite2 database file. If the database 
+    file is a directory and has the .cblite2 extension, 
+    use -replaceDatabaseNamed:withDatabaseDir:error: instead.
+ @param databaseName  The name of the database to replace.
+ @param databasePath  Path of the database file that should replace it.
+ @param attachmentsPath  Path of the associated attachments directory, or nil if there are no attachments.
+ @param outError  If an error occurs, it will be stored into this parameter on return.
+ @return  YES if the database was copied, NO if an error occurred. */
+- (BOOL) replaceDatabaseNamed: (NSString*)databaseName
+             withDatabaseFile: (NSString*)databasePath
+              withAttachments: (NSString*)attachmentsPath
+                        error: (NSError**)outError                  __attribute__((nonnull(1,2)));
+#endif
+
+/** Replaces or installs a database from a file. This is primarily used to install a canned database 
+    on first launch of an app, in which case you should first check .exists to avoid replacing the 
+    database if it exists already. The canned database would have been copied into your app bundle 
+    at build time. If the database file is not a directory and has the .cblite extension,
+    use -replaceDatabaseNamed:withDatabaseFile:withAttachments:error: instead.
     @param databaseName  The name of the database to replace.
     @param databaseDir  Path of the database directory that should replace it.
     @param outError  If an error occurs, it will be stored into this parameter on return.
@@ -160,6 +176,4 @@ extern NSString* const CBLHTTPErrorDomain;
 
 
 
-#if __has_feature(nullability)
-#pragma clang assume_nonnull end
-#endif
+NS_ASSUME_NONNULL_END

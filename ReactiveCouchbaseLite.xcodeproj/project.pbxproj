@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2B02CAB1FDBD3C577E63D923 /* libPods-ReactiveCouchbaseLiteTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6656A74090E1EE3F08FE46 /* libPods-ReactiveCouchbaseLiteTests.a */; };
 		3F73D6AC7EB91816F3669653 /* libPods-ReactiveCouchbaseLite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB906D12016E8B918413903A /* libPods-ReactiveCouchbaseLite.a */; };
+		D8C0E7B01AF2715F001AE017 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC721A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m */; };
 		D8D6CC5A1A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC591A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8D6CC601A9E135000C8D5F5 /* ReactiveCouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CC541A9E134F00C8D5F5 /* ReactiveCouchbaseLite.framework */; };
 		D8D6CC901A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC711A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.m */; };
@@ -28,7 +29,6 @@
 		D8D6CCA61A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC871A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.m */; };
 		D8D6CCA81A9E13BB00C8D5F5 /* RCLDefinitions.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC891A9E13BB00C8D5F5 /* RCLDefinitions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8D6CCA91A9E13BB00C8D5F5 /* RCLDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC8A1A9E13BB00C8D5F5 /* RCLDefinitions.m */; };
-		D8D6CCBB1A9E140000C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC721A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m */; };
 		D8D6CCBC1A9E140000C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC751A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.Tests.m */; };
 		D8D6CCBD1A9E140000C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC781A9E13BB00C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.Tests.m */; };
 		D8D6CCBE1A9E140000C8D5F5 /* CBLManager+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC7B1A9E13BB00C8D5F5 /* CBLManager+ReactiveCouchbaseLite.Tests.m */; };
@@ -497,9 +497,9 @@
 			files = (
 				D8E3949C1AC0604A0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.Tests.m in Sources */,
 				D8D6CCC01A9E140000C8D5F5 /* CBLQuery+ReactiveCouchbaseLite.Tests.m in Sources */,
+				D8C0E7B01AF2715F001AE017 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m in Sources */,
 				D8D6CCBC1A9E140000C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.Tests.m in Sources */,
 				D8D6CCBF1A9E140000C8D5F5 /* CBLModel+ReactiveCouchbaseLite.Tests.m in Sources */,
-				D8D6CCBB1A9E140000C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m in Sources */,
 				D8DC8A821ABA090200B4AA70 /* RCLTestDefinitions.m in Sources */,
 				D8D6CCC11A9E140000C8D5F5 /* CBLReplication+ReactiveCouchbaseLite.Tests.m in Sources */,
 				D8D6CCBD1A9E140000C8D5F5 /* CBLLiveQuery+ReactiveCouchbaseLite.Tests.m in Sources */,
