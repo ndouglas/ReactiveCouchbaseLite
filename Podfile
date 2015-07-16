@@ -7,7 +7,7 @@ target 'ReactiveCouchbaseLite' do
 end
 
 target 'ReactiveCouchbaseLiteTests', :exclusive => true do
-	platform :osx, '10.10'
+	pod 'ReactiveCouchbaseLite', :path => '.'
 	pod 'OCMockito'
 end
 
