@@ -102,7 +102,7 @@ typedef BOOL (^CBLFilterBlock) (CBLSavedRevision* revision, NSDictionary* __null
 - (nullable CBLDocument*) existingDocumentWithID: (NSString*)docID;
 
 /** Same as -documentWithID:. Enables "[]" access in Xcode 4.4+ */
-- (CBLDocument*)objectForKeyedSubscript: (NSString*)key;
+- (nullable CBLDocument*)objectForKeyedSubscript: (NSString*)key;
 
 /** Creates a new CBLDocument object with no properties and a new (random) UUID.
     The document will be saved to the database when you call -putProperties: on it. */
@@ -233,6 +233,10 @@ typedef BOOL (^CBLChangeEnumeratorBlock) (NSString* key,
 
 /** The contents of the current revision of the document, or nil if this is a new document. */
 @property (readonly, nullable) CBLSavedRevision* currentRevision;
+
+/** The source of the change: either the URL of the remote database that's being pulled from,
+    or a "user:" URL denoting the user authenticated through the listener's REST API, or nil. */
+@property (readonly, nonatomic) NSURL* source;
 
 /** Rejects the proposed new revision. */
 - (void) reject;

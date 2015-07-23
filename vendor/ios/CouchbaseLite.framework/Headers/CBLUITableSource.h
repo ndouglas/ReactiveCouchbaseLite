@@ -6,8 +6,11 @@
 //  Copyright 2011-2013 Couchbase, Inc. All rights reserved.
 //
 
+#import "CBLBase.h"
 #import <UIKit/UIKit.h>
 @class CBLDocument, CBLLiveQuery, CBLQueryRow;
+
+NS_ASSUME_NONNULL_BEGIN
 
 /** A UITableView data source driven by a CBLLiveQuery.
     It populates the table rows from the query rows, and automatically updates the table as the
@@ -32,19 +35,19 @@
 #pragma mark Row Accessors:
 
 /** The current array of CBLQueryRows being used as the data source for the table. */
-@property (nonatomic, readonly) NSArray* rows;
+@property (nonatomic, readonly, nullable) CBLArrayOf(CBLQueryRow*)* rows;
 
 /** Convenience accessor to get the row object for a given table row index. */
-- (CBLQueryRow*) rowAtIndex: (NSUInteger)index;
+- (nullable CBLQueryRow*) rowAtIndex: (NSUInteger)index;
 
 /** Convenience accessor to find the index path of the row with a given document. */
-- (NSIndexPath*) indexPathForDocument: (CBLDocument*)document           __attribute__((nonnull));
+- (nullable NSIndexPath*) indexPathForDocument: (CBLDocument*)document;
 
 /** Convenience accessor to return the query row at a given index path. */
-- (CBLQueryRow*) rowAtIndexPath: (NSIndexPath*)path                     __attribute__((nonnull));
+- (nullable CBLQueryRow*) rowAtIndexPath: (NSIndexPath*)path;
 
 /** Convenience accessor to return the document at a given index path. */
-- (CBLDocument*) documentAtIndexPath: (NSIndexPath*)path                __attribute__((nonnull));
+- (nullable CBLDocument*) documentAtIndexPath: (NSIndexPath*)path;
 
 
 #pragma mark Displaying The Table:
@@ -52,7 +55,7 @@
 /** If non-nil, specifies the property name of the query row's value that will be used for the table row's visible label.
     If the row's value is not a dictionary, or if the property doesn't exist, the property will next be looked up in the document's properties.
     If this doesn't meet your needs for labeling rows, you should implement -couchTableSource:willUseCell:forRow: in the table's delegate. */
-@property (copy) NSString* labelProperty;
+@property (copy, nullable) NSString* labelProperty;
 
 
 #pragma mark Editing The Table:
@@ -61,12 +64,12 @@
 @property (nonatomic) BOOL deletionAllowed;
 
 /** Deletes the documents at the given row indexes, animating the removal from the table. */
-- (BOOL) deleteDocumentsAtIndexes: (NSArray*)indexPaths
-                            error: (NSError**)outError                  __attribute__((nonnull(1)));
+- (BOOL) deleteDocumentsAtIndexes: (CBLArrayOf(NSIndexPath*)*)indexPaths
+                            error: (NSError**)outError;
 
 /** Asynchronously deletes the given documents, animating the removal from the table. */
-- (BOOL) deleteDocuments: (NSArray*)documents
-                   error: (NSError**)outError                           __attribute__((nonnull(1)));
+- (BOOL) deleteDocuments: (CBLArrayOf(CBLDocument*)*)documents
+                   error: (NSError**)outError;
 
 @end
 
@@ -87,7 +90,7 @@
 /** Called after the query's results change to update the table view. If this method is not implemented by the delegate, reloadData is called on the table view.*/
 - (void)couchTableSource:(CBLUITableSource*)source
          updateFromQuery:(CBLLiveQuery*)query
-            previousRows:(NSArray *)previousRows;
+            previousRows:(CBLArrayOf(CBLQueryRow*) *)previousRows;
 
 /** Called from -tableView:cellForRowAtIndexPath: just before it returns, giving the delegate a chance to customize the new cell. */
 - (void)couchTableSource:(CBLUITableSource*)source
@@ -108,3 +111,6 @@
             deleteFailed:(NSError*)error;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

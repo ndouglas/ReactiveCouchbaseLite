@@ -9,6 +9,7 @@
 #import "CBLQuery.h"
 #import "CBLGeometry.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 /** CBLQuery interface for geo-queries.
     To use this, the view's map function must have emitted geometries (points, rects, etc.)
@@ -35,11 +36,14 @@
 
 /** The GeoJSON object emitted as the key of the emit() call by the map function.
     The format is a parsed GeoJSON point or polygon; see http://geojson.org/geojson-spec */
-@property (readonly) NSDictionary* geometry;
+@property (readonly, nullable) NSDictionary* geometry;
 
 /** The GeoJSON object type of the row's geometry.
     Usually @"Point" or @"Rectangle", but may be another type if the emitted key was GeoJSON.
     (The "Rectangle" type is not standard GeoJSON.) */
-@property (readonly, nonatomic) NSString* geometryType;
+@property (readonly, nonatomic, nullable) NSString* geometryType;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

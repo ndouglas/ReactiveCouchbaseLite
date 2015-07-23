@@ -43,6 +43,8 @@
 
 + (IMP) impForGetterOfProperty: (NSString*)property ofClass: (Class)propertyClass;
 + (IMP) impForSetterOfProperty: (NSString*)property ofClass: (Class)propertyClass;
++ (IMP) impForGetterOfProperty: (NSString*)property ofProtocol: (Protocol*)propertyProtocol;
++ (IMP) impForSetterOfProperty: (NSString*)property ofProtocol: (Protocol*)propertyProtocol;
 + (IMP) impForGetterOfProperty: (NSString*)property ofType: (const char*)propertyType;
 + (IMP) impForSetterOfProperty: (NSString*)property ofType: (const char*)propertyType;
 
@@ -65,4 +67,7 @@ BOOL MYGetPropertyInfo(Class cls,
     or nil if a class does not apply or no such property is present.
     See Property Type String section of the Objective-C Runtime Programming Guide 
     for more information about the format of the string. */
-Class MYClassFromType(const char* propertyType);
+Class MYClassFromType(const char* propertyType, Class relativeToClass);
+
+/** Same as MYClassFromType, except for protocols. */
+Protocol* MYProtocolFromType(const char* propertyType, Class relativeToClass);

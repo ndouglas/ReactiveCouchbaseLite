@@ -10,6 +10,7 @@
 @class CBLSavedRevision, CBLUnsavedRevision, CBLDatabaseChange;
 @protocol CBLDocumentModel;
 
+NS_ASSUME_NONNULL_BEGIN
 
 /** A CouchbaseLite document (as opposed to any specific revision of it.) */
 @interface CBLDocument : NSObject
@@ -42,24 +43,24 @@
 #pragma mark REVISIONS:
 
 /** The ID of the current revision (if known; else nil). */
-@property (readonly, copy) NSString* currentRevisionID;
+@property (readonly, copy, nullable) NSString* currentRevisionID;
 
 /** The current/latest revision. This object is cached. */
-@property (readonly) CBLSavedRevision* currentRevision;
+@property (readonly, nullable) CBLSavedRevision* currentRevision;
 
 /** The revision with the specified ID. */
-- (CBLSavedRevision*) revisionWithID: (NSString*)revisionID;
+- (nullable CBLSavedRevision*) revisionWithID: (NSString*)revisionID;
 
 /** Returns the document's history as an array of CBLRevisions. (See CBLRevision's method.) */
-- (NSArray*) getRevisionHistory: (NSError**)outError;
+- (nullable CBLArrayOf(CBLRevision*)*) getRevisionHistory: (NSError**)outError;
 
 /** Returns all the current conflicting revisions of the document. If the document is not
     in conflict, only the single current revision will be returned. */
-- (NSArray*) getConflictingRevisions: (NSError**)outError;
+- (nullable CBLArrayOf(CBLRevision*)*) getConflictingRevisions: (NSError**)outError;
 
 /** Returns all the leaf revisions in the document's revision tree,
     including deleted revisions (i.e. previously-resolved conflicts.) */
-- (NSArray*) getLeafRevisions: (NSError**)outError;
+- (nullable CBLArrayOf(CBLRevision*)*) getLeafRevisions: (NSError**)outError;
 
 /** Creates an unsaved new revision whose parent is the currentRevision,
     or which will be the first revision if the document doesn't exist yet.
@@ -74,22 +75,22 @@
     This is shorthand for self.currentRevision.properties.
     Any keys in the dictionary that begin with "_", such as "_id" and "_rev", contain CouchbaseLite
     metadata. */
-@property (readonly, copy) NSDictionary* properties;
+@property (readonly, copy, nullable) CBLJSONDict* properties;
 
 /** The user-defined properties, without the ones reserved by CouchDB.
     This is based on -properties, with every key whose name starts with "_" removed. */
-@property (readonly, copy) NSDictionary* userProperties;
+@property (readonly, copy, nullable) CBLJSONDict* userProperties;
 
 /** Shorthand for [self.properties objectForKey: key]. */
-- (id) propertyForKey: (NSString*)key                                   __attribute__((nonnull));
+- (nullable id) propertyForKey: (NSString*)key;
 
 /** Same as -propertyForKey:. Enables "[]" access in Xcode 4.4+ */
-- (id)objectForKeyedSubscript:(NSString*)key                            __attribute__((nonnull));
+- (nullable id)objectForKeyedSubscript:(NSString*)key;
 
 /** Saves a new revision. The properties dictionary must have a "_rev" property whose ID matches the current revision's (as it will if it's a modified copy of this document's .properties
     property.) */
-- (CBLSavedRevision*) putProperties: (NSDictionary*)properties
-                              error: (NSError**)outError                __attribute__((nonnull(1)));
+- (nullable CBLSavedRevision*) putProperties: (CBLJSONDict*)properties
+                                       error: (NSError**)outError;
 
 /** Saves a new revision by letting the caller update the existing properties.
     This method handles conflicts by retrying (calling the block again).
@@ -102,8 +103,8 @@
             error will be stored.
     @return  The new saved revision, or nil on error or cancellation.
  */
-- (CBLSavedRevision*) update: (BOOL(^)(CBLUnsavedRevision*))block
-                       error: (NSError**)outError                    __attribute__((nonnull(1)));
+- (nullable CBLSavedRevision*) update: (BOOL(^)(CBLUnsavedRevision*))block
+                                error: (NSError**)outError;
 
 
 #pragma mark MODEL:
@@ -111,8 +112,10 @@
 /** Optional reference to an application-defined model object representing this document.
     Usually this is a CBLModel, but you can implement your own model classes if you want.
     Note that this is a weak reference. */
-@property (weak) id<CBLDocumentModel> modelObject;
+@property (weak, nullable) id<CBLDocumentModel> modelObject;
 
+
+- (instancetype) init NS_UNAVAILABLE;
 
 @end
 
@@ -123,7 +126,7 @@
 /** Called whenever a new revision is added to the document.
     (Equivalent to kCBLDocumentChangeNotification.) */
 - (void) document: (CBLDocument*)doc
-        didChange: (CBLDatabaseChange*)change                        __attribute__((nonnull));
+        didChange: (CBLDatabaseChange*)change;
 @end
 
 
@@ -136,3 +139,6 @@
     not currently any CBLDocument instance representing it, no notification will be posted.
     If you want to observe all document changes in a database, use kCBLDatabaseChangeNotification.*/
 extern NSString* const kCBLDocumentChangeNotification;
+
+
+NS_ASSUME_NONNULL_END

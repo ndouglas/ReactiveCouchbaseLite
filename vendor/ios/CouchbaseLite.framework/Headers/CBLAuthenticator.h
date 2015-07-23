@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 Couchbase, Inc. All rights reserved.
 
 
-#import <Foundation/Foundation.h>
+#import "CBLBase.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 /** The CBLAuthenticator protocol defines objects that can authenticate a user to a remote database
     server. An object conforming to this protocol is acquired from the CBLAuthenticator _class_'s
@@ -51,4 +52,18 @@
                                                 tokenSecret: (NSString*)tokenSecret
                                             signatureMethod: (NSString*)signatureMethod;
 
+/** Creates an authenticator that uses an SSL/TLS client certificate.
+    @param identity  The identity certificate plus private key
+    @param certs  Any additional CA certs needed to establish the chain of authority. */
++ (id<CBLAuthenticator>) SSLClientCertAuthenticatorWithIdentity: (SecIdentityRef)identity
+                                                supportingCerts: (nullable NSArray*)certs;
+
++ (id<CBLAuthenticator>) SSLClientCertAuthenticatorWithAnonymousIdentity: (NSString*)label;
+
+- (instancetype) init NS_UNAVAILABLE;
+
 @end
+
+
+
+NS_ASSUME_NONNULL_END
