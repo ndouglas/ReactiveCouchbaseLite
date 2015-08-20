@@ -21,6 +21,15 @@ typedef NS_ENUM(unsigned, CBLReplicationStatus) {
 } ;
 
 
+/** Callback for notifying progress downloading an attachment.
+    `bytesRead` is the number of bytes received so far and `contentLength` is the total number of
+    bytes to read. The download is complete when bytesRead == contentLength. If an error occurs,
+    `error` will be non-nil. */
+typedef void (^CBLAttachmentProgressBlock)(uint64_t bytesRead,
+                                           uint64_t contentLength,
+                                           NSError* error);
+
+
 /** A 'push' or 'pull' replication between a local and a remote database.
     Replications can be one-shot or continuous. */
 @interface CBLReplication : NSObject
@@ -64,6 +73,11 @@ typedef NS_ENUM(unsigned, CBLReplicationStatus) {
 
 /** Sets the documents to specify as part of the replication. */
 @property (copy, nullable) CBLArrayOf(NSString*) *documentIDs;
+
+/** Should attachments be downloaded automatically along with documents?
+    Defaults to YES; if you set it to NO you can later download individual attachments by calling
+    -downloadAttachment:. */
+@property (nonatomic) BOOL downloadsAttachments;
 
 /** Extra HTTP headers to send in all requests to the remote server.
     Should map strings (header names) to strings. */
@@ -170,6 +184,7 @@ typedef NS_ENUM(unsigned, CBLReplicationStatus) {
 /** The total number of changes to be processed, if the task is active, else 0 (observable). */
 @property (nonatomic, readonly) unsigned changesCount;
 
+#pragma mark - PENDING DOCUMENTS (PUSH ONLY):
 
 /** The IDs of documents that have local changes that have not yet been pushed to the server
     by this replication. This only considers documents that this replication would push: documents
@@ -184,6 +199,16 @@ typedef NS_ENUM(unsigned, CBLReplicationStatus) {
     changes. */
 - (BOOL) isDocumentPending: (CBLDocument*)doc;
 
+#pragma mark - ATTACHMENT DOWNLOADING (PULL ONLY)
+
+/** Starts an asynchronous download of an attachment that was skipped in a pull replication.
+    @param attachment  The attachment to download.
+    @return  An NSProgress object that will be updated to report the progress of the download.
+        You can use Key-Value Observing to observe its fractionCompleted property.
+        (Note: observer callbacks will be issued on a background thread!)
+        You can cancel the download by calling its -cancel method. */
+- (NSProgress*) downloadAttachment: (CBLAttachment*)attachment;
+
 
 - (instancetype) init NS_UNAVAILABLE;
 
@@ -194,6 +219,9 @@ typedef NS_ENUM(unsigned, CBLReplicationStatus) {
     {status, running, error, completed, total}. It's often more convenient to observe this
     notification rather than observing each property individually. */
 extern NSString* const kCBLReplicationChangeNotification;
+
+/** NSProgress userInfo key used to report an NSError when an attachment download fails. */
+extern NSString* const kCBLProgressErrorKey;
 
 
 NS_ASSUME_NONNULL_END
