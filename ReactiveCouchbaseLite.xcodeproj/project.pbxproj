@@ -11,7 +11,6 @@
 		3F73D6AC7EB91816F3669653 /* libPods-ReactiveCouchbaseLite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB906D12016E8B918413903A /* libPods-ReactiveCouchbaseLite.a */; };
 		D8C0E7B01AF2715F001AE017 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC721A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.Tests.m */; };
 		D8D6CC5A1A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC591A9E134F00C8D5F5 /* ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8D6CC601A9E135000C8D5F5 /* ReactiveCouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CC541A9E134F00C8D5F5 /* ReactiveCouchbaseLite.framework */; };
 		D8D6CC901A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC711A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.m */; };
 		D8D6CC921A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC731A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8D6CC931A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC741A9E13BB00C8D5F5 /* CBLDocument+ReactiveCouchbaseLite.m */; };
@@ -38,16 +37,12 @@
 		D8D6CCC21A9E140000C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC881A9E13BB00C8D5F5 /* RACScheduler+ReactiveCouchbaseLite.Tests.m */; };
 		D8D6CCC71A9E156C00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D6CC701A9E13BB00C8D5F5 /* CBLDatabase+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8D6CCCD1A9E172100C8D5F5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCCC1A9E172100C8D5F5 /* Foundation.framework */; };
-		D8D6CCD21A9E1E4200C8D5F5 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; };
-		D8D6CCD31A9E1E4200C8D5F5 /* CouchbaseLiteListener.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; };
 		D8DC8A821ABA090200B4AA70 /* RCLTestDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D6CC8C1A9E13BB00C8D5F5 /* RCLTestDefinitions.m */; };
 		D8E394991AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.h in Headers */ = {isa = PBXBuildFile; fileRef = D8E394961AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8E3949A1AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D8E394971AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.m */; };
 		D8E3949C1AC0604A0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8E394981AC0602F0010CC50 /* CBLQueryEnumerator+ReactiveCouchbaseLite.Tests.m */; };
 		D8EE9C911AB7415300CB15B1 /* CouchbaseLite.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8EE9C921AB7415300CB15B1 /* CouchbaseLiteListener.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		D8EE9C931AB7448A00CB15B1 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; };
-		D8EE9C941AB7448D00CB15B1 /* CouchbaseLiteListener.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; };
 		D8EE9C961AB7452800CB15B1 /* CouchbaseLite.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D6CCB41A9E13E400C8D5F5 /* CouchbaseLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8EE9C971AB7452800CB15B1 /* CouchbaseLiteListener.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D6CCB51A9E13E400C8D5F5 /* CouchbaseLiteListener.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -150,8 +145,6 @@
 			files = (
 				D8D6CCCD1A9E172100C8D5F5 /* Foundation.framework in Frameworks */,
 				3F73D6AC7EB91816F3669653 /* libPods-ReactiveCouchbaseLite.a in Frameworks */,
-				D8D6CCD21A9E1E4200C8D5F5 /* CouchbaseLite.framework in Frameworks */,
-				D8D6CCD31A9E1E4200C8D5F5 /* CouchbaseLiteListener.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,9 +152,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8D6CC601A9E135000C8D5F5 /* ReactiveCouchbaseLite.framework in Frameworks */,
-				D8EE9C931AB7448A00CB15B1 /* CouchbaseLite.framework in Frameworks */,
-				D8EE9C941AB7448D00CB15B1 /* CouchbaseLiteListener.framework in Frameworks */,
 				2B02CAB1FDBD3C577E63D923 /* libPods-ReactiveCouchbaseLiteTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

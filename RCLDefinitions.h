@@ -7,7 +7,7 @@
 //  See LICENSE for details.
 //
 
-#import <CouchbaseLite/CouchbaseLite.h>
+#import <couchbase-lite-osx/CouchbaseLite.h>
 #import <CouchbaseLiteListener/CBLListener.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 

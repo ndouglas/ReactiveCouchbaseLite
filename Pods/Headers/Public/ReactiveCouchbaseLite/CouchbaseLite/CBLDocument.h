@@ -1,1 +1,0 @@
-../../../../../vendor/osx/CouchbaseLite.framework/Versions/A/Headers/CBLDocument.h
