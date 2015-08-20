@@ -4,7 +4,22 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>OCHamcrest.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>OCMockito.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-ReactiveCouchbaseLite.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-ReactiveCouchbaseLiteTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -14,15 +29,40 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>ReactiveCouchbaseLite.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>E94D2927D9F460F184AF9C902E1ED9A8</key>
+		<key>1D0ACC49E7D4221D6255879F468BB50D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EE29EBF81677291E4D26BAE0DBB19481</key>
+		<key>20C8BD2173733653DD8B87E49B188A39</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>991B500BC68757B2D6FCE90DE689D2BC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>99DA32089CC403AE9C5F9C4E48C8DE1C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9AA7C7C42C6BED67819FA01DB57D3110</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F21AADAB71A752149E78D8301DA73848</key>
 		<dict>
 			<key>primary</key>
 			<true/>

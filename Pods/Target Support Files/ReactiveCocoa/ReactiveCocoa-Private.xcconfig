@@ -1,5 +1,5 @@
 #include "ReactiveCocoa.xcconfig"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/ReactiveCocoa" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/ReactiveCocoa" "${PODS_ROOT}/Headers/Public/couchbase-lite-osx" "${PODS_ROOT}/Headers/Public/couchbase-lite-osx/CouchbaseLite" "${PODS_ROOT}/Headers/Public/couchbase-lite-osx/CouchbaseLiteListener"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/ReactiveCocoa" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/OCHamcrest" "${PODS_ROOT}/Headers/Public/OCMockito" "${PODS_ROOT}/Headers/Public/ReactiveCocoa" "${PODS_ROOT}/Headers/Public/ReactiveCouchbaseLite" "${PODS_ROOT}/Headers/Public/ReactiveCouchbaseLite/CouchbaseLite" "${PODS_ROOT}/Headers/Public/ReactiveCouchbaseLite/CouchbaseLiteListener"
 PODS_ROOT = ${SRCROOT}
 SKIP_INSTALL = YES

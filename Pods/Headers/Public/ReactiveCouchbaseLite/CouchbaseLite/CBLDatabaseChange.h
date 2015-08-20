@@ -1,0 +1,1 @@
+../../../../../vendor/osx/CouchbaseLite.framework/Versions/A/Headers/CBLDatabaseChange.h
