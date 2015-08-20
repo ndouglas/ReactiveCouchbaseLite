@@ -172,7 +172,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		421C3FF0F2734E104EA9DCC209087D9D /* PBXContainerItemProxy */ = {
+		F0A92E86EF7435D1BA0EC762F58B5433 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
 			proxyType = 1;
@@ -810,7 +810,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				63B3140430A87F6708EB94D9DF4875B8 /* PBXTargetDependency */,
+				E075186E3DBA5393475A6FD44E145467 /* PBXTargetDependency */,
 			);
 			name = "Pods-ReactiveCouchbaseLite";
 			productName = "Pods-ReactiveCouchbaseLite";
@@ -956,11 +956,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		63B3140430A87F6708EB94D9DF4875B8 /* PBXTargetDependency */ = {
+		E075186E3DBA5393475A6FD44E145467 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = ReactiveCocoa;
 			target = EE29EBF81677291E4D26BAE0DBB19481 /* ReactiveCocoa */;
-			targetProxy = 421C3FF0F2734E104EA9DCC209087D9D /* PBXContainerItemProxy */;
+			targetProxy = F0A92E86EF7435D1BA0EC762F58B5433 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

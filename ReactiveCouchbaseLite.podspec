@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         		= "ReactiveCouchbaseLite"
-  s.version      		= "1.0.31"
+  s.version      		= "1.0.32"
   s.summary      		= "A merger of Reactive Cocoa and Couchbase-Lite."
   s.description  		= <<-DESC
 				A merger of Reactive Cocoa and Couchbase-Lite.
@@ -27,19 +27,12 @@ Pod::Spec.new do |s|
   s.author             		= { "Nathan Douglas" => "ndouglas@devontechnologies.com" }
   s.ios.deployment_target 	= "7.0"
   s.osx.deployment_target 	= "10.8"
-  s.source       		= { :git => "https://github.com/ndouglas/ReactiveCouchbaseLite.git", :tag => "1.0.31" }
+  s.source       		= { :git => "https://github.com/ndouglas/ReactiveCouchbaseLite.git", :tag => "1.0.32" }
   s.exclude_files 		= "*.Tests.m", "RCLTestDefinitions.{h,m}"
   s.frameworks			= "Foundation"
   s.dependency 			"ReactiveCocoa"
   s.osx.source_files  		= "*.{h,m}", "Pods/couchbase-lite-osx/CouchbaseLite.framework/Headers/*.h",  "Pods/couchbase-lite-osx/CouchbaseLiteListener.framework/Headers/*.h", 
   s.ios.source_files  		= "*.{h,m}", "Pods/couchbase-lite-ios/CouchbaseLite.framework/Headers/*.h",  "Pods/couchbase-lite-ios/CouchbaseLiteListener.framework/Headers/*.h", 
-  s.osx.preserve_paths 		= "Pods/couchbase-lite-osx/CouchbaseLite.framework", "Pods/couchbase-lite-osx/CouchbaseLiteListener.framework"
-  s.ios.preserve_paths 		= "Pods/couchbase-lite-ios/CouchbaseLite.framework", "Pods/couchbase-lite-ios/CouchbaseLiteListener.framework"
-  s.osx.vendored_frameworks	= "Pods/couchbase-lite-osx/CouchbaseLite.framework", "Pods/couchbase-lite-osx/CouchbaseLiteListener.framework"
-  s.ios.vendored_frameworks	= "Pods/couchbase-lite-ios/CouchbaseLite.framework", "Pods/couchbase-lite-ios/CouchbaseLiteListener.framework"
-  s.osx.resources		= "Pods/couchbase-lite-osx/CouchbaseLite.framework", "Pods/couchbase-lite-osx/CouchbaseLiteListener.framework"
-  s.ios.resources		= "Pods/couchbase-lite-ios/CouchbaseLite.framework", "Pods/couchbase-lite-ios/CouchbaseLiteListener.framework"
-  s.xcconfig 			= { 'LD_RUNPATH_SEARCH_PATHS' => '@loader_path/../Frameworks' }
   s.ios.dependency		"couchbase-lite-ios"
   s.osx.dependency		"couchbase-lite-osx"
   s.ios.dependency		"couchbase-lite-ios/Listener"
