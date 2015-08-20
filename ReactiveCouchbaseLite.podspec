@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         		= "ReactiveCouchbaseLite"
-  s.version      		= "1.0.34"
+  s.version      		= "1.0.35"
   s.summary      		= "A merger of Reactive Cocoa and Couchbase-Lite."
   s.description  		= <<-DESC
 				A merger of Reactive Cocoa and Couchbase-Lite.
@@ -27,15 +27,13 @@ Pod::Spec.new do |s|
   s.author             		= { "Nathan Douglas" => "ndouglas@devontechnologies.com" }
   s.ios.deployment_target 	= "7.0"
   s.osx.deployment_target 	= "10.8"
-  s.source       		= { :git => "https://github.com/ndouglas/ReactiveCouchbaseLite.git", :tag => "1.0.34" }
+  s.source       		= { :git => "https://github.com/ndouglas/ReactiveCouchbaseLite.git", :tag => "1.0.35" }
   s.exclude_files 		= "*.Tests.m", "RCLTestDefinitions.{h,m}"
   s.osx.source_files  		= "*.{h,m}", "vendor/osx/CouchbaseLite.framework/Headers/*.h",  "vendor/osx/CouchbaseLiteListener.framework/Headers/*.h", 
   s.ios.source_files  		= "*.{h,m}", "vendor/ios/CouchbaseLite.framework/Headers/*.h",  "vendor/ios/CouchbaseLiteListener.framework/Headers/*.h", 
   s.frameworks			= "Foundation"
-  s.ios.frameworks		= "CFNetwork.framework"
-  s.ios.frameworks		= "Security.framework"
-  s.ios.frameworks		= "libsqlite3.dylib"
-  s.ios.frameworks		= "libz.dylib"
+  s.ios.frameworks		= "CFNetwork", "Security""
+  s.ios.libraries		= "libsqlite3", "libz"
   s.osx.preserve_paths 		= "vendor/osx/CouchbaseLite.framework", "vendor/osx/CouchbaseLiteListener.framework"
   s.ios.preserve_paths 		= "vendor/ios/CouchbaseLite.framework", "vendor/ios/CouchbaseLiteListener.framework"
   s.osx.vendored_frameworks	= "vendor/osx/CouchbaseLite.framework", "vendor/osx/CouchbaseLiteListener.framework"
