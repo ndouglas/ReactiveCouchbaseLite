@@ -27,7 +27,7 @@
 	[super tearDown];
 }
 
-- (void)testRun {
+- (void)testRunMethod {
     NSError *error = nil;
     for (int i = 0; i < 500; i++) {
         [[self.testDatabase documentWithID:[[NSUUID UUID] UUIDString]] update:^BOOL(CBLUnsavedRevision *unsavedRevision) {

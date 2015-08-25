@@ -8,6 +8,7 @@ end
 
 target 'ReactiveCouchbaseLiteTests', :exclusive => true do
 	pod 'ReactiveCouchbaseLite', :path => '.'
+	pod 'OCHamcrest'
 	pod 'OCMockito'
 end
 

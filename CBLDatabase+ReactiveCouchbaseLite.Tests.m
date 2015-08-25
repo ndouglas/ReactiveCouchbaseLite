@@ -819,12 +819,14 @@ typedef void (^RCLDocumentCreatorType)(void);
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Just wait for a while"];
     [self waitForExpectationsWithTimeout:500 handler:nil];
+    [expectation fulfill];
 }
 
 - (void)testSomeOtherStuff {
     NSArray *array = @[@"A", @"B", @"C"];
     RACSequence *sequence = array.rac_sequence;
     RACSignal *signal = sequence.signal;
+    [signal logAll];
 }
 
 @end
