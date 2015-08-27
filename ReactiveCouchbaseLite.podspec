@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name                        = "ReactiveCouchbaseLite"
-  s.version                     = "1.0.45"
+  s.version                     = "1.0.46"
   s.summary                     = "A merger of Reactive Cocoa and Couchbase-Lite."
   s.description                 = <<-DESC
                                 A merger of Reactive Cocoa and Couchbase-Lite.
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   s.author             			= { "Nathan Douglas" => "ndouglas@devontechnologies.com" }
   s.ios.deployment_target 		= "7.0"
   s.osx.deployment_target 		= "10.8"
-  s.source                      = { :git => "https://github.com/ndouglas/ReactiveCouchbaseLite.git", :tag => "1.0.45" }
+  s.source                      = { :git => "https://github.com/ndouglas/ReactiveCouchbaseLite.git", :tag => "1.0.46" }
   s.subspec 'Core' do |cs|
   	cs.exclude_files            = "*.Tests.m", "RCLTestDefinitions.{h,m}"
   	cs.osx.source_files  		= "*.{h,m}", "vendor/osx/CouchbaseLite.framework/Headers/*.h",  "vendor/osx/CouchbaseLiteListener.framework/Headers/*.h", 
@@ -36,22 +36,20 @@ Pod::Spec.new do |s|
   	cs.ios.frameworks           = "CFNetwork", "Security"
   	cs.ios.libraries            = "sqlite3", "z"
   	cs.osx.preserve_paths 		= "vendor/osx/CouchbaseLite.framework", "vendor/osx/CouchbaseLiteListener.framework"
-  	cs.ios.preserve_paths 		= "vendor/ios/CouchbaseLite.framework", "vendor/ios/CouchbaseLiteListener.framework"
   	cs.osx.vendored_frameworks	= "vendor/osx/CouchbaseLite.framework", "vendor/osx/CouchbaseLiteListener.framework"
-  	cs.ios.vendored_frameworks	= "vendor/ios/CouchbaseLite.framework", "vendor/ios/CouchbaseLiteListener.framework"
   	cs.osx.resources            = "vendor/osx/CouchbaseLite.framework", "vendor/osx/CouchbaseLiteListener.framework"
+  	cs.ios.preserve_paths 		= "vendor/ios/CouchbaseLite.framework", "vendor/ios/CouchbaseLiteListener.framework"
+  	cs.ios.vendored_frameworks	= "vendor/ios/CouchbaseLite.framework", "vendor/ios/CouchbaseLiteListener.framework"
   	cs.ios.resources            = "vendor/ios/CouchbaseLite.framework", "vendor/ios/CouchbaseLiteListener.framework"
   	cs.xcconfig                 = { 'LD_RUNPATH_SEARCH_PATHS' => '@loader_path/../Frameworks' }
 	cs.dependency               "ReactiveCocoa"
   end
   s.subspec 'Tests' do |ts|
 	ts.source_files             = "RCLTestDefinitions.{h,m}", "*.Tests.m"
-	ts.frameworks               = "XCTest"
+	ts.frameworks               = "XCTest", "Foundation"
 	ts.dependency               "OCMockito"
 	ts.dependency               "OCHamcrest"
-    ts.ios.libraries            = "kern"
 	ts.dependency               "ReactiveCouchbaseLite/Core"
-	ts.xcconfig                 = { "GCC_PREPROCESSOR_DEFINITIONS" => '$(inherited) HC_SHORTHAND MOCKITO_SHORTHAND' }
   end
   s.default_subspec             = 'Core'
 end
