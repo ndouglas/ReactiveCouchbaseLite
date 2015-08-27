@@ -86,6 +86,20 @@ typedef struct CBLManagerOptions {
 - (BOOL) registerEncryptionKey: (nullable id)encryptionKey
               forDatabaseNamed: (NSString*)name;
 
+#if !TARGET_OS_IPHONE
+/** Encrypts a database using a randomly-generated key that's stored in the default Keychain.
+    This must be called before opening an encrypted database, or before creating a database
+    that's to be encrypted.
+ 
+    (The effect is similar to -registerEncryptionKey:forDatabaseNamed:, except that storage of
+    the key is taken care of automatically.)
+
+    For security reasons this method is not available on iOS. Instead, consider using
+    CBLEncryptionController (found in the Extras folder of the distribution) as a high level
+    interface for managing database encryption using a user-supplied password or TouchID. */
+- (BOOL) encryptDatabaseNamed: (NSString*)name;
+#endif
+
 /** Same as -existingDatabaseNamed:. Enables "[]" access in Xcode 4.4+ */
 - (nullable CBLDatabase*) objectForKeyedSubscript: (NSString*)key;
 
@@ -158,7 +172,7 @@ typedef struct CBLManagerOptions {
     It's usually more convenient to enable logging via command-line args, as discussed on that
     same page; but in some environments you may not have access to the args, or may want to use
     other criteria to enable logging. */
-+ (void) enableLogging: (NSString*)type;
++ (void) enableLogging: (nullable NSString*)type;
 
 /** Redirects Couchbase Lite logging: instead of writing to the console/stderr, it will call the
     given block. Passing a nil block restores the default behavior. */
