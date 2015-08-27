@@ -11,7 +11,7 @@
 #import "RCLTestDefinitions.h"
 #import "ReactiveCouchbaseLite.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
-#import <kern/OSAtomic.h>
+#import <libkern/OSAtomic.h>
 
 typedef void (^RCLObjectTesterBlock)(id);
 typedef RCLObjectTesterBlock (^RCLObjectTesterGeneratorBlock)(id);
