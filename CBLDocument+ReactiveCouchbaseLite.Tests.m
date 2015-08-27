@@ -9,7 +9,7 @@
 
 #import <XCTest/XCTest.h>
 #import "RCLTestDefinitions.h"
-#import "ReactiveCouchbaseLite.h"
+#import <ReactiveCouchbaseLite/ReactiveCouchbaseLite.h>
 
 @interface CBLDocument_ReactiveCouchbaseLiteTests : RCLTestCase
 @end

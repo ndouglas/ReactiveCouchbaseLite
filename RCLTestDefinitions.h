@@ -8,7 +8,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "ReactiveCouchbaseLite.h"
+#import "RCLDefinitions.h"
 
 #define RCL_DEFAULT_LISTENER_PORT 2028
 

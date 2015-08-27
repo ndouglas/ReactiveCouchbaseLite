@@ -9,6 +9,7 @@
 
 #import <XCTest/XCTest.h>
 #import "RCLTestDefinitions.h"
+#import <ReactiveCouchbaseLite/ReactiveCouchbaseLite.h>
 
 @interface RACScheduler_ReactiveCouchbaseLiteTests : RCLTestCase
 

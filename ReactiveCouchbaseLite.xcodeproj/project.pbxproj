@@ -668,6 +668,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 50677A480C7DC7F2807922A5 /* Pods-ReactiveCouchbaseLiteTests.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -691,6 +692,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F3920EA2D6F07FFB54773B63 /* Pods-ReactiveCouchbaseLiteTests.release.xcconfig */;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",

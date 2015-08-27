@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "ReactiveCouchbaseLite.h"
+#import <ReactiveCouchbaseLite/ReactiveCouchbaseLite.h>
 
 @interface CBLQueryEnumerator_ReactiveCouchbaseLiteTests : XCTestCase
 

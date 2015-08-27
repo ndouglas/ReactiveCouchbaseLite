@@ -9,8 +9,7 @@
 
 #import <XCTest/XCTest.h>
 #import "RCLTestDefinitions.h"
-#import "ReactiveCouchbaseLite.h"
-#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCouchbaseLite/ReactiveCouchbaseLite.h>
 #import <libkern/OSAtomic.h>
 
 typedef void (^RCLObjectTesterBlock)(id);
