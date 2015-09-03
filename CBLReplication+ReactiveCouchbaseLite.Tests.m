@@ -39,7 +39,6 @@
 
 - (void)testTransferredDocuments {
 	NSString *documentID = [[NSUUID UUID] UUIDString];
-    [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:documentID] times:3 interval:0.1];
     [self rcl_expectNexts:@[
         ^(NSDictionary *transferringDocument) {
             XCTAssertTrue([transferringDocument[@"_id"] isEqualToString:documentID]);
@@ -50,7 +49,9 @@
         ^(NSDictionary *transferringDocument) {
             XCTAssertTrue([transferringDocument[@"_id"] isEqualToString:documentID]);
         },
-    ] signal:[[self.pushReplication rcl_transferredDocuments] take:3] timeout:5.0 description:@"pending push document IDs received correctly"];
+    ] signal:[[[self.pushReplication rcl_transferredDocuments] take:3] logAll] initially:^{
+        [self rcl_triviallyUpdateDocument:[self.testDatabase documentWithID:documentID] times:3 interval:0.1];
+    } timeout:5.0 description:@"pending push document IDs received correctly"];
 }
 
 - (void)testDidStart {

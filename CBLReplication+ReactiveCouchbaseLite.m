@@ -9,6 +9,9 @@
 
 #import "CBLReplication+ReactiveCouchbaseLite.h"
 #import "ReactiveCouchbaseLite.h"
+#import <objc/runtime.h>
+
+static char CBLReplicationTransferredPropertiesSignalKey;
 
 typedef NSDictionary *(^CBLPropertiesTransformationBlock)(NSDictionary *document);
 
@@ -18,19 +21,39 @@ typedef NSDictionary *(^CBLPropertiesTransformationBlock)(NSDictionary *document
 
 @implementation CBLReplication (ReactiveCouchbaseLite)
 
-- (RACSignal *)rcl_transferredDocuments {
-    NSCAssert(!self.propertiesTransformationBlock, @"Only one properties transformation block can be used at a time.");
-    RACSignal *result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-            [self setPropertiesTransformationBlock:^NSDictionary *(NSDictionary *document) {
-                [subscriber sendNext:document];
-                return document;
-            }];
-            [self restart];
-            return [RACDisposable disposableWithBlock:^{
-                [self setPropertiesTransformationBlock:nil];
+- (void)rcl_setTransferredPropertiesSignal:(RACSignal *)signal {
+    @synchronized (self) {
+        objc_setAssociatedObject(self, &CBLReplicationTransferredPropertiesSignalKey, signal, OBJC_ASSOCIATION_RETAIN);
+    }
+}
+
+- (RACSignal *)rcl_transferredPropertiesSignal {
+    RACSignal *result = nil;
+    @synchronized (self) {
+        result = objc_getAssociatedObject(self, &CBLReplicationTransferredPropertiesSignalKey);
+        if (!result) {
+            NSCAssert(!self.propertiesTransformationBlock, @"Only one properties transformation block can be used at a time.");
+            result = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                [self setPropertiesTransformationBlock:^NSDictionary *(NSDictionary *document) {
+                    [subscriber sendNext:document];
+                    return document;
+                }];
                 [self restart];
+                return [RACDisposable disposableWithBlock:^{
+                    [self rcl_setTransferredPropertiesSignal:nil];
+                    [self setPropertiesTransformationBlock:nil];
+                    [self restart];
+                }];
             }];
-        }];
+            [self rcl_setTransferredPropertiesSignal:result];
+        }
+    }
+    return [result setNameWithFormat:@"[%@ -rcl_transferredPropertiesSignal]", self];
+}
+
+
+- (RACSignal *)rcl_transferredDocuments {
+    RACSignal *result = [self rcl_transferredPropertiesSignal];
     return [result setNameWithFormat:@"[%@ -rcl_transferredDocuments]", self];
 }
 
