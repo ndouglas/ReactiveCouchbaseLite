@@ -1,10 +1,9 @@
 //  OCHamcrest by Jon Reid, http://qualitycoding.org/about/
-//  Copyright 2014 hamcrest.org. See LICENSE.txt
+//  Copyright 2015 hamcrest.org. See LICENSE.txt
 
-#import "HCXCTestFailureHandler.h"
+#import "HCXCTestFailureReporter.h"
 
 #import "HCTestFailure.h"
-
 
 @interface NSObject (PretendMethodExistsOnNSObjectToAvoidLinkingXCTest)
 
@@ -16,7 +15,7 @@
 @end
 
 
-@implementation HCXCTestFailureHandler
+@implementation HCXCTestFailureReporter
 
 - (BOOL)willHandleFailure:(HCTestFailure *)failure
 {

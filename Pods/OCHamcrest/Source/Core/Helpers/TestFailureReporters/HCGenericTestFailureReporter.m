@@ -1,12 +1,12 @@
 //  OCHamcrest by Jon Reid, http://qualitycoding.org/about/
-//  Copyright 2014 hamcrest.org. See LICENSE.txt
+//  Copyright 2015 hamcrest.org. See LICENSE.txt
 
-#import "HCGenericTestFailureHandler.h"
+#import "HCGenericTestFailureReporter.h"
 
 #import "HCTestFailure.h"
 
 
-@implementation HCGenericTestFailureHandler
+@implementation HCGenericTestFailureReporter
 
 - (BOOL)willHandleFailure:(HCTestFailure *)failure
 {
@@ -25,7 +25,7 @@
                                                          failure.fileName,
                                                          (unsigned long)failure.lineNumber,
                                                          failure.reason];
-    return [NSException exceptionWithName:@"Hamcrest Error" reason:failureReason userInfo:nil];
+    return [NSException exceptionWithName:@"HCGenericTestFailure" reason:failureReason userInfo:nil];
 }
 
 @end

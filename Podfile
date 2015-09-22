@@ -3,7 +3,7 @@ xcodeproj 'ReactiveCouchbaseLite'
 
 target 'ReactiveCouchbaseLite' do
 	platform :osx, '10.10'
-	pod 'ReactiveCocoa'
+	pod 'ReactiveCocoa', '~> 2.5'
 end
 
 target 'ReactiveCouchbaseLiteTests', :exclusive => true do

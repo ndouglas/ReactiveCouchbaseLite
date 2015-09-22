@@ -1,8 +1,8 @@
 {
   "name": "ReactiveCouchbaseLite",
-  "version": "1.0.42",
+  "version": "1.0.53",
   "summary": "A merger of Reactive Cocoa and Couchbase-Lite.",
-  "description": "A merger of Reactive Cocoa and Couchbase-Lite.\n\t\nIn the course of working with ReactiveCocoa and Couchbase-Lite together on a major \nproject, I generated a decent amount of useful code that could be separated out \nfrom the project and made useful to other developers. I'm working on this task here.\n\nI'm not expecting this to be a major undertaking, since a lot of this code is \nalready written and tested, but I am cleaning it up and refactoring a bit, and \nmaking it a bit more comprehensive, so please bear with me.\n\nMy highest priorities are correctness, thread-safety (I'm trying to make the \ninterface completely thread-agnostic), and performance on large datasets (as large \nas CBL can comfortably operate).\n\nQuestions, comments, pull requests, and so forth are welcomed and greatly \nappreciated. Development is active as of December 8, 2014 and expected to continue \nthrough the foreseeable future. It will probably be deprecated when ReactiveCocoa 2 \nis.",
+  "description": "A merger of Reactive Cocoa and Couchbase-Lite.\n                \nIn the course of working with ReactiveCocoa and Couchbase-Lite together on a major \nproject, I generated a decent amount of useful code that could be separated out \nfrom the project and made useful to other developers. I'm working on this task here.\n\nI'm not expecting this to be a major undertaking, since a lot of this code is \nalready written and tested, but I am cleaning it up and refactoring a bit, and \nmaking it a bit more comprehensive, so please bear with me.\n\nMy highest priorities are correctness, thread-safety (I'm trying to make the \ninterface completely thread-agnostic), and performance on large datasets (as large \nas CBL can comfortably operate).\n\nQuestions, comments, pull requests, and so forth are welcomed and greatly \nappreciated. Development is active as of December 8, 2014 and expected to continue \nthrough the foreseeable future. It will probably be deprecated when ReactiveCocoa 2 \nis.",
   "homepage": "https://github.com/ndouglas/ReactiveCouchbaseLite",
   "license": {
     "type": "Public Domain",
@@ -17,7 +17,7 @@
   },
   "source": {
     "git": "https://github.com/ndouglas/ReactiveCouchbaseLite.git",
-    "tag": "1.0.42"
+    "tag": "1.0.53"
   },
   "default_subspecs": "Core",
   "subspecs": [
@@ -79,7 +79,7 @@
       },
       "dependencies": {
         "ReactiveCocoa": [
-
+          "~> 2.5"
         ]
       }
     },
@@ -89,20 +89,14 @@
         "RCLTestDefinitions.{h,m}",
         "*.Tests.m"
       ],
-      "frameworks": "XCTest",
+      "frameworks": [
+        "XCTest",
+        "Foundation"
+      ],
       "dependencies": {
-        "OCMockito": [
-
-        ],
-        "OCHamcrest": [
-
-        ],
         "ReactiveCouchbaseLite/Core": [
 
         ]
-      },
-      "xcconfig": {
-        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) HC_SHORTHAND MOCKITO_SHORTHAND"
       }
     }
   ]

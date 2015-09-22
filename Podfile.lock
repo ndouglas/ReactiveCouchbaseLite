@@ -1,5 +1,5 @@
 PODS:
-  - OCHamcrest (4.1.1)
+  - OCHamcrest (4.2.0)
   - OCMockito (1.4.0):
     - OCHamcrest (~> 4.0)
   - ReactiveCocoa (2.5):
@@ -9,15 +9,15 @@ PODS:
   - ReactiveCocoa/no-arc (2.5)
   - ReactiveCocoa/UI (2.5):
     - ReactiveCocoa/Core
-  - ReactiveCouchbaseLite (1.0.42):
-    - ReactiveCouchbaseLite/Core (= 1.0.42)
-  - ReactiveCouchbaseLite/Core (1.0.42):
-    - ReactiveCocoa
+  - ReactiveCouchbaseLite (1.0.53):
+    - ReactiveCouchbaseLite/Core (= 1.0.53)
+  - ReactiveCouchbaseLite/Core (1.0.53):
+    - ReactiveCocoa (~> 2.5)
 
 DEPENDENCIES:
   - OCHamcrest
   - OCMockito
-  - ReactiveCocoa
+  - ReactiveCocoa (~> 2.5)
   - ReactiveCouchbaseLite (from `.`)
 
 EXTERNAL SOURCES:
@@ -25,9 +25,9 @@ EXTERNAL SOURCES:
     :path: .
 
 SPEC CHECKSUMS:
-  OCHamcrest: 6f03ffa81d12feab872638490a44ab0a6d3aca10
+  OCHamcrest: c14c0b3f4c4e99363e5b87d97bae38c4438b6d5d
   OCMockito: 4981140c9a9ec06c31af40f636e3c0f25f27e6b2
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
-  ReactiveCouchbaseLite: ec88dba7b38ee3214919be06cf9c8821b3c6e144
+  ReactiveCouchbaseLite: ca337f294e9547a7e074680fc2acee463dc194cf
 
 COCOAPODS: 0.38.2
