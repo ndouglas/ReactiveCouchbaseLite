@@ -1,6 +1,7 @@
+MY_RCL_VERSION="1.0.53"
 Pod::Spec.new do |s|
   s.name                        = "ReactiveCouchbaseLite"
-  s.version                     = "1.0.53"
+  s.version                     = MY_RCL_VERSION
   s.summary                     = "A merger of Reactive Cocoa and Couchbase-Lite."
   s.description                 = <<-DESC
                                 A merger of Reactive Cocoa and Couchbase-Lite.
