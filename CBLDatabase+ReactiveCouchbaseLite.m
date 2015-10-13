@@ -313,7 +313,7 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
             NSCAssert(database.rcl_isOnScheduler, @"not on correct scheduler");
             CBLView *view = [database viewNamed:name];
             if (!view.mapBlock || (reduceBlock && !view.reduceBlock)) {
-                if (![view setMapBlock:mapBlock reduceBlock:reduceBlock version:version]) {
+                if (![view setMapBlock:mapBlock reduceBlock:reduceBlock version:version] && !view.mapBlock) {
                     [subscriber sendError:RCLErrorWithCode(RCLErrorCode_ViewCouldNotBeUpdated)];
                 } else {
                     [subscriber sendNext:view];
