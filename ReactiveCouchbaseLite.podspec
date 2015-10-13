@@ -1,4 +1,4 @@
-MY_RCL_VERSION="1.0.53"
+MY_RCL_VERSION="1.0.54"
 Pod::Spec.new do |s|
   s.name                        = "ReactiveCouchbaseLite"
   s.version                     = MY_RCL_VERSION
