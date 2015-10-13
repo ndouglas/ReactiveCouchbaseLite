@@ -9,9 +9,9 @@ PODS:
   - ReactiveCocoa/no-arc (2.5)
   - ReactiveCocoa/UI (2.5):
     - ReactiveCocoa/Core
-  - ReactiveCouchbaseLite (1.0.53):
-    - ReactiveCouchbaseLite/Core (= 1.0.53)
-  - ReactiveCouchbaseLite/Core (1.0.53):
+  - ReactiveCouchbaseLite (1.0.54):
+    - ReactiveCouchbaseLite/Core (= 1.0.54)
+  - ReactiveCouchbaseLite/Core (1.0.54):
     - ReactiveCocoa (~> 2.5)
 
 DEPENDENCIES:
@@ -28,6 +28,6 @@ SPEC CHECKSUMS:
   OCHamcrest: cd63d27f48a266d4412c0b295b01b8f0940efa81
   OCMockito: 4981140c9a9ec06c31af40f636e3c0f25f27e6b2
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
-  ReactiveCouchbaseLite: ca337f294e9547a7e074680fc2acee463dc194cf
+  ReactiveCouchbaseLite: 9d1e89533a53d8c3de9675d3efabb28d6fcbc7a2
 
 COCOAPODS: 0.38.2
