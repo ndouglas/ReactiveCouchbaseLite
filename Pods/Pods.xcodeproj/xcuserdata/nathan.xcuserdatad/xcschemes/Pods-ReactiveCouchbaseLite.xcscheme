@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7423DDA218201D151E33D3D2"
+               BlueprintIdentifier = "43132AB1763E47B5798E277B"
                BuildableName = "libPods-ReactiveCouchbaseLite.a"
                BlueprintName = "Pods-ReactiveCouchbaseLite"
                ReferencedContainer = "container:Pods.xcodeproj">
