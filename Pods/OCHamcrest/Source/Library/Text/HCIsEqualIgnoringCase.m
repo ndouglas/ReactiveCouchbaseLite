@@ -35,7 +35,7 @@
     return [self.string caseInsensitiveCompare:item] == NSOrderedSame;
 }
 
-- (void)describeTo:(id<HCDescription>)description
+- (void)describeTo:(id <HCDescription>)description
 {
     [[description appendDescriptionOf:self.string]
                   appendText:@" ignoring case"];
@@ -44,7 +44,7 @@
 @end
 
 
-id HC_equalToIgnoringCase(NSString *aString)
+id HC_equalToIgnoringCase(NSString *expectedString)
 {
-    return [HCIsEqualIgnoringCase isEqualIgnoringCase:aString];
+    return [HCIsEqualIgnoringCase isEqualIgnoringCase:expectedString];
 }

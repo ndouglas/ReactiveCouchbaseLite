@@ -12,16 +12,16 @@
 
 @implementation HCHasCount
 
-+ (instancetype)hasCount:(id <HCMatcher>)matcher
++ (instancetype)hasCount:(id <HCMatcher>)countMatcher
 {
-    return [[self alloc] initWithCount:matcher];
+    return [[self alloc] initWithCount:countMatcher];
 }
 
-- (instancetype)initWithCount:(id <HCMatcher>)matcher
+- (instancetype)initWithCount:(id <HCMatcher>)countMatcher
 {
     self = [super init];
     if (self)
-        _countMatcher = matcher;
+        _countMatcher = countMatcher;
     return self;
 }
 
@@ -39,7 +39,7 @@
     return [item respondsToSelector:@selector(count)];
 }
 
-- (void)describeMismatchOf:(id)item to:(id<HCDescription>)mismatchDescription
+- (void)describeMismatchOf:(id)item to:(id <HCDescription>)mismatchDescription
 {
     [mismatchDescription appendText:@"was "];
     if ([self itemHasCount:item])
@@ -51,7 +51,7 @@
     [mismatchDescription appendDescriptionOf:item];
 }
 
-- (void)describeTo:(id<HCDescription>)description
+- (void)describeTo:(id <HCDescription>)description
 {
     [[description appendText:@"a collection with count of "] appendDescriptionOf:self.countMatcher];
 }
@@ -59,9 +59,9 @@
 @end
 
 
-id HC_hasCount(id <HCMatcher> matcher)
+id HC_hasCount(id <HCMatcher> countMatcher)
 {
-    return [HCHasCount hasCount:matcher];
+    return [HCHasCount hasCount:countMatcher];
 }
 
 id HC_hasCountOf(NSUInteger value)

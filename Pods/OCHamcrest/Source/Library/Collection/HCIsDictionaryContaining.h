@@ -4,6 +4,9 @@
 #import <OCHamcrest/HCBaseMatcher.h>
 
 
+/*!
+ * @abstract Matches if any entry in a dictionary satisfies the nested pair of matchers.
+ */
 @interface HCIsDictionaryContaining : HCBaseMatcher
 
 + (instancetype)isDictionaryContainingKey:(id <HCMatcher>)keyMatcher
@@ -15,28 +18,25 @@
 @end
 
 
-FOUNDATION_EXPORT id HC_hasEntry(id keyMatch, id valueMatch);
+FOUNDATION_EXPORT id HC_hasEntry(id keyMatcher, id valueMatcher);
 
 #ifdef HC_SHORTHAND
 /*!
- * @brief hasEntry(keyMatcher, valueMatcher) -
- * Matches if dictionary contains key-value entry satisfying a given pair of matchers.
- * @param keyMatcher The matcher to satisfy for the key, or an expected value for @ref equalTo matching.
- * @param valueMatcher The matcher to satisfy for the value, or an expected value for @ref equalTo matching.
- * @discussion This matcher iterates the evaluated dictionary, searching for any key-value entry
- * that satisfies <em>keyMatcher</em> and <em>valueMatcher</em>. If a matching entry is found,
- * hasEntry is satisfied.
+ * @abstract hasEntry(keyMatcher, valueMatcher) -
+ * Creates a matcher for NSDictionaries that matches when the examined dictionary contains at least
+ * one entry whose key satisfies the specified <code>keyMatcher</code> <b>and</b> whose value
+ * satisfies the specified <code>valueMatcher</code>.
+ * @param keyMatcher The matcher to satisfy for the key, or an expected value for <em>equalTo</em> matching.
+ * @param valueMatcher The matcher to satisfy for the value, or an expected value for <em>equalTo</em> matching.
+ * @discussion Any argument that is not a matcher is implicitly wrapped in an <em>equalTo</em>
+ * matcher to check for equality.
  *
- * Any argument that is not a matcher is implicitly wrapped in an @ref equalTo matcher to check for
- * equality.
+ * <b>Examples</b><br />
+ * <pre>assertThat(myDictionary, hasEntry(equalTo(@"foo"), equalTo(@"bar")))</pre>
  *
- * Examples:
- * <ul>
- *   <li><code>hasEntry(equalTo(\@"foo"), equalTo(\@"bar"))</code></li>
- *   <li><code>hasEntry(\@"foo", \@"bar")</code></li>
- * </ul>
+ * <pre>assertThat(myDictionary, hasEntry(@"foo", @"bar"))</pre>
  *
- * @attribute Name Clash
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_hasEntry instead.
  */

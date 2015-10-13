@@ -4,6 +4,9 @@
 #import <OCHamcrest/HCBaseMatcher.h>
 
 
+/*!
+ * @abstract Matches if any entry in a dictionary has a value satisfying the nested matcher.
+ */
 @interface HCIsDictionaryContainingValue : HCBaseMatcher
 
 + (instancetype)isDictionaryContainingValue:(id <HCMatcher>)valueMatcher;
@@ -12,26 +15,25 @@
 @end
 
 
-FOUNDATION_EXPORT id HC_hasValue(id valueMatch);
+FOUNDATION_EXPORT id HC_hasValue(id valueMatcher);
 
 #ifdef HC_SHORTHAND
 /*!
- * @brief hasValue(valueMatcher) -
- * Matches if dictionary contains an entry whose value satisfies a given matcher.
- * @param valueMatcher The matcher to satisfy for the value, or an expected value for @ref equalTo matching.
- * @discussion This matcher iterates the evaluated dictionary, searching for any key-value entry
- * whose value satisfies the given matcher. If a matching entry is found, hasValue is satisfied.
+ * @abstract hasValue(valueMatcher) -
+ * Creates a matcher for NSDictionaries that matches when the examined dictionary contains at least
+ * value that satisfies the specified matcher.
+ * @param valueMatcher The matcher to satisfy for the value, or an expected value for <em>equalTo</em> matching.
+ * @discussion This matcher works on any collection that has an <code>-allValues</code> method.
  *
- * Any argument that is not a matcher is implicitly wrapped in an @ref equalTo matcher to check for
- * equality.
+ * Any argument that is not a matcher is implicitly wrapped in an <em>equalTo</em> matcher to check
+ * for equality.
  *
- * Examples:
- * <ul>
- *   <li><code>hasValue(equalTo(\@"bar"))</code></li>
- *   <li><code>hasValue(\@"bar")<code></li>
- * </ul>
+ * <b>Examples</b><br />
+ * <pre>assertThat(myDictionary, hasValue(equalTo(@"bar")))</pre>
  *
- * @attribute Name Clash
+ * <pre>assertThat(myDictionary, hasValue(@"bar"))<pre>
+ *
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_hasValue instead.
  */

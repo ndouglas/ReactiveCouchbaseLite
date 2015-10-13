@@ -4,6 +4,9 @@
 #import <OCHamcrest/HCBaseMatcher.h>
 
 
+/*!
+ * @abstract Provides a custom description to another matcher.
+ */
 @interface HCDescribedAs : HCBaseMatcher
 
 + (instancetype)describedAs:(NSString *)description
@@ -21,15 +24,16 @@ FOUNDATION_EXPORT id HC_describedAs(NSString *description, id <HCMatcher> matche
 
 #ifdef HC_SHORTHAND
 /*!
- * @brief describedAs(description, matcher, ...) -
- * Adds custom failure description to a given matcher.
- * @param description Overrides the matcher's description.
- * @param matcher,... The matcher to satisfy, followed by a comma-separated list of substitution
+ * @abstract describedAs(description, matcher, ...) -
+ * Wraps an existing matcher, overriding its description with that specified. All other functions
+ * are delegated to the decorated matcher, including its mismatch description.
+ * @param description The new description for the wrapped matcher.
+ * @param matcher,... The matcher to wrap, followed by a comma-separated list of substitution
  * values ending with <code>nil</code>.
  * @discussion The description may contain substitution placeholders %0, %1, etc. These will be
  * replaced by any values that follow the matcher.
  *
- * @attribute Name Clash
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_describedAs instead.
  */

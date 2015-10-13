@@ -30,19 +30,19 @@
     return ![self.matcher matches:item];
 }
 
-- (void)describeTo:(id<HCDescription>)description
+- (void)describeTo:(id <HCDescription>)description
 {
     [[description appendText:@"not "] appendDescriptionOf:self.matcher];
 }
 
-- (void)describeMismatchOf:(id)item to:(id<HCDescription>)mismatchDescription
+- (void)describeMismatchOf:(id)item to:(id <HCDescription>)mismatchDescription
 {
     [self.matcher describeMismatchOf:item to:mismatchDescription];
 }
 @end
 
 
-id HC_isNot(id aMatcher)
+id HC_isNot(id matcher)
 {
-    return [HCIsNot isNot:HCWrapInMatcher(aMatcher)];
+    return [HCIsNot isNot:HCWrapInMatcher(matcher)];
 }

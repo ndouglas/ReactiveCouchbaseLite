@@ -4,35 +4,32 @@
 #import <OCHamcrest/HCBaseMatcher.h>
 
 
+/*!
+ * @abstract Tests if string that contains a list of substrings in relative order.
+ */
 @interface HCStringContainsInOrder : HCBaseMatcher
-{
-    NSArray *substrings;
-}
 
-+ (instancetype)containsInOrder:(NSArray *)substringList;
-- (instancetype)initWithSubstrings:(NSArray *)substringList;
++ (instancetype)containsInOrder:(NSArray *)substrings;
+- (instancetype)initWithSubstrings:(NSArray *)substrings;
 
 @end
 
 
-FOUNDATION_EXPORT id HC_stringContainsInOrder(NSString *substring, ...) NS_REQUIRES_NIL_TERMINATION;
+FOUNDATION_EXPORT id HC_stringContainsInOrder(NSString *substrings, ...) NS_REQUIRES_NIL_TERMINATION;
 
 #ifdef HC_SHORTHAND
 /*!
- * @brief stringContainsInOrder(firstString, ...) -
- * Matches if object is a string containing a given list of substrings in relative order.
- * @param firstString,... A comma-separated list of strings ending with <code>nil</code>.
- * @discussion This matcher first checks whether the evaluated object is a string. If so, it checks
- * whether it contains a given list of strings, in relative order to each other. The searches are
- * performed starting from the beginning of the evaluated string.
+ * @abstract stringContainsInOrder(substrings, ...) -
+ * Creates matcher for NSStrings that matches when the examined string contains all of
+ * the specified substrings, considering the order of their appearance.
+ * @param substrings,... A comma-separated list of strings that must be contained within matching
+ * strings, ending with <code>nil</code>.
+ * @discussion
+ * <b>Example</b><br />
+ * <pre>assertThat(@"myfoobarbaz", stringContainsInOrder(@"bar", @"foo", nil))</pre>
+ * fails as "foo" occurs before "bar" in the string "myfoobarbaz"
  *
- * Example:
- * <ul>
- *   <li><code>stringContainsInOrder(\@"bc", \@"fg", \@"jkl", nil)</code></li>
- * </ul>
- * will match "abcdefghijklm".
- *
- * @attribute Name Clash
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_stringContainsInOrder instead.
  */

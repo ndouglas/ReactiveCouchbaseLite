@@ -4,6 +4,9 @@
 #import <OCHamcrest/HCDiagnosingMatcher.h>
 
 
+/*!
+ * @abstract Does executing a block throw an exception which satisfies a nested matcher?
+ */
 @interface HCThrowsException : HCDiagnosingMatcher
 
 - (id)initWithExceptionMatcher:(id)exceptionMatcher;
@@ -15,15 +18,15 @@ FOUNDATION_EXPORT id HC_throwsException(id exceptionMatcher);
 
 #ifdef HC_SHORTHAND
 /*!
- * @brief throwsException(exceptionMatcher) -
- * Matches if object is a block which, when executed, throws an exception satisfying a given matcher.
+ * @abstract throwsException(exceptionMatcher) -
+ * Creates a matcher that matches when the examined object is a block which, when executed, throws
+ * an exception satisfying the specified matcher.
  * @param exceptionMatcher The matcher to satisfy when passed the exception.
- * @discussion Example:
- * <ul>
- *   <li><code>throwsException(instanceOf([NSException class]))</code></li>
- * </ul>
+ * @discussion
+ * <b>Example</b><br />
+ * <pre>assertThat(^{ [obj somethingBad]; }, throwsException(anything())</pre>
  *
- * @attribute Name Clash
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_throwsException instead.
  */

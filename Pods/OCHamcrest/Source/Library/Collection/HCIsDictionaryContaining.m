@@ -42,7 +42,7 @@
     return NO;
 }
 
-- (void)describeTo:(id<HCDescription>)description
+- (void)describeTo:(id <HCDescription>)description
 {
     [[[[[description appendText:@"a dictionary containing { "]
                      appendDescriptionOf:self.keyMatcher]
@@ -54,10 +54,10 @@
 @end
 
 
-id HC_hasEntry(id keyMatch, id valueMatch)
+id HC_hasEntry(id keyMatcher, id valueMatcher)
 {
-    HCRequireNonNilObject(keyMatch);
-    HCRequireNonNilObject(valueMatch);
-    return [HCIsDictionaryContaining isDictionaryContainingKey:HCWrapInMatcher(keyMatch)
-                                                         value:HCWrapInMatcher(valueMatch)];
+    HCRequireNonNilObject(keyMatcher);
+    HCRequireNonNilObject(valueMatcher);
+    return [HCIsDictionaryContaining isDictionaryContainingKey:HCWrapInMatcher(keyMatcher)
+                                                         value:HCWrapInMatcher(valueMatcher)];
 }

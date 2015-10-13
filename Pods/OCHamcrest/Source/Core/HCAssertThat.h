@@ -20,7 +20,7 @@ FOUNDATION_EXPORT void HC_assertThatWithLocation(id testCase, id actual, id <HCM
 
 #ifdef HC_SHORTHAND
 /*!
- * @brief assertThat(actual, matcher) -
+ * @abstract assertThat(actual, matcher) -
  * Asserts that actual value satisfies matcher.
  * @param actual The object to evaluate as the actual value.
  * @param matcher The matcher to satisfy as the expected condition.
@@ -30,7 +30,7 @@ FOUNDATION_EXPORT void HC_assertThatWithLocation(id testCase, id actual, id <HCM
  * Use assertThat in test case methods. It's designed to integrate with XCTest and other testing
  * frameworks where individual tests are executed as methods.
  *
- * @attribute Name Clash
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_assertThat instead.
  */
@@ -42,7 +42,7 @@ typedef id (^HCAssertThatAfterActualBlock)() __attribute__((deprecated));
 
 OBJC_EXPORT void HC_assertThatAfterWithLocation(id testCase, NSTimeInterval maxTime,
                                                 HCAssertThatAfterActualBlock actualBlock,
-                                                id<HCMatcher> matcher,
+                                                id <HCMatcher> matcher,
                                                 const char *fileName, int lineNumber) __attribute__((deprecated));
 
 #define HC_assertThatAfter(maxTime, actualBlock, matcher)  \
@@ -52,8 +52,8 @@ OBJC_EXPORT void HC_assertThatAfterWithLocation(id testCase, NSTimeInterval maxT
 
 #ifdef HC_SHORTHAND
 /*!
- * @brief assertThatAfter(maxTime, actualBlock, matcher) -
- * Asserts that a value provided by a block will satisfy matcher in less than a given time.
+ * @abstract assertThatAfter(maxTime, actualBlock, matcher) -
+ * Asserts that a value provided by a block will satisfy matcher in less than the specified time.
  * @param maxTime Max time (in seconds) in which the matcher has to be satisfied.
  * @param actualBlock A block providing the object to evaluate until timeout or the matcher is satisfied.
  * @param matcher The matcher to satisfy as the expected condition.
@@ -65,20 +65,20 @@ OBJC_EXPORT void HC_assertThatAfterWithLocation(id testCase, NSTimeInterval maxT
  * An easy way of defining the actualBlock is using the macro <code>futureValueOf(actual)</code>,
  * which also improves readability.
  *
- * @attribute Name Clash
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_assertThatAfter instead.
 */
 #define assertThatAfter HC_assertThatAfter
 
 /*!
- * @brief futureValueOf(actual) -
+ * @abstract futureValueOf(actual) -
  * Evaluates actual value at future time.
  * @param actual The object to evaluate as the actual value.
  * @deprecated Version 4.2.0. Use @ref thatEventually instead.
  * @discussion Wraps <em>actual</em> in a block so that it can be repeatedly evaluated by @ref assertThatAfter.
  *
- * @attribute Name Clash
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_futureValueOf instead.
  */
@@ -100,8 +100,8 @@ OBJC_EXPORT void HC_assertWithTimeoutAndLocation(id testCase, NSTimeInterval tim
 
 #ifdef HC_SHORTHAND
 /*!
- * @brief assertWithTimeout(timeout, actualBlock, matcher) -
- * Asserts that a value provided by a block will satisfy matcher within a given time.
+ * @abstract assertWithTimeout(timeout, actualBlock, matcher) -
+ * Asserts that a value provided by a block will satisfy matcher within the specified time.
  * @param timeout Maximum time to wait for passing behavior, specified in seconds.
  * @param actualBlock A block providing the object to repeatedly evaluate as the actual value.
  * @param matcher The matcher to satisfy as the expected condition.
@@ -112,7 +112,7 @@ OBJC_EXPORT void HC_assertWithTimeoutAndLocation(id testCase, NSTimeInterval tim
  *
  * An easy way of providing the <em>actualBlock</em> is to use the macro @ref thatEventually</code>.
  *
- * @attribute Name Clash
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_assertWithTimeout instead.
 */
@@ -120,11 +120,11 @@ OBJC_EXPORT void HC_assertWithTimeoutAndLocation(id testCase, NSTimeInterval tim
 
 
 /*!
- * @brief thatEventually(actual) -
+ * @abstract thatEventually(actual) -
  * Evaluates actual value at future time.
  * @param actual The object to evaluate as the actual value.
  * @discussion Wraps <em>actual</em> in a block so that it can be repeatedly evaluated by @ref assertWithTimeout.
- * @attribute Name Clash
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_thatEventually instead.
  */

@@ -13,17 +13,17 @@
 
 @implementation HCSubstringMatcher
 
-- (instancetype)initWithSubstring:(NSString *)aString
+- (instancetype)initWithSubstring:(NSString *)substring
 {
-    HCRequireNonNilObject(aString);
+    HCRequireNonNilObject(substring);
 
     self = [super init];
     if (self)
-        _substring = [aString copy];
+        _substring = [substring copy];
     return self;
 }
 
-- (void)describeTo:(id<HCDescription>)description
+- (void)describeTo:(id <HCDescription>)description
 {
     [[[[description appendText:@"a string "]
                     appendText:[self relationship]]

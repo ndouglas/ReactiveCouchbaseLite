@@ -4,6 +4,9 @@
 #import <OCHamcrest/HCDiagnosingMatcher.h>
 
 
+/*!
+ * @abstract Matches if every item in a collection satisfies a nested matcher.
+ */
 @interface HCEvery : HCDiagnosingMatcher
 
 @property (nonatomic, strong, readonly) id <HCMatcher> matcher;
@@ -17,20 +20,19 @@ FOUNDATION_EXPORT id HC_everyItem(id itemMatcher);
 
 #ifdef HC_SHORTHAND
 /*!
- * @brief everyItem(itemMatcher) -
- * Matches if every element of a collection satisfies the given matcher.
+ * @abstract everyItem(itemMatcher) -
+ * Creates a matcher for collections that matches when the examined collection's items are all
+ * matched by the specified matcher.
  * @param itemMatcher The matcher to apply to every item provided by the examined collection.
- * @discussion This matcher iterates the evaluated collection, confirming that each element
- * satisfies the given matcher.
+ * @discussion This matcher works on any collection that conforms to the NSFastEnumeration protocol,
+ * performing a single pass.
  *
- * Example:
- * <ul>
- *   <li><code>everyItem(startsWith(\@"Jo"))</code></li>
- * </ul>
- * will match a collection ["Jon", "John", "Johann"].
+ * <b>Example</b><br />
+ * <pre>assertThat(@[@"bar", @"baz"], everyItem(startsWith(@"ba")))</pre>
  *
- * @attribute Name Clash
- * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym HC_everyItem instead.
+ * <b>Name Clash</b><br />
+ * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
+ * HC_everyItem instead.
  */
 #define everyItem HC_everyItem
 #endif

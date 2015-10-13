@@ -8,13 +8,13 @@
 
 @interface HCMatchingInAnyOrder : NSObject
 @property (nonatomic, copy, readonly) NSMutableArray *matchers;
-@property (nonatomic, strong, readonly) id <HCDescription, NSObject> mismatchDescription;
+@property (nonatomic, strong, readonly) id <HCDescription> mismatchDescription;
 @end
 
 @implementation HCMatchingInAnyOrder
 
 - (instancetype)initWithMatchers:(NSArray *)itemMatchers
-             mismatchDescription:(id<HCDescription, NSObject>)description
+             mismatchDescription:(id <HCDescription>)description
 {
     self = [super init];
     if (self)
@@ -44,7 +44,7 @@
 
 - (BOOL)isFinishedWith:(NSArray *)collection
 {
-    if ([self.matchers count] == 0)
+    if (self.matchers.count == 0)
         return YES;
 
     [[[[self.mismatchDescription appendText:@"no item matches: "]
@@ -76,7 +76,7 @@
     return self;
 }
 
-- (BOOL)matches:(id)collection describingMismatchTo:(id<HCDescription>)mismatchDescription
+- (BOOL)matches:(id)collection describingMismatchTo:(id <HCDescription>)mismatchDescription
 {
     if (![collection conformsToProtocol:@protocol(NSFastEnumeration)])
     {
@@ -94,7 +94,7 @@
     return [matchSequence isFinishedWith:collection];
 }
 
-- (void)describeTo:(id<HCDescription>)description
+- (void)describeTo:(id <HCDescription>)description
 {
     [[[description appendText:@"a collection over "]
                    appendList:self.matchers start:@"[" separator:@", " end:@"]"]
@@ -104,11 +104,11 @@
 @end
 
 
-id HC_containsInAnyOrder(id itemMatch, ...)
+id HC_containsInAnyOrder(id itemMatchers, ...)
 {
     va_list args;
-    va_start(args, itemMatch);
-    NSArray *matchers = HCCollectMatchers(itemMatch, args);
+    va_start(args, itemMatchers);
+    NSArray *matchers = HCCollectMatchers(itemMatchers, args);
     va_end(args);
 
     return [HCIsCollectionContainingInAnyOrder isCollectionContainingInAnyOrder:matchers];

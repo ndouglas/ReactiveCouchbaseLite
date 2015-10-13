@@ -4,30 +4,32 @@
 #import <OCHamcrest/HCSubstringMatcher.h>
 
 
+/*!
+ * @abstract Tests string starts with a substring.
+ */
 @interface HCStringStartsWith : HCSubstringMatcher
 
-+ (id)stringStartsWith:(NSString *)aSubstring;
++ (id)stringStartsWith:(NSString *)substring;
 
 @end
 
 
-FOUNDATION_EXPORT id HC_startsWith(NSString *aSubstring);
+FOUNDATION_EXPORT id HC_startsWith(NSString *prefix);
 
 #ifdef HC_SHORTHAND
 /*!
- * @brief startsWith(aString) -
- * Matches if object is a string starting with a given string.
- * @param aString The string to search for. This value must not be <code>nil</code>.
- * @discussion This matcher first checks whether the evaluated object is a string. If so, it checks
- * if <em>aString</em> matches the beginning characters of the evaluated object.
+ * @abstract startsWith(prefix) -
+ * Creates a matcher that matches when the examined object is a string that starts with the
+ * specified string.
+ * @param prefix The substring that the returned matcher will expect at the start of any examined
+ * string. (Must not be <code>nil</code>.)
+ * @discussion The matcher invokes <code>-hasPrefix:</code> on the examined object, passing the
+ * specified <em>prefix</em>.
  *
- * Example:
- * <ul>
- *   <li><code>endsWith(\@"foo")</code></li>
- * </ul>
- * will match "foobar".
+ * <b>Example</b><br />
+ * <pre>assertThat(@"myStringOfNote", startsWith(@"my"))</pre>
  *
- * @attribute Name Clash
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_startsWith instead.
  */

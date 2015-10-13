@@ -5,7 +5,7 @@
 
 
 /*!
- * @brief A matcher over acceptable values.
+ * @abstract A matcher over acceptable values.
  * @discussion A matcher is able to describe itself to give feedback when it fails.
  *
  * HCMatcher implementations should not directly implement this protocol. Instead, extend the
@@ -15,22 +15,22 @@
 @protocol HCMatcher <HCSelfDescribing>
 
 /*!
- * @brief Evaluates the matcher for argument item.
+ * @abstract Evaluates the matcher for argument item.
  * @param item  The object against which the matcher is evaluated.
  * @return <code>YES</code> if item matches, otherwise <code>NO</code>.
  */
 - (BOOL)matches:(id)item;
 
 /*!
- * @brief Evaluates the matcher for argument item.
+ * @abstract Evaluates the matcher for argument item.
  * @param item The object against which the matcher is evaluated.
  * @param mismatchDescription The description to be built or appended to if item does not match.
  * @return <code>YES</code> if item matches, otherwise <code>NO</code>.
  */
-- (BOOL)matches:(id)item describingMismatchTo:(id<HCDescription>)mismatchDescription;
+- (BOOL)matches:(id)item describingMismatchTo:(id <HCDescription>)mismatchDescription;
 
 /*!
- * @brief Generates a description of why the matcher has not accepted the item.
+ * @abstract Generates a description of why the matcher has not accepted the item.
  * @param item The item that the HCMatcher has rejected.
  * @param mismatchDescription The description to be built or appended to.
  * @discussion The description will be part of a larger description of why a matching failed, so it
@@ -38,6 +38,6 @@
  *
  * This method assumes that <code>matches:item</code> is false, but will not check this.
  */
-- (void)describeMismatchOf:(id)item to:(id<HCDescription>)mismatchDescription;
+- (void)describeMismatchOf:(id)item to:(id <HCDescription>)mismatchDescription;
 
 @end

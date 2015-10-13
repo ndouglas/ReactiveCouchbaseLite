@@ -18,7 +18,7 @@ static NSString *describeMismatch(id matcher, id actual)
             appendDescriptionOf:matcher]
             appendText:@", but "];
     [matcher describeMismatchOf:actual to:description];
-    return [description description];
+    return description.description;
 }
 
 static void reportMismatch(id testCase, id actual, id <HCMatcher> matcher,
@@ -40,7 +40,7 @@ void HC_assertThatWithLocation(id testCase, id actual, id <HCMatcher> matcher,
 }
 
 void HC_assertThatAfterWithLocation(id testCase, NSTimeInterval maxTime,
-                                    HCAssertThatAfterActualBlock actualBlock, id<HCMatcher> matcher,
+                                    HCAssertThatAfterActualBlock actualBlock, id <HCMatcher> matcher,
                                     const char *fileName, int lineNumber)
 {
     HC_assertWithTimeoutAndLocation(testCase, maxTime, actualBlock, matcher, fileName, lineNumber);

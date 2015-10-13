@@ -4,29 +4,29 @@
 #import <OCHamcrest/HCClassMatcher.h>
 
 
+/*!
+ * @abstract Matches objects that are of a given class or any subclass.
+ */
 @interface HCIsInstanceOf : HCClassMatcher
 
-+ (id)isInstanceOf:(Class)aClass;
++ (id)isInstanceOf:(Class)expectedClass;
 
 @end
 
 
-FOUNDATION_EXPORT id HC_instanceOf(Class aClass);
+FOUNDATION_EXPORT id HC_instanceOf(Class expectedClass);
 
 #ifdef HC_SHORTHAND
 /*!
- * @brief instanceOf(aClass) -
- * Matches if object is an instance of, or inherits from, a given class.
- * @param aClass The class to compare against as the expected class.
- * @discussion This matcher checks whether the evaluated object is an instance of <em>aClass</em> or
- * an instance of any class that inherits from <em>aClass</em>.
+ * @abstract instanceOf(expectedClass) -
+ * Creates a matcher that matches when the examined object is an instance of, or inherits from, the
+ * specified class.
+ * @param expectedClass The class to compare against as the expected class.
+ * @discussion
+ * <b>Example</b><br />
+ * <pre>assertThat(canoe, instanceOf([Canoe class]))</pre>
  *
- * Example:
- * <ul>
- *   <li></code>instanceOf([NSString class])</code></li>
- * </ul>
- *
- * @attribute Name Clash
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_instanceOf instead.
  */

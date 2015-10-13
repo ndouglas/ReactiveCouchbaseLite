@@ -4,16 +4,16 @@
 #import <OCHamcrest/HCBaseMatcher.h>
 
 
+/*!
+ * @abstract Matches anything.
+ */
 @interface HCIsAnything : HCBaseMatcher
-{
-    NSString *description;
-}
 
 + (instancetype)isAnything;
-+ (instancetype)isAnythingWithDescription:(NSString *)aDescription;
++ (instancetype)isAnythingWithDescription:(NSString *)description;
 
 - (instancetype)init;
-- (instancetype)initWithDescription:(NSString *)aDescription;
+- (instancetype)initWithDescription:(NSString *)description;
 
 @end
 
@@ -22,11 +22,9 @@ FOUNDATION_EXPORT id HC_anything(void);
 
 #ifdef HC_SHORTHAND
 /*!
- * @brief Matches anything.
- * @discussion This matcher always evaluates to <code>YES</code>. Specify this in composite matchers
- * when the value of a particular element is unimportant.
- *
- * @attribute Name Clash
+ * @abstract Creates a matcher that always matches, regardless of the examined object.
+ * @discussion
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_anything instead.
  */
@@ -34,17 +32,16 @@ FOUNDATION_EXPORT id HC_anything(void);
 #endif
 
 
-FOUNDATION_EXPORT id HC_anythingWithDescription(NSString *aDescription);
+FOUNDATION_EXPORT id HC_anythingWithDescription(NSString *description);
 
 #ifdef HC_SHORTHAND
 /*!
- * @brief anythingWithDescription(description) -
- * Matches anything.
- * @param description A string used to describe this matcher.
- * @discussion This matcher always evaluates to <code>YES</code>. Specify this in collection
- * matchers when the value of a particular element in a collection is unimportant.
- *
- * @attribute Name Clash
+ * @abstract anythingWithDescription(description) -
+ * Creates a matcher that matches anything, regardless of the examined object, but describes itself
+ * with the specified NSString.
+ * @param description A meaningful string used to describe this matcher.
+ * @discussion
+ * <b>Name Clash</b><br />
  * In the event of a name clash, don't <code>#define HC_SHORTHAND</code> and use the synonym
  * HC_anything instead.
  */

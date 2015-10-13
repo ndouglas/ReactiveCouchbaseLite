@@ -8,11 +8,11 @@
 
 @implementation HCStringDescription
 
-+ (NSString *)stringFrom:(id<HCSelfDescribing>)selfDescribing
++ (NSString *)stringFrom:(id <HCSelfDescribing>)selfDescribing
 {
     HCStringDescription *description = [HCStringDescription stringDescription];
     [description appendDescriptionOf:selfDescribing];
-    return [description description];
+    return description.description;
 }
 
 + (instancetype)stringDescription
