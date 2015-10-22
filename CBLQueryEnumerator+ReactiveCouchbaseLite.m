@@ -14,7 +14,8 @@
 #define __CLASS__ "CBLQueryEnumerator"
 
 - (RACSignal *)rcl_rowsSinceSequenceNumber:(UInt64)sequenceNumber {
-    return [[self.allObjects.rac_sequence.signal filter:^BOOL(CBLQueryRow *row) {
+    return [[self.allObjects.rac_sequence.signal
+        filter:^BOOL(CBLQueryRow *row) {
             return row.sequenceNumber >= sequenceNumber;
         }]
         setNameWithFormat:@"[%@ -rcl_rowsSinceSequenceNumber: %@]", self, @(sequenceNumber)];

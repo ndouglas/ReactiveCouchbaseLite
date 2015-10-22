@@ -1,3 +1,4 @@
+inhibit_all_warnings!
 
 xcodeproj 'ReactiveCouchbaseLite'
 
