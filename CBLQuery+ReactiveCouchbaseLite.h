@@ -20,6 +20,15 @@
 - (RACSignal *)rcl_run;
 
 /**
+ Runs an asynchronous query and purges the results.
+ 
+ @return A signal that completes or returns an error if one occurred.
+ @discussion No, seriously, this purges the documents returned by the query.
+ */
+
+- (RACSignal *)rcl_purgeDocuments;
+
+/**
  All of the rows as a signal.
  
  @return A signal of the rows.

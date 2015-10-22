@@ -510,8 +510,35 @@ CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current) {
 
 - (RACSignal *)rcl_updateDocumentWithID:(NSString *)ID block:(BOOL(^)(CBLUnsavedRevision *unsavedRevision))block {
     CBLDatabase *database = RCLCurrentOrNewDatabase(self);
-    RACSignal *result = [[database documentWithID:ID] rcl_update:block];
+    RACSignal *result = [[database documentWithID:ID]
+        rcl_update:block];
     return [result setNameWithFormat:@"[%@ -rcl_updateDocumentWithID: %@ block: %@]", self, ID, block];
+}
+
+- (RACSignal *)rcl_purgeDocumentWithID:(NSString *)documentID {
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    RACSignal *result = [[database rcl_documentWithID:documentID]
+        flattenMap:^RACSignal *(CBLDocument *document) {
+            return [document rcl_purge];
+        }];
+    return [result setNameWithFormat:@"[%@ -rcl_purgeDocumentWithID: %@]", self, documentID];
+}
+
+- (RACSignal *)rcl_purgeDocumentsWithIDs:(NSArray *)documentIDs {
+    CBLDatabase *database = RCLCurrentOrNewDatabase(self);
+    RACSignal *result = [database rcl_inTransaction:^BOOL(CBLDatabase *database) {
+        BOOL result = YES;
+        NSError *error = nil;
+        for (NSString *documentID in documentIDs) {
+            CBLDocument *document = [database documentWithID:documentID];
+            result = result && [document purgeDocument:&error];
+            if (!result) {
+                break;
+            }
+        }
+        return result;
+    }];
+    return [result setNameWithFormat:@"[%@ -rcl_purgeDocumentsWithIDs: %@]", self, documentIDs];
 }
 
 #pragma mark - Local Document Operations

@@ -31,6 +31,20 @@
     return [result setNameWithFormat:@"[%@ -rcl_run]", self];
 }
 
+- (RACSignal *)rcl_purgeDocuments {
+    NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
+    CBLDatabase *database = self.database;
+    RACSignal *result = [[self rcl_run]
+        flattenMap:^RACSignal *(CBLQueryEnumerator *queryEnumerator) {
+            NSMutableArray *documentIDs = [NSMutableArray array];
+            for (CBLQueryRow *row in queryEnumerator.allObjects) {
+                [documentIDs addObject:row.documentID];
+            }
+            return [database rcl_purgeDocumentsWithIDs:documentIDs];
+        }];
+    return [result setNameWithFormat:@"[%@ -rcl_purgeDocuments]", self];
+}
+
 - (RACSignal *)rcl_flattenedRows {
     NSCAssert(self.rcl_isOnScheduler, @"not on correct scheduler");
     RACSignal *result = [[self rcl_run]

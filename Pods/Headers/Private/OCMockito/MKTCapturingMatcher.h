@@ -1,1 +1,1 @@
-../../../OCMockito/Source/OCMockito/MKTCapturingMatcher.h
+../../../OCMockito/Source/OCMockito/Matchers/MKTCapturingMatcher.h

@@ -363,6 +363,24 @@ extern CBLDatabase *RCLCurrentOrNewDatabase(CBLDatabase *current);
 
 - (RACSignal *)rcl_updateDocumentWithID:(NSString *)documentID block:(BOOL(^)(CBLUnsavedRevision *unsavedRevision))block;
 
+/**
+ Purges the document.
+ 
+ @param documentID The ID of the document.
+ @return A signal that completes when the document has been purged or passes an error if it fails.
+ */
+
+- (RACSignal *)rcl_purgeDocumentWithID:(NSString *)documentID;
+
+/**
+ Purges the documents with the specified IDs.
+ 
+ @param documentIDs The IDs of the documents.
+ @return A signal that completes when the documents have been purged or passes an error if it fails.
+ */
+
+- (RACSignal *)rcl_purgeDocumentsWithIDs:(NSArray *)documentIDs;
+
 #pragma mark - Local Document Operations
 
 /**
